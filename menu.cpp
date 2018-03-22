@@ -7,6 +7,6 @@ using namespace std;
 
 int main(){
 
-  std::cout << "Test file for the github" << endl;
+  std::cout << "Relembrar por no gitignore a pasta Debug criada pelo IDE" << endl;
   return 0;
 }
