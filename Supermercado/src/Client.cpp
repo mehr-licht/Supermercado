@@ -33,13 +33,7 @@ string Client::getName() {
 	return this->name;
 }
 
-float Client::getPrice() {
-	return this->price;
-}
 
-bool Client::getIsGarage() {
-	return this->isGarage;
-}
 
 
 

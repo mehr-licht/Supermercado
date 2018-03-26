@@ -42,8 +42,7 @@ public:
 	 * @param price float do preço do parque de estacionamento.
 	 * @param isGarage int que representa se o parque é garagem ou parque de rua. Se 0 é parque de rua, se o 1 é garagem.
 	 */
-	Supermarket(int id, Vertex<Node> *node, string name, float price,
-			int isGarage);
+	Supermarket(int id, Vertex<Node> *node, string name);
 
 	/**
 	 * Função que retorna o ID do parking lot.

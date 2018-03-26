@@ -112,7 +112,7 @@ void map::loadNodes() {
 
 void map::loadSupermarket() {
 	string line;
-	ifstream file("Parking.txt");
+	ifstream file("supermarkets.txt");
 
 	if (file.is_open()) {
 		while (getline(file, line)) {
@@ -123,8 +123,8 @@ void map::loadSupermarket() {
 			int id;
 			int nodeID;
 			string name;
-			float price;
-			int garagem;
+
+
 
 			linestream >> id;
 
@@ -132,10 +132,7 @@ void map::loadSupermarket() {
 			linestream >> nodeID;
 			std::getline(linestream, data, ';'); // read up-to the first ; (discard ;).
 			linestream >> name;
-			std::getline(linestream, data, ';'); // read up-to the first ; (discard ;).
-			linestream >> price;
-			std::getline(linestream, data, ';'); // read up-to the first ; (discard ;).
-			linestream >> garagem;
+
 
 			Vertex<Node> *vert = NULL;
 
@@ -146,8 +143,8 @@ void map::loadSupermarket() {
 				}
 			}
 
-			Supermarket plot = Supermarket(id, vert, name, price, garagem);
-			vecParking.push_back(plot);
+			Supermarket plot = Supermarket(id, vert, name);
+			vecSupermarket.push_back(plot);
 
 		}
 
@@ -289,18 +286,12 @@ void map::printGraph() {
 
 		if (isSupermarket(idNo)) {
 
-			float price = 0;
+
 
 			string nodeLabel;
 
-			for (unsigned int j = 0; j < vecParking.size(); j++) {
-				if (vecParking.at(j).getNode()->getInfo().getID() == idNo) {
-					price = vecParking.at(j).getPrice();
-				}
-			}
 
-			nodeLabel = intToString(idNo) + " (" + floatToString(price)
-					+ " €/h)";
+			nodeLabel = intToString(idNo) ;
 
 			gv->setVertexIcon(idNo, "res/supermarketIcon.png");
 			gv->setVertexLabel(idNo, nodeLabel);
@@ -391,8 +382,8 @@ Node map::getNodeByID(int id) {
 }
 
 bool map::isSupermarket(int idNo) {
-	for (unsigned int i = 0; i < vecParking.size(); i++) {
-		if (vecParking.at(i).getNode()->getInfo().getID() == idNo)
+	for (unsigned int i = 0; i < vecSupermarket.size(); i++) {
+		if (vecSupermarket.at(i).getNode()->getInfo().getID() == idNo)
 			return true;
 	}
 
@@ -416,11 +407,11 @@ Node map::superNear(int id, int maxDistance) {
 
 	myGraph.dijkstraShortestPath(node);
 
-	for (unsigned int i = 0; i < vecParking.size(); i++) {
+	for (unsigned int i = 0; i < vecSupermarket.size(); i++) {
 
-		int distAtual = vecParking.at(i).getNode()->getDist(); //distancia do parque analisado ao node
+		int distAtual = vecSupermarket.at(i).getNode()->getDist(); //distancia do super analisado ao node
 
-		if (distAtual <= maxDistance) { //se distancia do parque analisado esta dentro dos limites impostos pelo user
+		if (distAtual <= maxDistance) { //se distancia do super analisado esta dentro dos limites impostos pelo user
 			if (distAtual < distMinima) { //se a distancia for menor que a guardada
 				pos = i; //atualiza a posiï¿½ao
 				distMinima = distAtual; //atualiza distancia guardada
@@ -428,12 +419,12 @@ Node map::superNear(int id, int maxDistance) {
 		}
 	}
 
-	if (pos == -1) { //se nenhum parque foi encontrado
+	if (pos == -1) { //se nenhum super foi encontrado
 		Node nullNode;
 		nullNode.setID(-1);
 		return nullNode;
 	} else
-		return vecParking.at(pos).getNode()->getInfo();
+		return vecSupermarket.at(pos).getNode()->getInfo();
 }
 
 Node map::clientNear(int id) {
@@ -463,15 +454,15 @@ string map::mainMenu(bool source) {
 	int option;
 	string input;
 
-	if (source)
-		cout << "> WHERE ARE YOU ?\n";
-	else
-		cout << "> WHERE DO YOU WANT TO GO ?\n";
-
-	cout << "[1]Mall           [4]Restaurant\n"
-			<< "[2]Cinema         [5]University\n"
-			<< "[3]Gas Station    [6]Parking Lot\n" << "[0]Other\n\n";
-
+//	if (source)
+//		cout << "> WHERE ARE YOU ?\n";
+//	else
+//		cout << "> WHERE DO YOU WANT TO GO ?\n";
+//
+//	cout << "[1]Mall           [4]Restaurant\n"
+//			<< "[2]Cinema         [5]University\n"
+//			<< "[3]Gas Station    [6]Supermarket Lot\n" << "[0]Other\n\n";
+//
 	cout << "> Option: ";
 	cin >> option;
 	cout << endl;
@@ -650,8 +641,8 @@ vector<Node> map::calculatePath(int sourceID, int destID, int maxDistance,
 
 //ELABORAR O PATH//
 
-	vector<Node> part1; //path da source ao parque
-	vector<Node> part2; //path do parque a dest
+	vector<Node> part1; //path da source ao super
+	vector<Node> part2; //path do super a dest
 	vector<Node> vec; //path da source a dest, passando pelo parque
 
 	if (supermarket.getID() == sourceID && supermarket.getID() == destID) { //se a source, o dest e o parque sao o mesmo ponto

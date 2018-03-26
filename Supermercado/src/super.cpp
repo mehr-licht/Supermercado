@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <ctype.h>
 #include "methods.h"
+#include <fstream>
 
 using namespace std;
 
@@ -52,109 +53,136 @@ void usage() {
 			<< "Supermercado clientes1.txt 2\t\treturns best route from all the above methods which have TO constraints\n";
 	cout
 			<< "Supermercado 1 clientes1.txt 2\t\treturns best route from all the above methods which have TO and FROM constraints\n";
+
 }
 
-bool isNumber(char number[]) {
-	int i, num = 0;
+int isNumber(char* number) {
+	return  strtol(number , NULL, 10);
+}
 
-	for (; number[i] != 0; i++) {
-		if (!isdigit(number[i])) {
-			return false;
-		} else {
-			num *= pow(10, i);
-			num += number[i];
-		}
+bool isFile(char* file) {
+	ifstream myfile(file);
+	if (myfile) {
+		return true;
+	} else {
+		return false;
 	}
-	return num;
 }
 
 int main(int argc, char*argv[]) {
-	cout << "-10\n";
+
+	////cout << "-10\n";
 	int arg = -1, arg2 = -1;
 	if (argc < 2 || argc > 5) {
-		cout << "-0\n";
+		//	//cout << "-0\n";
 		usage();
+		return 0;
 	} else if (argc == 2 && !isNumber(argv[1])) {
-		cout << "00\n";
+		//cout << "00\n";
 		//FILE 8
+		if (!isFile(argv[1])) {
+			//cout << argv[1] << " is not a file" << endl;
+			usage();
+		}
 		runAllMethods(-1, -1);
-	} else if (argc == 2) { //runs all the *
-		cout << "01\n";
-		if ((arg = isNumber(argv[2])) && !isNumber(argv[1])) {
-			cout << "011\n";
+	} else if (argc == 3) { //runs all the *
+		//cout << "01\n";
+		if (!isFile(argv[1])) {
+			//cout << argv[1] << " is not a file" << endl;
+			usage();
+			return 0;
+		}
+		if ((arg = isNumber(argv[2]))) { // && !isNumber(argv[1])) {
+			//cout << "011\n";
 			//FILE # 10
 			runAllMethods(-1, arg);
-		} else if (argv[2] == "ALLFROM" && !isNumber(argv[1])) {
-			cout << "012\n";
+		} else if (argv[2] == "ALLFROM") { // && !isNumber(argv[1])) {
+			//cout << "012\n";
 			//FILE ALLFROM 0
 			allFromOne(-1, -1);
-		} else if (argv[2] == "EACHFROMSELF" && !isNumber(argv[1])) {
-			cout << "013\n";
+		} else if (argv[2] == "EACHFROMSELF") { // && !isNumber(argv[1])) {
+			//cout << "013\n";
 			//FILE EACHFROMSELF 2
 			eachFromSelf();
-		} else if (argv[2] == "FROMTO" && !isNumber(argv[1])) {
-			cout << "014\n";
+		} else if (argv[2] == "FROMTO") { // && !isNumber(argv[1])) {
+			//cout << "014\n";
 			//FILE FROMTO 6
 			fromTo(-1, -1);
-		} else if (argv[2] == "OPTIMAL" && !isNumber(argv[1])) {
-			cout << "015\n";
+		} else if (argv[2] == "OPTIMAL") { // && !isNumber(argv[1])) {
+			//cout << "015\n";
 			//FILE OPTIMAL 7
 			optimal();
 		} else {
-			cout << "016\n";
+			//cout << "016\n";
 			usage();
+			return 0;
 		}
 
-	} else if (argc == 4 && !isNumber(argv[3]) && !isNumber(argv[2])) {
-		cout << "02\n";
-		arg = isNumber(argv[1]);
+	} else if (argc == 4 && (arg = isNumber(argv[1]))
+			&& (arg2 = isNumber(argv[4]))) { // && !isNumber(argv[2])  ){// && !isNumber(argv[3])){// && !isNumber(argv[2])) {
+		//cout << "02\n";
+		if (!isFile(argv[2])) {
+			//cout << argv[1] << " is not a file" << endl;
+			usage();
+			return 0;
+		}
+		//arg = isNumber(argv[1]);
 		//# FILE FROMTO # 3
-		fromTo(arg, -1);
+		fromTo(arg, arg2);
 	} else if (arg = isNumber(argv[1])) {
-		cout << "03\n";
-		if (argc == 3 && !isNumber(argv[2]) && isNumber(argv[1])) {
-			cout << "031\n";
+		//cout << "03\n";
+		//cout << "argv" << argv[1] << endl;
+		if (argc == 3 && isNumber(argv[1])) {	//}&& !isNumber(argv[2])){// ) {
+			//cout << "031\n";
 			//# FILE 9
+			//cout << "arg" << arg << endl;
 			runAllMethods(arg, -1);
 		} else if ((arg2 = isNumber(argv[3])) && (arg = isNumber(argv[1]))
 				&& !isNumber(argv[2])) {
-			cout << "032\n";
+			//cout << "032\n";
 			//# FILE # 11
 			runAllMethods(arg, arg2);
 		} else if (argv[3] == "FROMTO" && (arg = isNumber(argv[1]))
 				&& !isNumber(argv[2])) {
-			cout << "033\n";
+			//cout << "033\n";
 			//# FILE FROMTO 4
 			fromTo(arg, -1);
 		} else {
-			cout << "034\n";
+			//cout << "034\n";
 			usage();
+			return 0;
 		}
 
 	} else if (argc == 4 && isNumber(argv[2])) {
-		cout << "04\n";
+		if (!isFile(argv[1])) {
+			//cout << argv[1] << " is not a file" << endl;
+			usage();
+			return 0;
+		}
+		//cout << "04\n";
 		if (argv[3] == "ALLFROM" && (arg = isNumber(argv[2]))
 				&& !isNumber(argv[1])) {
-			cout << "041\n";
+			//cout << "041\n";
 			//FILE # ALLFROM 1
 			runAllMethods(-1, arg);
 		} else if (argv[3] == "FROMTO" && (arg = isNumber(argv[2]))
 				&& !isNumber(argv[1])) {
-			cout << "042\n";
+			//cout << "042\n";
 			//FILE # FROMTO 5
 			fromTo(-1, arg);
 		} else {
-			cout << "043\n";
+			//cout << "043\n";
 			usage();
+			return 0;
 		}
 
 	} else {
-		cout << "05\n";
+		////cout << "05\n";
 		usage();
+		return 0;
 	}
-return 0;
+	return 0;
 }
-
 
 //map::instance()->loadData();
 //

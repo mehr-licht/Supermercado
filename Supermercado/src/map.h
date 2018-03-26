@@ -33,7 +33,7 @@ private:
 	Graph<Node> myGraph;
 	Node supermarket;
 	vector<Node> vecNodes;
-	vector<Supermarket> vecParking;
+	vector<Supermarket> vecSupermarket;
 	vector<Street> vecStreets;
 	vector<Vertex<Node>*> vecClients;
 	Node client;

@@ -11,17 +11,11 @@
 Supermarket::Supermarket() {
 }
 
-Supermarket::Supermarket(int id, Vertex<Node> *node, string name, float price,
-		int isGarage) {
+Supermarket::Supermarket(int id, Vertex<Node> *node, string name) {
 	this->id = id;
 	this->node = node;
 	this->name = name;
-	this->price = price;
 
-	if (isGarage)
-		this->isGarage = true;
-	else
-		this->isGarage = false;
 }
 
 Supermarket::~Supermarket() {
@@ -39,11 +33,6 @@ string Supermarket::getName() {
 	return this->name;
 }
 
-float Supermarket::getPrice() {
-	return this->price;
-}
 
-bool Supermarket::getIsGarage() {
-	return this->isGarage;
-}
+
 
