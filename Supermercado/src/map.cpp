@@ -7,6 +7,8 @@
 
 #include "map.h"
 
+
+
 map::map() {
 	gv = new GraphViewer(600, 600, false);
 }
@@ -17,10 +19,7 @@ map::~map() {
 void map::loadEdges() {
 	string line;
 
-	ifstream file("Edges.txt"); //ficheiro com 46 arestas
-	//ifstream file("1a100.txt"); //ficheiro com 100 arestas
-	//ifstream file("2a300.txt"); //ficheiro com 200 arestas
-	//ifstream file("3a500.txt"); //ficheiro com 500 arestas
+	ifstream file("Edges.txt");
 
 	if (file.is_open()) {
 		while (getline(file, line)) {
@@ -73,10 +72,7 @@ void map::loadEdges() {
 void map::loadNodes() {
 	string line;
 
-	ifstream file("Nodes.txt"); //ficheiro com 26 nos
-	//ifstream file("1v200.txt"); //ficheiro com 200 nos
-	//ifstream file("2v600.txt"); //ficheiro com 600 nos
-	//ifstream file("3v1000.txt"); //ficheiro com 1000 nos
+	ifstream file("Nodes.txt");
 
 	if (file.is_open()) {
 		while (getline(file, line)) {
@@ -232,7 +228,7 @@ void map::loadStreets() {
 
 void map::loadClients() {
 	string line;
-	ifstream file("petrolStations.txt");
+	ifstream file("clients.txt");
 
 	if (file.is_open()) {
 		while (getline(file, line)) {
@@ -263,6 +259,7 @@ void map::loadData() {
 	loadSupermarket();
 	loadStreets();
 	loadClients();
+	assignSupers();
 	return;
 }
 
@@ -398,7 +395,7 @@ bool map::isClient(int idNo) {
 	return false;
 }
 
-//retorna node com id -1, se nao nenhum parque dentro dos limites impostos pelo user
+//retorna node com id -1, se nao nenhum super dentro dos limites impostos pelo user
 Node map::superNear(int id, int maxDistance) {
 
 	int distMinima = INT_MAX;
@@ -435,9 +432,9 @@ Node map::clientNear(int id) {
 
 	for (unsigned int i = 0; i < vecClients.size(); i++) {
 
-		myGraph.dijkstraShortestPath(vecClients.at(i)->getInfo()); //faz dijkstra para a bomba analisada
+		myGraph.dijkstraShortestPath(vecClients.at(i)->getInfo()); //faz dijkstra para
 
-		int distAtual = myGraph.getVertex(node)->getDist(); //distancia da bomba analisada ate ao node
+		int distAtual = myGraph.getVertex(node)->getDist(); //distancia da  analisada ate ao node
 
 		if (distAtual <= distMinima) { //se distancia atual menor que a distancia guardada
 			pos = i; //atualiza posicao
@@ -536,7 +533,7 @@ bool map::verifyChoice(const vector<int> st, int id) {
 
 vector<Node> map::insertValues() {
 
-	int source, dest, Cheap_Near;
+	int source, dest;
 	float maxDistance;
 	char passClient;
 	vector<int> options;
@@ -579,17 +576,10 @@ vector<Node> map::insertValues() {
 	cin >> maxDistance;
 	cout << endl;
 
-	cout << "> WHICH TYPE OF PARKING LOT DO YOU PREFER ?\n";
-	cout << "[1]Cheap           [2]Near Your Destiny\n\n";
 
-	cout << "> Option: ";
-	cin >> Cheap_Near;
 	cout << endl;
 
-	if (Cheap_Near != 1 && Cheap_Near != 2) {
-		cerr << "Invalid option.\n";
-		return failed;
-	}
+
 
 	cout << "> DO YOU WANT TO FILL UP THE CAR ? (y/n): ";
 	cin >> passClient;
@@ -604,8 +594,7 @@ vector<Node> map::insertValues() {
 	int nTimeStart = GetMilliCount();
 //------------------------------------------------
 
-	vector<Node> path = calculatePath(source, dest, maxDistance, Cheap_Near,
-			passClient);
+	vector<Node> path = calculatePath(source, dest, maxDistance,passClient);
 
 	if (path.size() != 0) { //se ha de facto um path
 		cout << "> PATH: ";
@@ -634,8 +623,7 @@ vector<Node> map::insertValues() {
 }
 
 //retorna vetor vazio se nao encontroou nenhum path
-vector<Node> map::calculatePath(int sourceID, int destID, int maxDistance,
-		int Cheap_Near, char passClient) {
+vector<Node> map::calculatePath(int sourceID, int destID, int maxDistance, char passClient) {
 
 
 

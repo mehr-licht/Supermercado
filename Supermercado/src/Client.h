@@ -13,7 +13,7 @@
 #include <string>
 #include "Node.h"
 #include "Graph.h"
-
+#include "Supermarket.h"
 //using namespace std;
 
 class Client {
@@ -22,8 +22,8 @@ private:
 	int id;
 	Vertex<Node> *node;
 	string name;
-	float price;
-	bool isGarage;
+	bool visited;
+	Supermarket super;
 
 public:
 	/**
@@ -35,6 +35,13 @@ public:
 	 * Destrutor default.
 	 */
 	~Client();
+
+	void setNotVisited();
+
+	void setVisited();
+
+	bool getVisited() ;
+
 
 	/**
 	 * Construtor de Client

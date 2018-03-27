@@ -8,7 +8,7 @@
 #ifndef SRC_MAP_H_
 #define SRC_MAP_H_
 
-#include <cmath>
+#include <math.h>
 #include "Street.h"
 #include <iostream>
 #include <string>
@@ -24,6 +24,8 @@
 #include "Supermarket.h"
 #include "graphviewer.h"
 #include "utilities.h"
+
+
 
 class map {
 
@@ -45,17 +47,19 @@ public:
 	 */
 	map();
 
+
 	/**
 	 * Destrutor default.
 	 */
 	~map();
 
-	static map* instance() {
-		if (!singleton_instance)
-			singleton_instance = new map;
-
-		return singleton_instance;
-	}
+//	static map* instance() {
+//
+//		if (!singleton_instance)
+//			singleton_instance = new map;
+//
+//		return singleton_instance;
+//	}
 
 	/**
 	 * Funcao que carrega os dados do ficheiro de arestas para as estruturas em Graph.h.
@@ -171,8 +175,7 @@ public:
 	 * @param passClient char que diz se o user quer abastecer ('y') ou não ('n').
 	 * @return Vetor de Nodes do path final pretendido.
 	 */
-	vector<Node> calculatePath(int sourceID, int destID, int maxDistance,
-			int Cheap_Near, char passClient);
+	vector<Node> calculatePath(int sourceID, int destID, int maxDistance, char passClient);
 
 	/**
 	 * Funcao que adiciona uma cliente ao path passado por argumento.

@@ -9,29 +9,32 @@
 
 using namespace std;
 
-void allFromOne(int from,int to){
+void allFromOne(map* obj,int from,int to){
 	cout<<"allFromOne("<<from<<","<<to<<")\n";
+	cout<<"1_Dijkstra mais volta desde o último\n";
+		cout<<"2_toAndFrom()\n";
 }
 
-void eachFromSelf(){
+void eachFromSelf(map* obj){
 	cout<<"eachFromSelf\n";
+
 }
-void fromTo(int from,int to){
+void fromTo(map* obj,int from,int to){
 	cout<<"fromTo("<<from<<","<<to<<")\n";
 }
 void optimal(){
 	cout<<"optimal\n";
 }
 
-void runAllMethods(int from,int to){
+void runAllMethods(map* obj,int from,int to){
 	cout<<"entra all"<<endl;
-//	if(from>0){
-//
-//	}
-	allFromOne(from,to);
-	eachFromSelf();
-	fromTo(from, to);
-	optimal();
+	cout<<"\n";
+	allFromOne(obj,from,to);
+	cout<<"\n";
+	eachFromSelf(obj);
+	//fromTo(from, to);
+	//optimal();
+	cout<<"\n";
 	cout<<"sai all"<<endl;
 
 }
