@@ -33,7 +33,6 @@
 class map {
 
 private:
-	static map* singleton_instance;
 
 	Graph<Node> myGraph;
 	Node supermarket;
@@ -66,8 +65,8 @@ public:
 
 	void assignSupers();
 
-	bool Visited(unsigned int ordem, vector<Client> clients);
-	queue<Vertex<Node>*> toAndFrom(Supermarket super, vector<Client> clients);
+	bool Visited(unsigned int ordem);
+	queue<Vertex<Node>*> toAndFrom(Supermarket super);
 
 	/**
 	 * Funcao que carrega os dados do ficheiro de arestas para as estruturas em Graph.h.

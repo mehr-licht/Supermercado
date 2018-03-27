@@ -8,6 +8,7 @@
 #include "Client.h"
 
 Client::Client() {
+	this->id = 0;
 }
 
 Client::Client(int id, Vertex<Node> *node, string name) {

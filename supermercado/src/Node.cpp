@@ -12,6 +12,7 @@
 
 Node::Node() {
 	this->id = 0;
+	this->visited = false;
 }
 
 Node::Node(int id, int x, int y, std::string name) {
@@ -19,9 +20,22 @@ Node::Node(int id, int x, int y, std::string name) {
 	this->coords.first = x;
 	this->coords.second = y;
 	this->name = name;
+	this->visited = false;
 }
 
 Node::~Node() {
+}
+
+void Node::setNotVisited() {
+	this->visited=false;
+}
+
+void Node::setVisited() {
+	this->visited=true;
+}
+
+bool Node::getVisited() {
+	return this->visited;
 }
 
 void Node::setID(int id) {

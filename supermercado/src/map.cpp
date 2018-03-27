@@ -766,10 +766,10 @@ void map::addClientToPath(vector<Node> &path) {
 	return;
 }
 
-bool map::Visited(unsigned int ordem, vector<Client> clients) {
-	for (unsigned int i = 0; i < clients.size(); i++) {
+bool map::Visited(unsigned int ordem) {
+	for (unsigned int i = 0; i < this->vecClients.size(); i++) {
 		if (i == ordem) {
-			if (clients.at(i).getVisited()) {
+			if (this->vecClients.at(i)->getInfo().getVisited()) {
 				return true;
 			} else {
 				return false;
@@ -780,9 +780,9 @@ bool map::Visited(unsigned int ordem, vector<Client> clients) {
 	return false;
 }
 
-queue<Vertex<Node>*> map::toAndFrom(Supermarket super, vector<Client> clients) { //eliminar argumentos RECEBE obj!!!!
+queue<Vertex<Node>*> map::toAndFrom(Supermarket super) { //eliminar argumentos RECEBE obj!!!!
 	//vector<Client> naoVisitados;
-	int naoVisitados = clients.size();
+	int naoVisitados = this->vecClients.size();
 	queue<Vertex<Node>*> percurso;
 	stack<Vertex<Node>*> regresso;
 	Vertex<Node>* actualGo = super.getNode();
@@ -794,32 +794,32 @@ queue<Vertex<Node>*> map::toAndFrom(Supermarket super, vector<Client> clients) {
 	if (naoVisitados) {
 		//get mais perto ida desde ponto actualGo
 		//ver se nao visitado
-		for (int i = 0; i < clients.size(); i++) {
-			if (!Visited(i, clients)) {
+		for (unsigned int i = 0; i < this->vecClients.size(); i++) {
+			if (!Visited(i)) {
 
 				//tirar dos nao visitados e actualiza actualGo
 				percurso.push(cliente);
 				naoVisitados--;
 				actualGo = cliente;		//.getNode();
 				//e setNotVisited
-				for (int i = 0; i < clients.size(); i++) {
-					if (clients.at(i).getID() == cliente->getInfo().getID()) {
-						clients.at(i).setVisited();
+				for (unsigned int i = 0; i < this->vecClients.size(); i++) {
+					if (this->vecClients.at(i)->getInfo().getID() == cliente->getInfo().getID()) {
+						this->vecClients.at(i)->getInfo().setVisited();
 					}
 				}
 			}
 		}
 		if (naoVisitados) {
 			//get mais perto volta ponto actualCome
-			for (int i = 0; i < clients.size(); i++) {
-				if (!Visited(i, clients)) {
+			for (unsigned int i = 0; i < this->vecClients.size(); i++) {
+				if (!Visited(i)) {
 					regresso.push(cliente2);
 					naoVisitados--;
 					actualCome = cliente2;
-					for (int i = 0; i < clients.size(); i++) {
-						if (clients.at(i).getID()
+					for (unsigned int i = 0; i < this->vecClients.size(); i++) {
+						if (this->vecClients.at(i)->getInfo().getID()
 								== cliente2->getInfo().getID()) {
-							clients.at(i).setVisited();
+							this->vecClients.at(i)->getInfo().setVisited();
 						}
 					}
 				}

@@ -18,7 +18,7 @@ private:
 	int id; ///< Node's ID
 	std::string name; //< Node's name
 	std::pair<int, int> coords;  ///< Node's coordinates (x,y)
-
+bool visited;
 public:
 	/**
 	 * Construtor default.
@@ -29,6 +29,15 @@ public:
 	 * Destrutor default.
 	 */
 	~Node();
+
+
+	void setNotVisited();
+
+	void setVisited() ;
+
+	bool getVisited() ;
+
+
 
 	/**
 	 * Construtor de node.
