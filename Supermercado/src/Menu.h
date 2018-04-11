@@ -22,6 +22,7 @@
 #include <limits>
 #include "edgetype.h"
 
+#define IMGPRE "map"
 #define IMGEXT ".png"
 
 #define DBL_MAX std::numeric_limits<double>::max();

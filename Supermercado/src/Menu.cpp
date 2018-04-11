@@ -1,7 +1,5 @@
 #include "Menu.h"
 
-
-
 Menu::Menu() {
 	int numNodes = 0;
 
@@ -231,14 +229,14 @@ void Menu::menu() {
 	cout << "\n";
 
 	do {
-	cout<<"\n\ncomo quer visualizar a(s) rota(s)\n\n";
-	cout<<"1 - na consola\n";
-	cout<<"2 - no graphViewer\n";
-	cout<<"0 - sair\n";
-	cin>>choice;
-	}while (choice !=0 && choice !=1 && choice !=2);
+		cout << "\n\ncomo quer visualizar a(s) rota(s)\n\n";
+		cout << "1 - na consola\n";
+		cout << "2 - no graphViewer\n";
+		cout << "0 - sair\n";
+		cin >> choice;
+	} while (choice != 0 && choice != 1 && choice != 2);
 
-	switch (choice){
+	switch (choice) {
 	case 1:
 		textRoute();
 		break;
@@ -249,7 +247,6 @@ void Menu::menu() {
 		return;
 		break;
 	}
-
 
 	return;
 }
@@ -373,7 +370,6 @@ void Menu::textRoute() {
 	return;
 }
 
-
 void Menu::gvRoute() {
 
 	int choice = -1;
@@ -395,7 +391,6 @@ void Menu::gvRoute() {
 		} while (choice != 0 && choice != 1 && choice != 2 && choice != 3);
 
 		system("clear");
-
 
 		switch (choice) {
 		case 1:
@@ -423,9 +418,9 @@ void Menu::gvRoute() {
 	return;
 }
 
-
 void Menu::compareMethods() {
 
+	char choiceChar = 'Z';
 	int choice = 0;
 	double totaltotal = 0;
 	double total = 0;
@@ -447,7 +442,7 @@ void Menu::compareMethods() {
 		cout << "o algoritmo mais rápido a calcular é o Floyd-Warshall" << endl;
 	}
 
-	cout << "o algoritmo mais rápido a calcular é o"
+	cout << "o algoritmo mais rápido a calcular é o "
 			<< (compareStruct.biMethod.totalMillis
 					< compareStruct.dOdMethod.totalMillis ?
 					"bidireccional" : "Dijkstra of Dijkstras") << endl;
@@ -465,7 +460,7 @@ void Menu::compareMethods() {
 				<< "o algoritmo que devolve o percurso total menor é o Floyd-Warshall"
 				<< endl;
 	}
-	cout << "o algoritmo que devolve o percurso total menor é o"
+	cout << "o algoritmo que devolve o percurso total menor é o "
 			<< (compareStruct.biMethod.totalWeight
 					< compareStruct.dOdMethod.totalWeight ?
 					"bidireccional" : "Dijkstra of Dijkstras") << endl;
@@ -483,15 +478,18 @@ void Menu::compareMethods() {
 				<< "o algoritmo que devolve o percurso total com menos nós é o Floyd-Warshall"
 				<< endl;
 	}
-	cout << "o algoritmo que devolve o percurso total com menos nós é o"
+	cout << "o algoritmo que devolve o percurso total com menos nós é o "
 			<< (compareStruct.biMethod.totalNodes
 					< compareStruct.dOdMethod.totalNodes ?
 					"bidireccional" : "Dijkstra of Dijkstras") << endl;
 	cout << "DoD: " << compareStruct.dOdMethod.totalNodes << " nodes\n";
 	cout << "bi: " << compareStruct.biMethod.totalNodes << " nodes\n";
 	cout << "FW: " << compareStruct.fwMethod.totalNodes << " nodes\n\n\n";
-cout<<"\nprima uma tecla para continuar\n";
-	getchar();
+
+	do {
+		cout << "\nprima C para continuar\n";
+		cin >> choiceChar;
+	} while (choiceChar != 'c' && choiceChar != 'C');
 
 	textRoute(); //para escolher ver caminhos
 
@@ -803,7 +801,7 @@ void Menu::gvRouteFW() {
 	//loadFiles(numNodes);	//one truck at a time
 	double total = 0;
 	long long id;
-	cout<<"\nprima uma tecla para continuar\n";
+	cout << "\nprima uma tecla para continuar\n";
 	getchar();
 	bool found = false;
 
@@ -830,7 +828,7 @@ void Menu::gvRouteFW() {
 	vector<long long> routeBack;
 	vector<long long> supermarketLocation;
 
-//cout << "em processamento...\n[";
+//cout << "em processamento\n[";
 
 	vector<long long> stops = trucks.at(id - 1)->getStops();
 //long long sizeStops = stops.size();
@@ -853,7 +851,7 @@ void Menu::gvRouteFW() {
 	completeRoute.insert(completeRoute.end(), routeBack.begin(),
 			routeBack.end());
 
-	cout << "esta quase...\n";
+	cout << "mais um pouco\n";
 	viewGraph(true, id, completeRoute);
 	vector<Node> newPath;
 
@@ -861,7 +859,7 @@ void Menu::gvRouteFW() {
 }
 
 void Menu::gvRouteBi() {
-long long id;
+	long long id;
 	int totaltotal = 0;
 	int s, t;
 	double total = 0;
@@ -871,12 +869,11 @@ long long id;
 	vector<long long> supermarketLocation;
 	vector<long long> stops;
 	cout << "Rota de que supermercado?\n";
-		cin >> s;
-		cout << "Rota de que camiao?\n";
-		cin >> t;
-		int trucksPerSuper = trucks.size() / supermarkets.size();
-		id = trucksPerSuper * s + t;
-
+	cin >> s;
+	cout << "Rota de que camiao?\n";
+	cin >> t;
+	int trucksPerSuper = trucks.size() / supermarkets.size();
+	id = trucksPerSuper * s + t;
 
 	if (trucks.at(t)->getSupermarket() == supermarkets.at(s)->getId()) {
 
@@ -956,7 +953,13 @@ void Menu::gvRouteDoD() {
 
 	}	//fim verificacao cliente truck super
 
+	if(completeRoute.size()==0){
+		cout<<"rota vazia\n";
+		return;
+	}
+
 	cout << "mais um pouco\n";
+	//cout<<"gvRouteDoD route SIZE="<<completeRoute.size()<<endl;
 	viewGraph(true, id, completeRoute);
 	vector<Node> newPath;
 
@@ -1022,18 +1025,48 @@ void Menu::loadFiles(int numNodes) {
 					connections.at(i)->getNode1(), distance);
 
 	}
-	cout<<"\nprima uma tecla para continuar\n";
+	cout << "\nprima uma tecla para continuar\n";
 	getchar();
 	return;
 }
 
 void Menu::viewGraph(bool toSupermarket, long long idtruck,
 		vector<long long> route) {
+	int numNodes = 1, width = 1000, height = 498;
+	switch (graph.getNumVertex()) {
+	case 649:
+		numNodes = 1;
+		width = 600;
+		height = 535;
+		break;
+	case 1329:
+		numNodes = 2;
+		width = 862;
+		height = 793;
+		break;
+	case 2543:
+		numNodes = 3;
+		width = 864;
+		height = 680;
+		break;
+	case 3980:
+		numNodes = 4;
+		width = 1046;
+		height = 789;
+		break;
+	default:
+		break;
+	}
 
-	gv = new GraphViewer(1000, 498, false);
+	std::stringstream sstm;
+	sstm << IMGPRE << numNodes << IMGEXT;
+	string imageName = sstm.str();
 
-	gv->setBackground("fundo.jpg");
-	gv->createWindow(1000, 498);
+
+	gv = new GraphViewer(width, height, false);
+
+	gv->setBackground(imageName);
+	gv->createWindow(width,height);
 
 	gv->defineEdgeCurved(false);
 
@@ -1046,6 +1079,8 @@ void Menu::viewGraph(bool toSupermarket, long long idtruck,
 	bool client = false;
 
 	long long edgecount = 0;
+
+	//cout<<"viewGRAPH route SIZE="<<route.size()<<endl;
 
 	for (unsigned int i = 0; i < route.size(); i++) {
 		client = false;
@@ -1068,7 +1103,7 @@ void Menu::viewGraph(bool toSupermarket, long long idtruck,
 
 		}
 
-		gv->addNode(route.at(i), nodes.at(j)->getX(), nodes.at(j)->getY());
+		gv->addNode(route.at(i), nodes.at(j)->getX()-450, nodes.at(j)->getY()-70);
 		if (i == 0 && toSupermarket == true)
 			gv->setVertexIcon(route.at(i), "super_small.png");
 		else if (i == route.size() - 1 && toSupermarket == true)
@@ -1154,7 +1189,7 @@ vector<long long> Menu::dijkstraOfDijkstras(long long firstNode,
 	double min;
 	int k;
 	pathOrder.push_back((graph.getVertex(next))->getInfo());
-	cout << "size=" << stops.size() << endl;
+
 	while (stops.size() > 0) {
 		//	cout << "IMPRIME STOPS" << endl;
 		//	for (int st = 0; st < (int) stops.size(); st++) {
