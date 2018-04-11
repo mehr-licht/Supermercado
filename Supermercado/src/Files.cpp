@@ -16,24 +16,27 @@ vector<Node*> Files::loadNodes(int numNodes) {
 	string line;
 	ifstream file(filename.c_str());
 
-	while (getline(file, line)) {
-		stringstream linestream(line);
-		string s;
-		getline(linestream, s, ';');
-		long long id = abs(atoll(s.c_str()));
-		getline(linestream, s, ';');
-		double lat = strtod(s.c_str(), NULL);
-		getline(linestream, s, ';');
-		double lon = strtod(s.c_str(), NULL);
-		getline(linestream, s, ';');
-		double latRad = strtod(s.c_str(), NULL);
-		getline(linestream, s, ';');
-		double lonRad = strtod(s.c_str(), NULL);
-		Node* node = new Node(id, lat, lon, latRad, lonRad);
-		nodes.push_back(node);
-
+	if (file.is_open()) {
+		while (getline(file, line)) {
+			stringstream linestream(line);
+			string s;
+			getline(linestream, s, ';');
+			long long id = abs(atoll(s.c_str()));
+			getline(linestream, s, ';');
+			double lat = strtod(s.c_str(), NULL);
+			getline(linestream, s, ';');
+			double lon = strtod(s.c_str(), NULL);
+			getline(linestream, s, ';');
+			double latRad = strtod(s.c_str(), NULL);
+			getline(linestream, s, ';');
+			double lonRad = strtod(s.c_str(), NULL);
+			Node* node = new Node(id, lat, lon, latRad, lonRad);
+			nodes.push_back(node);
+			}
+		file.close();
+	} else {
+		cerr << "e File not found!\n";
 	}
-
 	return nodes;
 }
 
@@ -46,19 +49,23 @@ vector<Road*> Files::loadRoads(int numNodes) {
 	string line;
 	ifstream file(filename.c_str());
 
-	while (getline(file, line)) {
-		stringstream linestream(line);
-		string s;
-		getline(linestream, s, ';');
-		long long id = atoll(s.c_str());
-		getline(linestream, s, ';');
-		string name = s;
-		getline(linestream, s, ';');
-		bool b;
-		istringstream(s) >> std::boolalpha >> b;
-		Road* road = new Road(id, name, b);
-		roads.push_back(road);
-
+	if (file.is_open()) {
+		while (getline(file, line)) {
+			stringstream linestream(line);
+			string s;
+			getline(linestream, s, ';');
+			long long id = atoll(s.c_str());
+			getline(linestream, s, ';');
+			string name = s;
+			getline(linestream, s, ';');
+			bool b;
+			istringstream(s) >> std::boolalpha >> b;
+			Road *road = new Road(id, name, b);
+			roads.push_back(road);
+		}
+		file.close();
+	} else {
+		cerr << "e File not found!\n";
 	}
 
 	return roads;
@@ -74,22 +81,27 @@ vector<RoadConnection*> Files::loadConnections(int numNodes) {
 	string line;
 	ifstream file(filename.c_str());
 
-	while (getline(file, line)) {
-		stringstream linestream(line);
-		string s;
-		getline(linestream, s, ';');
-		long long id = atoll(s.c_str());
-		getline(linestream, s, ';');
-		long long node1 = atoll(s.c_str());
-		getline(linestream, s, ';');
-		long long node2 = atoll(s.c_str());
-		getline(linestream, s, ';');
-		RoadConnection* conn = new RoadConnection(id, node1, node2);
-		connections.push_back(conn);
-
+	if (file.is_open()) {
+		while (getline(file, line)) {
+			stringstream linestream(line);
+			string s;
+			getline(linestream, s, ';');
+			long long id = atoll(s.c_str());
+			getline(linestream, s, ';');
+			long long node1 = atoll(s.c_str());
+			getline(linestream, s, ';');
+			long long node2 = atoll(s.c_str());
+			getline(linestream, s, ';');
+			RoadConnection* conn = new RoadConnection(id, node1, node2);
+			connections.push_back(conn);
+			}
+		file.close();
+	} else {
+		cerr << "e File not found!\n";
 	}
 
-	return connections;
+
+return connections;
 }
 
 vector<Supermarket*> Files::loadSupermarkets() {
@@ -99,18 +111,22 @@ vector<Supermarket*> Files::loadSupermarkets() {
 	string line;
 	ifstream file(filename.c_str());
 
-	while (getline(file, line)) {
-		stringstream linestream(line);
-		string s;
-		getline(linestream, s, ';');
-		int id = atoi(s.c_str());
-		getline(linestream, s, ';');
-		string name = s;
-		getline(linestream, s, ';');
-		long long node = atoll(s.c_str());
-		Supermarket* supermarket = new Supermarket(id, name, node);
-		supermarkets.push_back(supermarket);
-
+	if (file.is_open()) {
+		while (getline(file, line)) {
+			stringstream linestream(line);
+			string s;
+			getline(linestream, s, ';');
+			int id = atoi(s.c_str());
+			getline(linestream, s, ';');
+			string name = s;
+			getline(linestream, s, ';');
+			long long node = atoll(s.c_str());
+			Supermarket* supermarket = new Supermarket(id, name, node);
+			supermarkets.push_back(supermarket);
+		}
+		file.close();
+	} else {
+		cerr << "e File not found!\n";
 	}
 
 	return supermarkets;
@@ -123,24 +139,27 @@ vector<Client*> Files::loadClients() {
 	string line;
 	ifstream file(filename.c_str());
 
-	while (getline(file, line)) {
-		stringstream linestream(line);
-		string s;
-		getline(linestream, s, ';');
-		int id = atoi(s.c_str());
-		getline(linestream, s, ';');
-		string name = s;
-		getline(linestream, s, ';');
-		long long node = atoll(s.c_str());
-		getline(linestream, s, ';');
-		string address = s;
-		getline(linestream, s, ';');
-		int supermarket = atoi(s.c_str());
-		Client* client = new Client(id, name, node, address, supermarket);
-		clients.push_back(client);
-
+	if (file.is_open()) {
+		while (getline(file, line)) {
+			stringstream linestream(line);
+			string s;
+			getline(linestream, s, ';');
+			int id = atoi(s.c_str());
+			getline(linestream, s, ';');
+			string name = s;
+			getline(linestream, s, ';');
+			long long node = atoll(s.c_str());
+			getline(linestream, s, ';');
+			string address = s;
+			getline(linestream, s, ';');
+			int supermarket = atoi(s.c_str());
+			Client* client = new Client(id, name, node, address, supermarket);
+			clients.push_back(client);
+			}
+		file.close();
+	} else {
+		cerr << "e File not found!\n";
 	}
-
 
 	return clients;
 }
@@ -152,27 +171,29 @@ vector<Truck*> Files::loadTruck(vector<Client*> clients) {
 	string line;
 	ifstream file(filename.c_str());
 
-	while (getline(file, line)) {
-		stringstream linestream(line);
-		string s;
-		getline(linestream, s, ';');
-		int id = atoi(s.c_str());
-		getline(linestream, s, ';');
-		string numRota = s;
-		getline(linestream, s, ';');
-		long long capacity = atoi(s.c_str());
-		getline(linestream, s, ';');
-		int supermarket = atoi(s.c_str());
-		Truck* truck = new Truck(id, numRota, capacity, supermarket);
+	if (file.is_open()) {
+		while (getline(file, line)) {
+			stringstream linestream(line);
+			string s;
+			getline(linestream, s, ';');
+			int id = atoi(s.c_str());
+			getline(linestream, s, ';');
+			string numRota = s;
+			getline(linestream, s, ';');
+			long long capacity = atoi(s.c_str());
+			getline(linestream, s, ';');
+			int supermarket = atoi(s.c_str());
+			Truck* truck = new Truck(id, numRota, capacity, supermarket);
 
-		for (unsigned int i = 0; i < clients.size(); i++) {
-			if (clients[i]->getMySuper() == supermarket)
-				truck->addClient(clients[i]);
+			for (unsigned int i = 0; i < clients.size(); i++) {
+				if (clients[i]->getMySuper() == supermarket)
+					truck->addClient(clients[i]);
+			}
+			trucks.push_back(truck);
 		}
-
-		trucks.push_back(truck);
-
+		file.close();
+	} else {
+		cerr << "e File not found!\n";
 	}
-
 	return trucks;
 }
