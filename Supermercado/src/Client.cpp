@@ -1,53 +1,56 @@
-/*
- * Client.cpp
- *
- *  Created on: 26/03/2018
- *      Author: luis
- */
-
 #include "Client.h"
 
 Client::Client() {
+	this->id = 0;
 }
 
-Client::Client(int id, Vertex<Node> *node, string name) {
+
+Client::Client(int id, std::string name, long long node, std::string address,
+		long long mySuper=0) {
 	this->id = id;
-	this->node = node;
 	this->name = name;
-	this->visited = false;
+	this->node = node;
+	this->address = address;
 
-	}
-
-Client::~Client() {
+	this->mySuper =mySuper;
+	this->distMySuper = INT_INF;
 }
+;
 
-void Client::setNotVisited() {
-	this->visited=false;
-}
-
-void Client::setVisited() {
-	this->visited=true;
-}
-
-bool Client::getVisited() {
-	return this->visited;
-}
-
-int Client::getID() {
-	return this->id;
-}
-
-Vertex<Node>* Client::getNode() {
-	return this->node;
-}
-
-string Client::getName() {
+std::string Client::getName() {
 	return this->name;
 }
 
+long long  Client::getNode() {
+	return this->node;
+}
 
 
+int Client::getId() {
+	return this->id;
+}
+
+std::string Client::getAddress() {
+	return this->address;
+}
 
 
+void Client::print() {
+	std::cout << "id=" << id << "\tname=" << name << "\tnode=" << node
+			<< "\taddress=" << address << "\tmysuper" << mySuper
+			<< "\tdistsuper=" << distMySuper << std::endl;
+}
 
+int Client::getMySuper() {
+	return this->mySuper;
+}
+void Client::setMySuper(int super) {
+	this->mySuper = super;
+}
 
+double Client::getDistMySuper() {
+	return this->distMySuper;
+}
+void Client::setDistMySuper(double dist) {
+	this->distMySuper = dist;
+}

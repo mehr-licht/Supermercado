@@ -1,0 +1,128 @@
+13715562;Rua de João Pedro Ribeiro;False
+13797599;Rua de Antero de Quental;True
+14329124;Largo da Lapa;False
+30417990;Rua do Barão de Forrester;False
+30912941;Rua de Brito Capelo;False
+30912960;Travessa de Salgueiros;False
+31396393;Rua de São Brás;False
+31396444;Travessa de São Brás;False
+34653072;Rua de Fonseca Cardoso;False
+34772371;Rua de Camões;False
+36836258;Rua da Infanta Dona Maria;False
+38336633;Rua de Faria Guimarães;False
+39549792;Travessa da Senhora da Conceição;False
+39549900;Rua da Senhora da Lapa;False
+39549954;Rua da Glória;False
+39549961;Travessa da Senhora da Lapa;False
+39549973;Rua do Monte da Lapa;False
+39549982;Calçada da Lapa;False
+39550749;Travessa da Senhora da Conceição;False
+39586894;Rua dos Burgães;False
+39586911;Rua do Soajo;False
+39586944;Rua do Melo;False
+39587009;Rua do Monte Cativo;True
+39587067;Rua da Bouça;False
+39587108;Rua do Gerês;False
+39587490;Rua de Marques Marinho;False
+39588456;Rua da Peneda;False
+39590128;Rua do Marão;False
+39590262;Rua Sport Comércio e Salgueiros;False
+39597607;Rua de Cervantes;False
+39597692;Rua de Cervantes;False
+39597779;Rua de Cervantes;False
+39597832;Rua de Alves Redol;False
+39597960;Rua de Alves Redol;False
+39598055;Rua de Salgueiros;False
+39598458;Rua Ribeiro de Sousa;False
+39598589;Rua Padre José Pacheco do Monte;False
+39598605;Rua da Aliança;False
+39598629;Rua do Zambeze;False
+39598714;Rua do Niassa;False
+39609163;Rua de Cunha Júnior;False
+39631697;Travessa de Marracuene;False
+39633344;Rua Padre Luís Rodrigues;False
+39633589;Travessa do Monte Louro;False
+39633790;Rua de Damião de Góis;False
+39633834;;False
+39633884;Rua de Damião de Góis;False
+39650114;Rua do Quanza;False
+39650163;Rua do Limpopo;False
+39650208;Rua de Cabinda;False
+39653923;Alameda dos Capitães de Abril;False
+39653956;;False
+39657990;Rua de Antero de Quental;False
+39657991;Largo da Lapa;False
+51228956;Rua de Marracuene;False
+105637466;Rua de Monte Pedral;False
+128133836;Rua de Oliveira Monteiro;False
+128828529;Largo da Lapa;False
+178413106;Rua de Alves Redol;False
+206544631;;False
+210670988;Rua do Paraíso;False
+210670990;Rua de Antero de Quental;False
+228569801;Rua de São Brás;False
+231325189;;False
+231325191;;False
+252525262;Rua Cantor Zeca Afonso;False
+305708885;;False
+306780233;Rua da Bouça;False
+306780234;Rua do Monte Cativo;False
+306780458;Travessa de Antero de Quental;False
+307088020;;False
+307090815;Travessa de Salgueiros;False
+307126889;Rua de Cervantes;False
+308766174;;False
+308769686;;False
+308771430;Calçada Marques Marinho;False
+308771431;Rua da Peneda;False
+308771715;;False
+309387164;;False
+309425930;;False
+309609103;;False
+309609104;;False
+309609105;;False
+309613709;;False
+309613710;;False
+309613711;;False
+309613712;;False
+309850502;;False
+309850504;;False
+309850505;;False
+309850506;;False
+309945301;;False
+309946468;;False
+309946469;;False
+309946470;;False
+309946471;;False
+309983298;;False
+309983299;;False
+309983300;;False
+309983301;;False
+310304680;;False
+310408556;;False
+310746310;Rua de Damião de Góis;False
+310746311;;False
+310786269;Rua de Cervantes;False
+310892311;;False
+310892312;;False
+310892313;;False
+332479933;;False
+446857819;;False
+446857820;;False
+448195881;Rua de Serpa Pinto;False
+452076898;Rua do Paraíso;False
+453761206;Rua de Damião de Góis;False
+453761207;Rua de São Brás;False
+453761208;Rua de João Pedro Ribeiro;False
+453761209;Rua de João Pedro Ribeiro;False
+453762943;Rua de Egas Moniz;False
+453762944;Rua de Serpa Pinto;False
+453762946;Rua de Serpa Pinto;False
+453762947;Rua de Serpa Pinto;False
+453762948;Rua da Constituição;False
+456405100;Rua Almirante Leote do Rego;False
+466406690;;False
+482122892;Rua de Alves Redol;False
+482122893;Rua de Alves Redol;False
+482122894;Rua de Cervantes;False
+547650634;Rua do Paraíso;False

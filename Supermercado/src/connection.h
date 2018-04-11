@@ -1,4 +1,4 @@
-#ifndef _CONNECTION_
+﻿#ifndef _CONNECTION_
 #define _CONNECTION_
 
 #include <cstdio>
@@ -11,9 +11,9 @@
 #include <sys/types.h>
 #include <netdb.h>
 #endif
-#ifdef __WIN32__
-#include <winsock2.h>
-#endif
+//#ifdef __WIN32__
+//#include <winsock2.h>
+//#endif
 
 #include <string>
 #include <iostream>
@@ -21,17 +21,17 @@
 using namespace std;
 
 class Connection {
-public:
-	Connection(short port);
+ public:
+  Connection(short port);
 
-	bool sendMsg(string msg);
-	string readLine();
-private:
+  bool sendMsg(string msg);
+  string readLine();
+ private: 
 #ifdef __linux__
-	int sock;
+  long long sock;
 #endif
 #ifdef __WIN32__
-	SOCKET sock;
+  SOCKET sock;
 #endif
 };
 

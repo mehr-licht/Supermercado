@@ -1,92 +1,96 @@
-/*
- * Client.h
- *
- *  Created on: 26/03/2018
- *      Author: luis
- */
-
-#ifndef SRC_CLIENT_H_
-#define SRC_CLIENT_H_
 
 
-#include <iostream>
+#ifndef CLIENT_H_
+#define CLIENT_H_
+#include <limits>
 #include <string>
 #include "Node.h"
-#include "Graph.h"
+#include "iostream"
 #include "Supermarket.h"
-//using namespace std;
+
+const int INT_INF= std::numeric_limits<int>::max();
 
 class Client {
-private:
-
 	int id;
-	Vertex<Node> *node;
-	string name;
-	bool visited;
-	Supermarket super;
+	std::string name;
+	long long  node;
+	std::string address;
+	int mySuper;
+	int distMySuper;
 
 public:
 	/**
-	 * Construtor default.
+	 * Client default constructor.
 	 */
 	Client();
 
 	/**
-	 * Destrutor default.
+	 * Client constructor
+	 * @param id
+	 * @param n
+	 * @param h
+	 * @param s
 	 */
-	~Client();
-
-	void setNotVisited();
-
-	void setVisited();
-
-	bool getVisited() ;
+	Client(int id, std::string name, long long node, std::string address,
+			long long mySuper) ;
+	/**
+	 * Get Client's name.
+	 * @return Client's name.
+	 */
+	std::string getName();
+	/**
+	 * Get Client's node id.
+	 * @return Client's node id.
+	 */
+		long long  getNode();
+	/**
+	 * Get Client's address.
+	 * @return Client address.
+	 */
+		std::string getAddress();
 
 
 	/**
-	 * Construtor de Client
-	 * @param id int que represente o id do parque de estacionamento.
-	 * @param node aponador para o vertex a que esse parque de estacionamento está associado.
-	 * @param name string do nome do parque de estacionamento.
-	 *
-	 *
+	 * Get Client id.
+	 * @return Client id.
 	 */
-	Client(int id, Vertex<Node> *node, string name);
+int getId();
 
-	/**
-	 * Função que retorna o ID do parking lot.
-	 * @return ID do parking lot (int).
-	 */
-	int getID();
+/**
+ * prints a client in a friendly way
+ */
+void print();
 
-	/**
-	 * Função que retorna o apontador para para o vertex a que esse parque de estacionamento está associado.
-	 * @return Vertex a que esse parque de estacionamento está associado.
-	 */
-	Vertex<Node> *getNode();
+/**
+ * get client's assigned supermarket
+ * @return Client assigned supermarket
+ */
+int getMySuper();
 
-	/**
-	 * Função que retorna o nome do parkingLot.
-	 * @return nome do parking lot (string).
-	 */
-	string getName();
 
-	/**
-	 * Função que retorna o preço do parkingLot.
-	 * @return preço do parking lot (float).
-	 */
-	float getPrice();
+/**
+ * set client's assigned supermarket
+ *
+ */
+void setMySuper(int super);
 
-	/**
-	 * Função que nos diz se o parque de estcionamento é garagem ou parque de rua.
-	 * @return true se é garagem, false se é parque de rua.
-	 */
-	bool getIsGarage();
+
+/**
+ * get client's distance to his assigned supermarket
+ * @return distance to Client assigned supermarket
+ */
+double getDistMySuper();
+
+
+/**
+ *  set client's distance to his assigned supermarket
+ *
+ */
+void setDistMySuper(double dist);
+
+
 };
 
 
 
-
-
-
-#endif /* SRC_CLIENT_H_ */
+#endif /* CLIENT_H_ */

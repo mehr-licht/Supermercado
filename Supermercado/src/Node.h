@@ -1,81 +1,84 @@
-/*
- * Node.h
- *
- *  Created on: 26/03/2018
- *      Author: luis
- */
 
-#ifndef SRC_NODE_H_
-#define SRC_NODE_H_
 
-#include <iostream>
-#include <vector>
+#ifndef NODE_H_
+#define NODE_H_
 
-//using namespace std;
+#define WIDTH 1000
+#define HEIGHT 400
+#define LATMIN 41.14026
+#define LATMAX 41.1536
+#define LONMIN -8.620372
+#define LONMAX -8.598513
+
+#include <string>
+#include <math.h>
+
 
 class Node {
 private:
-	int id; ///< Node's ID
-	std::string name; //< Node's name
-	std::pair<int, int> coords;  ///< Node's coordinates (x,y)
+	long long id;
+	double lat;
+	double lon;
+	double latRad;
+	double lonRad;
+	double x;
+	double y;
+	double scaleLon();
+	double scaleLat();
 
 public:
 	/**
-	 * Construtor default.
+	 * Node default constructor.
 	 */
 	Node();
 
 	/**
-	 * Destrutor default.
+	 * Node constructor.
+	 * @param id
+	 * @param lat
+	 * @param lon
+	 * @param latRad
+	 * @param lonRad
 	 */
-	~Node();
-
+	Node (long long id, double lat, double lon, double latRad, double lonRad);
 	/**
-	 * Construtor de node.
-	 * @param id int que representa o ID do node.
-	 * @param x int que representa a coordenada X do node.
-	 * @param y int que representa a coordenada Y do node.
-	 * @param name string que representa o nome do local do node.
+	 * Get node's id.
+	 * @return Node's id.
 	 */
-	Node(int id, int x, int y, std::string name);
-
+	long long getId() const;
 	/**
-	 * Função que retorna o ID do node
-	 * @return ID do node (int).
+	 * Get node's latitude in degrees.
+	 * @return Latitude in degrees.
 	 */
-	int getID() const;
-
+	double getLat() const;
 	/**
-	 * Função que retorna a coordenada X do node.
-	 * @return X do node (int).
+	 * Get node's longitude in degrees.
+	 * @return Longitude in degrees.
 	 */
-	int getX() const;
-
+	double getLon() const;
 	/**
-	 * Função que retorna a coordenada Y do node.
-	 * @return Y do node (int).
+	 * Get node's latitude in radians.
+	 * @return Latitude in radians.
 	 */
-	int getY() const;
-
+	double getLatRad() const;
 	/**
-	 * Função que retorna o nome do local do node.
-	 * @return name do node (string).
+	 * Get node's longitude in radians.
+	 * @return Longitude in radians.
 	 */
-	std::string getName() const;
-
+	double getLonRad() const;
 	/**
-	 * Função que muda o ID do node.
-	 * @param ID int do ID pretendido.
+	 * Get node's x position.
+	 * @return X (horizontal) position.
 	 */
-	void setID(int ID);
-
+	double getX() const;
 	/**
-	 * Overload do operador == para nodes. Dois nodes são iguais quando têm o mesmo ID.
-	 * @param n2 Noode ao qual queremos comparar a instancia que chama esta função.
+	 * Get node's y position.
+	 * @return Y (vertical) position.
 	 */
-	bool operator==(const Node & n2) const;
+	double getY() const;
+
 };
 
 
 
-#endif /* SRC_NODE_H_ */
+#endif /* NODE_H_ */
