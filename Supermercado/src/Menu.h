@@ -38,7 +38,7 @@ private:
 	vector<Truck*> trucks;
 	static long long last_id;
 
-	bool statsShown = false;
+	bool statsShown;
 
 	struct methodData {
 		int totalNodes;

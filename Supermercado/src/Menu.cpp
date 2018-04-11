@@ -1,5 +1,7 @@
 #include "Menu.h"
 
+
+
 Menu::Menu() {
 	int numNodes = 0;
 
@@ -20,7 +22,7 @@ Menu::Menu() {
 	cout << "\n\n\nA Ler Os Ficheiros\n";
 	loadFiles(numNodes);
 
-	cout << "\nficheiros lidos!\nprima um tecla\n";
+	cout << "\nficheiros lidos!\nprima uma tecla para continuar\n";
 	getchar();
 	menu();
 	return;
@@ -205,7 +207,7 @@ void Menu::createClients(int clientes) {
 }
 
 void Menu::menu() {
-
+	statsShown = false;
 	long long choice = -1, supers = 1, trucks = 1, clientes = 14;
 	system("clear");
 
@@ -274,7 +276,7 @@ void Menu::getGraphStats() {
 	//avalia a conectividade (requisito do enunciado)
 	cout << "O grafo criado " << (graph.isStronglyConnected() ? "" : "não ")
 			<< "é fortemente conexo\n";
-	cout << "\n\n\nprima uma tecla\n";
+	cout << "\n\n\nprima uma tecla para continuar\n";
 	getchar();
 	return;
 }
@@ -363,7 +365,7 @@ void Menu::textRoute() {
 		//	cout << "soma das rotas=" << totaltotal << "\n";
 		cout << "\n\n";
 
-		cout << "prima um tecla\n";
+		cout << "\nprima uma tecla para continuar\n";
 		getchar();
 	}
 	//and to the choice menu again
@@ -413,7 +415,7 @@ void Menu::gvRoute() {
 
 		cout << "\n\n";
 
-		cout << "prima um tecla\n";
+		cout << "\nprima uma tecla para continuar\n";
 		getchar();
 	}
 	//and to the choice menu again
@@ -488,6 +490,8 @@ void Menu::compareMethods() {
 	cout << "DoD: " << compareStruct.dOdMethod.totalNodes << " nodes\n";
 	cout << "bi: " << compareStruct.biMethod.totalNodes << " nodes\n";
 	cout << "FW: " << compareStruct.fwMethod.totalNodes << " nodes\n\n\n";
+cout<<"\nprima uma tecla para continuar\n";
+	getchar();
 
 	textRoute(); //para escolher ver caminhos
 
@@ -799,6 +803,7 @@ void Menu::gvRouteFW() {
 	//loadFiles(numNodes);	//one truck at a time
 	double total = 0;
 	long long id;
+	cout<<"\nprima uma tecla para continuar\n";
 	getchar();
 	bool found = false;
 
@@ -1017,6 +1022,7 @@ void Menu::loadFiles(int numNodes) {
 					connections.at(i)->getNode1(), distance);
 
 	}
+	cout<<"\nprima uma tecla para continuar\n";
 	getchar();
 	return;
 }
