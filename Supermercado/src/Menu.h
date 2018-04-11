@@ -20,6 +20,7 @@
 #include "Utilities.h"//getMilliSpan
 #include <stack>
 #include <limits>
+#include "edgetype.h"
 
 #define IMGEXT ".png"
 
@@ -191,6 +192,25 @@ public:
 	 */
 	int numberOfClientsOfSupermarket(int super);
 
+	/**
+	 * menu to choose which method to be calculated to show the route in the graphviewer
+	 */
+	void gvRoute();
+
+	/**
+	 * Get route obtained with Floyd-Warshall algorithm in graphviewer.
+	 */
+	void gvRouteFW();
+
+	/**
+	 * Get route obtained with bidireccional algorithm in graphviewer.
+	 */
+	void gvRouteBi();
+
+	/**
+	 * Get route obtained with Dijkstra of Dijkstras algorithm in graphviewer.
+	 */
+	void gvRouteDoD();
 }
 ;
 

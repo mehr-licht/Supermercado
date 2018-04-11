@@ -1,6 +1,5 @@
 #include "Menu.h"
 
-
 Menu::Menu() {
 	int numNodes = 0;
 
@@ -15,8 +14,9 @@ Menu::Menu() {
 		cout << "4 : 3980\n";
 		cout << "0 : usar predefinido\n";
 		cin >> numNodes;
-	} while ( numNodes >4);
-if (numNodes <0) return;
+	} while (numNodes > 4);
+	if (numNodes < 0)
+		return;
 	cout << "\n\n\nA Ler Os Ficheiros\n";
 	loadFiles(numNodes);
 
@@ -55,7 +55,6 @@ void Menu::assignClientToSuper(int supers) {
 	bool added = false;
 	int n;
 	srand(time(NULL));
-
 
 	supermarkets.clear();
 	for (int s = (int) supermarkets.size(); s < supers; s++) {
@@ -128,9 +127,7 @@ void Menu::assignClientToTruck(int camioes) {
 
 	for (unsigned int c = 0; c < clients.size(); c++) {
 
-
 		trucksLeft = camioes;
-
 
 		for (int s = 0; s < (int) supermarkets.size(); s++) {
 
@@ -209,7 +206,7 @@ void Menu::createClients(int clientes) {
 
 void Menu::menu() {
 
-	long long choice = 1, supers = 1, trucks = 1, clientes = 14;
+	long long choice = -1, supers = 1, trucks = 1, clientes = 14;
 	system("clear");
 
 	cout << "Quantos clientes ? (0 para usar ficheiros)\n";
@@ -231,7 +228,25 @@ void Menu::menu() {
 
 	cout << "\n";
 
-	textRoute();
+	do {
+	cout<<"\n\ncomo quer visualizar a(s) rota(s)\n\n";
+	cout<<"1 - na consola\n";
+	cout<<"2 - no graphViewer\n";
+	cout<<"0 - sair\n";
+	}while (choice !=0 && choice !=1 && choice !=2);
+
+	switch (choice){
+	case 1:
+		textRoute();
+		break;
+	case 2:
+		gvRoute();
+		break;
+	default:
+		return;
+		break;
+	}
+
 
 	return;
 }
@@ -267,7 +282,6 @@ void Menu::textRoute() {
 
 	int choice = -1;
 
-
 	if (!statsShown) {
 		getGraphStats();
 	}
@@ -283,7 +297,8 @@ void Menu::textRoute() {
 
 			cin >> choice;
 
-		} while (choice != 0 && choice != 1 && choice != 2 && choice != 3 && choice != 4);
+		} while (choice != 0 && choice != 1 && choice != 2 && choice != 3
+				&& choice != 4);
 
 		system("clear");
 		double totaltotal = 0;
@@ -354,6 +369,57 @@ void Menu::textRoute() {
 //	textRoute();
 	return;
 }
+
+
+void Menu::gvRoute() {
+
+	int choice = -1;
+
+	if (!statsShown) {
+		getGraphStats();
+	}
+	while (choice != 0) {
+		do {
+
+			cout << "qual o metodo?\n";
+			cout << "1 - Dijkstra de Dijkstra?\n";
+			cout << "2 - bidireccional?\n";
+			cout << "3 - Floyd-Warshall?\n";
+			cout << "0 - sair\n";
+
+			cin >> choice;
+
+		} while (choice != 0 && choice != 1 && choice != 2 && choice != 3);
+
+		system("clear");
+
+
+		switch (choice) {
+		case 1:
+			gvRouteDoD();
+			break;
+		case 2:
+			gvRouteBi();
+			break;
+		case 3:
+			gvRouteFW();
+			break;
+
+		default:
+			return;
+			break;
+		}
+
+		cout << "\n\n";
+
+		cout << "prima um tecla\n";
+		getchar();
+	}
+	//and to the choice menu again
+//	textRoute();
+	return;
+}
+
 
 void Menu::compareMethods() {
 
@@ -462,7 +528,6 @@ void Menu::fw(double &total, bool toPrint) {
 
 				supermarketLocation.push_back(supermarkets.at(s)->getNode());
 
-
 				route = getFW(supermarkets.at(s)->getNode(),
 						trucks.at(t)->getStops(), supermarkets.at(s)->getNode(),
 						total);
@@ -506,7 +571,7 @@ void Menu::fw(double &total, bool toPrint) {
 //------------------------------------------------
 	cout << "\ntotal de nós rotas =" << compareStruct.fwMethod.totalNodes
 			<< endl;
-	cout << "\ntotal das rotas =" << totaltotal <<" m"<<endl;
+	cout << "\ntotal das rotas =" << totaltotal << " m" << endl;
 	compareStruct.fwMethod.totalWeight = totaltotal;
 	compareStruct.fwMethod.totalMillis = nTimeElapsed;
 	cout << "\n";
@@ -591,7 +656,7 @@ void Menu::DoD(double &total, bool toPrint) {
 //------------------------------------------------
 	cout << "\ntotal de nós rotas =" << compareStruct.dOdMethod.totalNodes
 			<< endl;
-	cout << "\ntotal das rotas =" << totaltotal <<" m"<< endl;
+	cout << "\ntotal das rotas =" << totaltotal << " m" << endl;
 	compareStruct.dOdMethod.totalWeight = totaltotal;
 	compareStruct.dOdMethod.totalMillis = nTimeElapsed;
 	cout << "\n";
@@ -643,7 +708,7 @@ void Menu::printRoute(vector<long long> & completeRoute, int s, int t) {
 }
 
 void Menu::bi(double &total, bool toPrint) {
-	cout<<"entrou bi\n";
+	cout << "entrou bi\n";
 	int totaltotal = 0;
 	cout << "\nNosso algoritmo bidireccional:\n";
 //cout << "em processamento ";
@@ -657,7 +722,6 @@ void Menu::bi(double &total, bool toPrint) {
 	vector<long long> routeBack;
 	vector<long long> supermarketLocation;
 	vector<long long> stops;
-
 
 	for (unsigned int s = 0; s < supermarkets.size(); s++) {
 
@@ -688,7 +752,7 @@ void Menu::bi(double &total, bool toPrint) {
 				//	completeRoute.reserve(route.size() + routeBack.size());
 				completeRoute.insert(completeRoute.end(), route.begin(),
 						route.end());
-				cout<<"08\n";
+				cout << "08\n";
 				//	completeRoute.insert(completeRoute.end(), routeBack.begin(),routeBack.end() - 1);	//-1 para não repetir a chegada
 				cout << "\nnumber of nodes in path:" << completeRoute.size()
 						<< endl;
@@ -723,10 +787,173 @@ void Menu::bi(double &total, bool toPrint) {
 //------------------------------------------------
 	cout << "\ntotal de nós rotas =" << compareStruct.biMethod.totalNodes
 			<< endl;
-	cout << "\ntotal das rotas =" << totaltotal <<" m"<< endl;
+	cout << "\ntotal das rotas =" << totaltotal << " m" << endl;
 	compareStruct.biMethod.totalWeight = totaltotal;
 	compareStruct.biMethod.totalMillis = nTimeElapsed;
 	cout << "\n";
+	return;
+}
+
+void Menu::gvRouteFW() {
+	//loadFiles(numNodes);	//one truck at a time
+	double total = 0;
+	long long id;
+	getchar();
+	bool found = false;
+
+	system("clear");
+
+	do {
+		cout << "qual a rota?\n";
+		cin >> id;
+		for (unsigned int i = 0; i < trucks.size(); i++) {
+			if (trucks.at(i)->getId() == id) {
+				found = true;
+				break;
+			}
+		}
+		if (found == false) {
+			cout << "nao existe essa rota.\n qual a rota?\n";
+		}
+	} while (found == false);
+	system("clear");
+
+	write(STDOUT_FILENO, "\n\nem processamento\n", 19);
+	long long supermarket = trucks[id - 1]->getSupermarket(); //supermercado onde esta o camiao
+	vector<long long> route;
+	vector<long long> routeBack;
+	vector<long long> supermarketLocation;
+
+//cout << "em processamento...\n[";
+
+	vector<long long> stops = trucks.at(id - 1)->getStops();
+//long long sizeStops = stops.size();
+//ERROR TRACKING cout<< sizeStops<<"NUM DE STOPS=============================================================================\n";
+
+	supermarketLocation.push_back(supermarkets.at(supermarket)->getNode());
+
+//ROTA: sai do supermercado(armazem) -> passa por todos os clients -> supermercado (armazem)
+	route = getFW(supermarkets.at(supermarket)->getNode(),
+			trucks.at(id - 1)->getStops(),
+			supermarkets.at(supermarket)->getNode(), total);
+
+	long long LastStop = route.at(route.size() - 1);
+	routeBack = getFW(LastStop, supermarketLocation, LastStop, total);
+
+//CONCATENATE BOTH ROUTES
+	vector<long long> completeRoute;
+	completeRoute.reserve(route.size() + routeBack.size());
+	completeRoute.insert(completeRoute.end(), route.begin(), route.end());
+	completeRoute.insert(completeRoute.end(), routeBack.begin(),
+			routeBack.end());
+
+	cout << "esta quase...\n";
+	viewGraph(true, id, completeRoute);
+	vector<Node> newPath;
+
+	return;
+}
+
+void Menu::gvRouteBi() {
+long long id;
+	int totaltotal = 0;
+	int s, t;
+	double total = 0;
+	vector<long long> completeRoute;
+	vector<long long> route;
+	vector<long long> routeBack;
+	vector<long long> supermarketLocation;
+	vector<long long> stops;
+	cout << "Rota de que supermercado?\n";
+		cin >> s;
+		cout << "Rota de que camiao?\n";
+		cin >> t;
+		int trucksPerSuper = trucks.size() / supermarkets.size();
+		id = trucksPerSuper * s + t;
+
+
+	if (trucks.at(t)->getSupermarket() == supermarkets.at(s)->getId()) {
+
+		completeRoute.clear();
+		route.clear();
+		routeBack.clear();
+		supermarketLocation.clear();
+		stops.clear();
+
+		stops = trucks.at(t)->getStops();
+
+		supermarketLocation.push_back(supermarkets.at(s)->getNode());
+
+		route = graph.getOurRoute(supermarkets.at(s)->getNode(),
+				trucks.at(t)->getStops(), supermarkets.at(s)->getNode(), total);
+
+		//	LastStop = route.at(route.size() - 1);
+		//PENSO QUE A MAIS			routeBack = graph.getOurRoute(LastStop, supermarketLocation,supermarkets.at(s)->getNode(), total);
+
+		//	completeRoute.reserve(route.size() + routeBack.size());
+		completeRoute.insert(completeRoute.end(), route.begin(), route.end());
+
+		//	completeRoute.insert(completeRoute.end(), routeBack.begin(),routeBack.end() - 1);	//-1 para não repetir a chegada
+
+	}	//fim verificacao cliente truck super
+
+	cout << "mais um pouco\n";
+	viewGraph(true, id, completeRoute);
+	vector<Node> newPath;
+
+	return;
+}
+
+void Menu::gvRouteDoD() {
+	long long id;
+	double total = 0;
+	int s, t;
+	vector<long long> completeRoute;
+	vector<long long> route;
+	vector<long long> routeBack;
+	vector<long long> supermarketLocation;
+	vector<long long> stops;
+
+	long long LastStop;
+	cout << "Rota de que supermercado?\n";
+	cin >> s;
+	cout << "Rota de que camiao?\n";
+	cin >> t;
+	int trucksPerSuper = trucks.size() / supermarkets.size();
+	id = trucksPerSuper * s + t;
+
+	if (trucks.at(t)->getSupermarket() == supermarkets.at(s)->getId()) {
+
+		completeRoute.clear();
+		route.clear();
+		routeBack.clear();
+		supermarketLocation.clear();
+		stops.clear();
+		stops = trucks.at(t)->getStops();
+
+		supermarketLocation.push_back(supermarkets.at(s)->getNode());
+
+		route = dijkstraOfDijkstras(supermarkets.at(s)->getNode(),
+				trucks.at(t)->getStops(), supermarkets.at(s)->getNode(), total);
+
+		LastStop = route.at(route.size() - 1);
+		//	cout << "last Stop=" << LastStop << endl;
+
+		routeBack = dijkstraOfDijkstras(LastStop, supermarketLocation,
+				supermarkets.at(s)->getNode(), total);
+
+		completeRoute.reserve(route.size() + routeBack.size());
+		completeRoute.insert(completeRoute.end(), route.begin(), route.end());
+
+		completeRoute.insert(completeRoute.end(), routeBack.begin(),
+				routeBack.end() - 1);	//-1 para não repetir a chegada
+
+	}	//fim verificacao cliente truck super
+
+	cout << "mais um pouco\n";
+	viewGraph(true, id, completeRoute);
+	vector<Node> newPath;
+
 	return;
 }
 
@@ -742,7 +969,7 @@ void Menu::loadFiles(int numNodes) {
 	nodes = fl.loadNodes(numNodes);
 	cout << nodes.size() << " NODES LOADED" << endl;
 
-		supermarkets = fl.loadSupermarkets();
+	supermarkets = fl.loadSupermarkets();
 	cout << supermarkets.size() << " SUPERMARKETS LOADED" << endl;
 
 	clients = fl.loadClients();
@@ -790,6 +1017,69 @@ void Menu::loadFiles(int numNodes) {
 
 	}
 	getchar();
+	return;
+}
+
+void Menu::viewGraph(bool toSupermarket, long long idtruck,
+		vector<long long> route) {
+
+	gv = new GraphViewer(1000, 498, false);
+
+	gv->setBackground("fundo.jpg");
+	gv->createWindow(1000, 498);
+
+	gv->defineEdgeCurved(false);
+
+	gv->defineEdgeColor("black");
+
+	gv->defineVertexIcon("res/emptyIcon.png");
+
+//	gv->defineVertexColor("BLUE");
+
+	bool client = false;
+
+	long long edgecount = 0;
+
+	for (unsigned int i = 0; i < route.size(); i++) {
+		client = false;
+		unsigned int j = 0;
+		write(STDOUT_FILENO, ".", 1);
+		for (j = 0; j < nodes.size(); j++) {
+			if (nodes.at(j)->getId() == route.at(i))
+				break;
+
+		}
+
+		for (unsigned int k = 0;
+				k < trucks.at(idtruck - 1)->getClients().size(); k++) {
+			if (trucks.at(idtruck - 1)->getClients().at(k)->getNode()
+					== route.at(i)) {
+				client = true;
+				break;
+
+			}
+
+		}
+
+		gv->addNode(route.at(i), nodes.at(j)->getX(), nodes.at(j)->getY());
+		if (i == 0 && toSupermarket == true)
+			gv->setVertexIcon(route.at(i), "super_small.png");
+		else if (i == route.size() - 1 && toSupermarket == true)
+			gv->setVertexIcon(route.at(i), "super_small.png");
+		else if (client == true)
+			gv->setVertexIcon(route.at(i), "client_small.png");
+		else
+			gv->setVertexIcon(route.at(i), "point_small.png");
+	}
+
+	for (unsigned int i = 0; i < route.size(); i++) {
+		if (i < route.size() - 1)
+			gv->addEdge(edgecount++, route.at(i), route.at(i + 1),
+					EdgeType::DIRECTED);
+	}
+
+	gv->rearrange();
+
 	return;
 }
 
@@ -905,8 +1195,6 @@ vector<long long> Menu::dijkstraOfDijkstras(long long firstNode,
 			//break;
 		}
 	}
-
-
 
 	return pathOrder;
 }
