@@ -12,7 +12,7 @@ Menu::Menu() {
 		cout << "2 : 1329\n";
 		cout << "3 : 2543\n";
 		cout << "4 : 3980\n";
-		cout << "0 : usar predefinido\n";
+		cout << "0 : Usar predefinido\n";
 		cin >> numNodes;
 	} while (numNodes > 4);
 	if (numNodes < 0)
