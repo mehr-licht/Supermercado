@@ -233,6 +233,7 @@ void Menu::menu() {
 	cout<<"1 - na consola\n";
 	cout<<"2 - no graphViewer\n";
 	cout<<"0 - sair\n";
+	cin>>choice;
 	}while (choice !=0 && choice !=1 && choice !=2);
 
 	switch (choice){
