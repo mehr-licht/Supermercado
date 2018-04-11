@@ -78,7 +78,7 @@ void Menu::assignClientToSuper(int supers) {
 
 	}
 	cout << supermarkets.size() << " supermercados criados\n\n";
-	//}
+
 	for (unsigned int s = 0; s < supermarkets.size(); s++) {
 		//write(STDOUT_FILENO, "\nS__\n", 5);
 		graph.dijkstraShortestPath(supermarkets.at(s)->getNode(), total);
