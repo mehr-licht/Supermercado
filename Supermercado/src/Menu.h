@@ -84,7 +84,7 @@ public:
 	 * @return Best route.
 	 */
 	vector<long long> getFW(long long SupermarketNode, vector<long long> stops,
-			long long endNode, double &total);
+			double &total);
 	/**
 	 * Dijkstra of Dijkstras method
 	 * @param total to return the route total meters
@@ -126,7 +126,7 @@ public:
 	 * @return Best route.
 	 */
 	vector<long long> dijkstraOfDijkstras(long long firstNode,
-			vector<long long> stops, long long endNode, double &total);
+			vector<long long> stops, double &total);
 
 	/**
 	 * verifies if the Graph is dense or sparse, highly connected or not and complete or not

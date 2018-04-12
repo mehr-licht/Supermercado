@@ -212,7 +212,7 @@ public:
 	//long long getWeight(const T &source, const T &dest);
 
 	vector<long long> getOurRoute(long long firstNode, vector<long long> stops,
-			long long endNode, double &total);
+			 double &total);
 };
 
 template<class T>
@@ -777,7 +777,7 @@ bool Graph<T>::isStronglyConnected() {
 
 template<class T>
 vector<long long> Graph<T>::getOurRoute(long long firstNode,
-		vector<long long> stops, long long endNode, double &total) {
+		vector<long long> stops,  double &total) {
 	if (!stops.empty()) {
 		Graph<T> invertedGraph = getInvertedGraph();
 		stack<long long> returnstack;
@@ -797,10 +797,7 @@ vector<long long> Graph<T>::getOurRoute(long long firstNode,
 			k = 0;
 			next = stops.at(0);
 			nextreturn = stops.at(0);
-			//	cout << "IMPRIME STOPS" << endl;
-			//	for (int st = 0; st < (int) stops.size(); st++) {
-			//		cout << "st=" << stops.at(st) << endl;
-			//	}
+
 
 			parcial = 0;
 			if (iter % 2 == 1) {
@@ -813,10 +810,7 @@ vector<long long> Graph<T>::getOurRoute(long long firstNode,
 			}
 
 			for (unsigned int i = 0; i < stops.size(); i++) {//ver qual a stop mais perto do inicio da etapa actual
-				//	cout << "tmp0" << graph.getVertex(stops.at(i))->getDist() << endl;
-
-				if ((tmp = getVertex(stops.at(i))->getDist()) < min) {
-					//		write(STDOUT_FILENO, ".", 1);
+					if ((tmp = getVertex(stops.at(i))->getDist()) < min) {
 
 					min = tmp;
 					k = i;
@@ -848,22 +842,9 @@ vector<long long> Graph<T>::getOurRoute(long long firstNode,
 				sourcereturn = nextreturn;
 			}
 
-//		if (stops.size() > 1) {
-//			source = (getVertex(iter%2==1?next:nextreturn))->getInfo(); //actualiza o inicio da proxima etapa
-//			//	cout<<"stops.at(k)"<<stops.at(k)<<endl;
 
 			stops.erase(stops.begin() + k);	//erro NAO APAGA O QUE DEVE //apaga a stop do cliente calculado nesta etapa
 
-			//	cout << "passou";
-//		} else {
-//			source = firstNode;
-//			stops.clear();
-//			dijkstraShortestPath(source, parcial);
-//			total += parcial;
-//			leg = getPath(source, next); //vai buscar o caminho da etapa agora calculada e a seguir insere no caminho total
-//			pathOrder.insert(pathOrder.end(), leg.begin(), leg.end());
-//			break;
-//		}
 
 		}
 

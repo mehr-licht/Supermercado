@@ -35,7 +35,7 @@ vector<Node*> Files::loadNodes(int numNodes) {
 			}
 		file.close();
 	} else {
-		cerr << "e File not found!\n";
+		cerr << "File not found!\n";
 	}
 	return nodes;
 }
@@ -65,7 +65,7 @@ vector<Road*> Files::loadRoads(int numNodes) {
 		}
 		file.close();
 	} else {
-		cerr << "e File not found!\n";
+		cerr << "File not found!\n";
 	}
 
 	return roads;
@@ -97,7 +97,7 @@ vector<RoadConnection*> Files::loadConnections(int numNodes) {
 			}
 		file.close();
 	} else {
-		cerr << "e File not found!\n";
+		cerr << "File not found!\n";
 	}
 
 
@@ -126,7 +126,7 @@ vector<Supermarket*> Files::loadSupermarkets() {
 		}
 		file.close();
 	} else {
-		cerr << "e File not found!\n";
+		cerr << "File not found!\n";
 	}
 
 	return supermarkets;
@@ -158,7 +158,7 @@ vector<Client*> Files::loadClients() {
 			}
 		file.close();
 	} else {
-		cerr << "e File not found!\n";
+		cerr << "File not found!\n";
 	}
 
 	return clients;
@@ -193,7 +193,7 @@ vector<Truck*> Files::loadTruck(vector<Client*> clients) {
 		}
 		file.close();
 	} else {
-		cerr << "e File not found!\n";
+		cerr << "File not found!\n";
 	}
 	return trucks;
 }
