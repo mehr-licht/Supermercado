@@ -59,7 +59,7 @@ void Menu::assignClientToSuper(int supers) {
 	srand(time(NULL));
 
 	supermarkets.clear();
-	for (int s = (int) supermarkets.size(); s < supers; s++) {
+	for (int s = 0; s < supers; s++) {
 
 		added = false;
 		while (!added) {
@@ -69,8 +69,12 @@ void Menu::assignClientToSuper(int supers) {
 			if (!isClient(nodes.at(n)->getId())
 					&& !isSupermarket(nodes.at(n)->getId())) {
 
+				std::stringstream sstm;
+					sstm <<SUPERNAME<<s;
+					string d = sstm.str();
+
 				supermarkets.push_back(
-						new Supermarket(s, "super" + s, nodes.at(n)->getId()));	//add necessary supers
+						new Supermarket(s, d, nodes.at(n)->getId()));	//add necessary supers
 				added = true;
 
 			}
@@ -78,6 +82,7 @@ void Menu::assignClientToSuper(int supers) {
 		}
 
 	}
+
 	cout << supermarkets.size() << " supermercados criados\n\n";
 
 	for (unsigned int s = 0; s < supermarkets.size(); s++) {
@@ -118,15 +123,17 @@ void Menu::assignClientToTruck(int camioes) {
 	trucks.clear();
 	for (int z = 0; z < (int) supermarkets.size(); z++) {
 
-		for (int t = 0; t < camioes; t++) {
-
-			trucks.push_back(new Truck(t, "truck" + t, INT_INFINITY, z));//add necessary trucks
+		for (int t = 1; t < camioes+1; t++) {
+			std::stringstream sstm;
+							sstm <<"truck"<<t<<"from"<<z;
+							string d = sstm.str();
+			trucks.push_back(new Truck(t, d, INT_INFINITY, z));//add necessary trucks
 
 		}
 	}
 
 	cout << trucks.size() << " camioes criados\n\n";
-
+truck=0;
 	for (unsigned int c = 0; c < clients.size(); c++) {
 
 		trucksLeft = camioes;
@@ -154,9 +161,9 @@ void Menu::assignClientToTruck(int camioes) {
 
 					}
 
-					cout << "clientes do truck " << truck << " = "
+					cout << "clientes do truck " << trucks.at(truck)->getnumRota() << " = "
 							<< trucks.at(truck)->getClients().size() << endl;
-					getchar();
+
 					truck++;
 				}
 			}
@@ -164,7 +171,7 @@ void Menu::assignClientToTruck(int camioes) {
 		}
 
 	}
-
+	getchar();
 	return;
 }
 
@@ -174,7 +181,7 @@ void Menu::createClients(int clientes) {
 	string d;
 	clients.clear();	//erases all clients
 
-	for (int c = 1; c <= clientes; c++) {
+	for (int c = 0; c < clientes; c++) {
 
 		added = false;
 		while (!added) {
@@ -183,15 +190,19 @@ void Menu::createClients(int clientes) {
 			//for (unsigned int n = 0; n < nodes.size(); n++) {
 			if (!isClient(nodes.at(n)->getId())
 					&& !isSupermarket(nodes.at(n)->getId())) {
+				std::stringstream sstm;
+
 
 				if (c < 10) {
-					d = "cliente_00" + c;
+					sstm <<"client_00"<<c;
+
 				} else if (c < 100) {
-					d = "cliente_0" + c;
+					sstm <<"client_0"<<c;
+
 				} else {
-					d = c;
+					sstm <<"client"<<c;;
 				}
-				//int id;
+				string d = sstm.str();
 
 				clients.push_back(
 						new Client(c, d, nodes.at(n)->getId(), "rua", 0)); //add necessary clients
@@ -202,6 +213,8 @@ void Menu::createClients(int clientes) {
 		}
 
 	}
+
+
 	cout << clients.size() << " clientes criados\n\n";
 	return;
 }
@@ -354,6 +367,11 @@ void Menu::textRoute() {
 			compareMethods();
 
 			break;
+		case 0:
+
+					exit(0);
+
+					break;
 		default:
 			return;
 			break;
@@ -452,23 +470,23 @@ void Menu::compareMethods() {
 	cout << "bi: " << compareStruct.biMethod.totalMillis << " ms\n";
 	cout << "FW: " << compareStruct.fwMethod.totalMillis << " ms\n\n\n";
 
-	int minWeight = compareStruct.biMethod.totalWeight;
-	if (compareStruct.dOdMethod.totalWeight < minWeight) {
-		minWeight = compareStruct.dOdMethod.totalWeight;
-	}
-	if (compareStruct.fwMethod.totalWeight < minWeight) {
-		minWeight = compareStruct.fwMethod.totalWeight;
-		cout
-				<< "o algoritmo que devolve o percurso total menor é o Floyd-Warshall"
-				<< endl;
-	}
-	cout << "o algoritmo que devolve o percurso total menor é o "
-			<< (compareStruct.biMethod.totalWeight
-					< compareStruct.dOdMethod.totalWeight ?
-					"bidireccional" : "Dijkstra of Dijkstras") << endl;
-	cout << "DoD: " << compareStruct.dOdMethod.totalWeight << " m\n";
-	cout << "bi: " << compareStruct.biMethod.totalWeight << " m\n";
-	cout << "FW: " << compareStruct.fwMethod.totalWeight << " m\n\n\n";
+//	int minWeight = compareStruct.biMethod.totalWeight;
+//	if (compareStruct.dOdMethod.totalWeight < minWeight) {
+//		minWeight = compareStruct.dOdMethod.totalWeight;
+//	}
+//	if (compareStruct.fwMethod.totalWeight < minWeight) {
+//		minWeight = compareStruct.fwMethod.totalWeight;
+//		cout
+//				<< "o algoritmo que devolve o percurso total menor é o Floyd-Warshall"
+//				<< endl;
+//	}
+//	cout << "o algoritmo que devolve o percurso total menor é o "
+//			<< (compareStruct.biMethod.totalWeight
+//					< compareStruct.dOdMethod.totalWeight ?
+//					"bidireccional" : "Dijkstra of Dijkstras") << endl;
+//	cout << "DoD: " << compareStruct.dOdMethod.totalWeight << " m\n";
+//	cout << "bi: " << compareStruct.biMethod.totalWeight << " m\n";
+//	cout << "FW: " << compareStruct.fwMethod.totalWeight << " m\n\n\n";
 
 	int minNodes = compareStruct.biMethod.totalNodes;
 	if (compareStruct.dOdMethod.totalNodes < minNodes) {
@@ -541,7 +559,7 @@ void Menu::fw(double &total, bool toPrint) {
 				LastStop = route.at(route.size() - 1);
 				route = getFW(LastStop, supermarketLocation, total);
 				completeRoute.insert(completeRoute.end(), route.begin(),
-						route.end());
+						route.end()-1);
 
 				cout << "\nnumber of nodes in path:" << completeRoute.size()
 						<< endl;
@@ -555,10 +573,10 @@ void Menu::fw(double &total, bool toPrint) {
 				if (toPrint)
 					printRoute(completeRoute, s, t);
 
-				cout << "\ntotal=" << total << endl;
+			//	cout << "\ntotal=" << total << endl;
 				totaltotal += total;
 				compareStruct.fwMethod.routes.push_back(completeRoute);
-				compareStruct.fwMethod.totalNodes += completeRoute.size();
+				compareStruct.fwMethod.totalNodes += completeRoute.size()/2;
 			}	//fim verificacao cliente truck super
 		}	//fim for truck
 	}	//fim for super
@@ -570,7 +588,7 @@ void Menu::fw(double &total, bool toPrint) {
 //------------------------------------------------
 	cout << "\ntotal de nós rotas =" << compareStruct.fwMethod.totalNodes
 			<< endl;
-	cout << "\ntotal das rotas =" << totaltotal << " m" << endl;
+//	cout << "\ntotal das rotas =" << totaltotal << " m" << endl;
 	compareStruct.fwMethod.totalWeight = totaltotal;
 	compareStruct.fwMethod.totalMillis = nTimeElapsed;
 	cout << "\n";
@@ -622,7 +640,7 @@ void Menu::DoD(double &total, bool toPrint) {
 						total);
 
 				completeRoute.insert(completeRoute.end(), route.begin(),
-						route.end());
+						route.end()-1);
 
 				cout << "\nnumber of nodes in path:" << completeRoute.size()
 						<< endl;
@@ -636,7 +654,7 @@ void Menu::DoD(double &total, bool toPrint) {
 				if (toPrint)
 					printRoute(completeRoute, s, t);
 
-				cout << "\ntotal=" << total << endl;
+			//	cout << "\ntotal=" << total << endl;
 				totaltotal += total;
 				compareStruct.dOdMethod.routes.push_back(completeRoute);
 				compareStruct.dOdMethod.totalNodes += completeRoute.size();
@@ -652,7 +670,7 @@ void Menu::DoD(double &total, bool toPrint) {
 //------------------------------------------------
 	cout << "\ntotal de nós rotas =" << compareStruct.dOdMethod.totalNodes
 			<< endl;
-	cout << "\ntotal das rotas =" << totaltotal << " m" << endl;
+//	cout << "\ntotal das rotas =" << totaltotal << " m" << endl;
 	compareStruct.dOdMethod.totalWeight = totaltotal;
 	compareStruct.dOdMethod.totalMillis = nTimeElapsed;
 	cout << "\n";
@@ -704,7 +722,7 @@ void Menu::printRoute(vector<long long> & completeRoute, int s, int t) {
 }
 
 void Menu::bi(double &total, bool toPrint) {
-	cout << "entrou bi\n";
+
 	int totaltotal = 0;
 	cout << "\nNosso algoritmo bidireccional:\n";
 //cout << "em processamento ";
@@ -740,7 +758,7 @@ void Menu::bi(double &total, bool toPrint) {
 						trucks.at(t)->getStops(), total);
 
 				completeRoute.insert(completeRoute.end(), route.begin(),
-						route.end());
+						route.end()-1);
 
 				cout << "\nnumber of nodes in path:" << completeRoute.size()
 						<< endl;
@@ -753,7 +771,7 @@ void Menu::bi(double &total, bool toPrint) {
 
 				if (toPrint)
 					printRoute(completeRoute, s, t);
-				cout << "\ntotal=" << total << endl;
+			//	cout << "\ntotal=" << total << endl;
 
 				totaltotal += total;
 
@@ -775,7 +793,7 @@ void Menu::bi(double &total, bool toPrint) {
 //------------------------------------------------
 	cout << "\ntotal de nós rotas =" << compareStruct.biMethod.totalNodes
 			<< endl;
-	cout << "\ntotal das rotas =" << totaltotal << " m" << endl;
+	//cout << "\ntotal das rotas =" << totaltotal << " m" << endl;
 	compareStruct.biMethod.totalWeight = totaltotal;
 	compareStruct.biMethod.totalMillis = nTimeElapsed;
 	cout << "\n";
@@ -822,7 +840,7 @@ void Menu::gvRouteFW() {
 	completeRoute.insert(completeRoute.end(), route.begin(), route.end());
 	long long LastStop = route.at(route.size() - 1);
 	route = getFW(LastStop, supermarketLocation, total);
-	completeRoute.insert(completeRoute.end(), route.begin(), route.end());
+	completeRoute.insert(completeRoute.end(), route.begin(), route.end()-1);
 
 	cout << "mais um pouco\n";
 
@@ -872,7 +890,7 @@ void Menu::gvRouteBi() {
 	route = graph.getOurRoute(supermarkets.at(supermarket)->getNode(),
 			trucks.at(id - 1)->getStops(), total);
 
-	completeRoute.insert(completeRoute.end(), route.begin(), route.end());
+	completeRoute.insert(completeRoute.end(), route.begin(), route.end()-1);
 
 	cout << "mais um pouco\n";
 
@@ -922,7 +940,7 @@ void Menu::gvRouteDoD() {
 
 	route = dijkstraOfDijkstras(LastStop, supermarketLocation, total);
 
-	completeRoute.insert(completeRoute.end(), route.begin(), route.end());
+	completeRoute.insert(completeRoute.end(), route.begin(), route.end()-1);
 
 	//}	//fim verificacao cliente truck super
 
@@ -1004,8 +1022,8 @@ void Menu::loadFiles(int numNodes) {
 					connections.at(i)->getNode1(), distance);
 
 	}
-	cout << "\nprima uma tecla para continuar\n";
-	getchar();
+//	cout << "\nprima uma tecla para continuar\n";
+//	getchar();
 	return;
 }
 
@@ -1181,7 +1199,7 @@ vector<long long> Menu::dijkstraOfDijkstras(long long firstNode,
 
 		k = 0;
 
-		min = DBL_MAX;
+		min = INT_INFINITY;
 		parcial = 0;
 		//vai determinar a etapa
 

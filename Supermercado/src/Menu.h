@@ -24,8 +24,8 @@
 
 #define IMGPRE "map"
 #define IMGEXT ".png"
-
-#define DBL_MAX std::numeric_limits<double>::max();
+#define SUPERNAME "super"
+;
 
 class Menu {
 private:
