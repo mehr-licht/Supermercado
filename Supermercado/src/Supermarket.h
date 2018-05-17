@@ -11,7 +11,7 @@ private:
 	int id;
 	std::string name;
 	long long node;
-
+	std::string freguesia;
 
 public:
 	/**
@@ -24,10 +24,11 @@ public:
 	 * @param name
 	 * @param node
 	 */
-	Supermarket(int id, std::string name, long long node) {
+	Supermarket(int id, std::string name, long long node, std::string freguesia) {
 		this->id = id;
 		this->name = name;
 		this->node = node;
+		this->freguesia = freguesia;
 	}
 
 	/**
@@ -35,6 +36,12 @@ public:
 	 * @return Supermarket id.
 	 */
 	int getId();
+
+	/**
+		 * Get Supermarket 'freguesia'.
+		 * @return Supermarket 'freguesia'.
+		 */
+	std::string getFreguesia();
 
 	/**
 	 * Get Supermarket name.

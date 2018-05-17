@@ -43,6 +43,12 @@ vector<long long> Truck::getStops() {
 	return stops;
 }
 
+
+void Truck::addNewStop(Client * newC) {
+	//Client * ptr = & newC;
+	this->clients.push_back(newC);
+}
+
 bool Truck::nodeExistsAsClients(int idNode) {
 
 	for (unsigned int i = 0; i < this->getClients().size(); i++) {

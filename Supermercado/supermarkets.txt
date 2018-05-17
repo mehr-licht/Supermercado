@@ -1,11 +1,23 @@
-0;Super 1;126600958
-1;Super 2;473877735
-2;Super 3;474552495
-3;Super 4;474685700
-4;Super 5;475360049
-5;Super 6;2397460874
-6;Super 7;3149497586
-7;Super 8;3153342968
-8;Super 9;4488733061
-9;Super 10;4749945326
-10;Super 11;5291538825
+0;Pingo Doce Damiao de Gois;474676240;Santo Ildefonso
+1;Lidl Bonfim;560400989;Bonfim
+2;Continente Antas;299594486;Campanhã
+3;Continente Carvalhido;475356004;Ramalde
+4;Jumbo Arrabida;26016523;Vila Nova de Gaia
+5;Lidl Agramonte;111415446;Massarelos
+6;Pingo Doce Campo 24 de Agosto;137964116;Bonfim
+7;Pingo Doce Passos Manuel;129553667;Santo Ildefonso
+8;Minipreço Firmeza;25632429;Bonfim
+9;Minipreço Sá da Bandeira;25632398;Santo Ildefonso
+10;Minipreço Fernão de Magalhães;138246606;Bonfim
+11;Pingo Doce Praça da República;25620653;Cedofeita
+12;Pingo Doce Cedofeita;25632279;Cedofeita
+13;Pingo Doce Lidador;408439365;Ramalde
+14;Pingo Doce Costa Cabral;299573943;Paranhos
+15;Pingo Doce Godinho de Faria;287458367;Matosinhos
+16;Pingo Doce Rotunda da Boavista;126604789;Cedofeita
+17;minipreço serpa pinto;122452434;Cedofeita
+18;minipreço oliveira monteiro;129953504;Cedofeita
+19;minipreço miguel bombarda;25632229;Cedofeita
+20;Lidl Areosa;112613629;Paranhos
+21;continente serpa pinto;126600959;Cedofeita
+22;Continente Campo Lindo;316511863;Paranhos

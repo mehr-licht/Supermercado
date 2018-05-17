@@ -4,11 +4,10 @@
 #include <string>
 #include "connection.h"
 
-
 class Road {
 
 public:
-	long long  id;
+	long long id;
 	string name;
 	bool two_way;
 
@@ -24,10 +23,11 @@ public:
 	 * @param two_way
 	 */
 	Road(unsigned int id, string name, bool two_way) {
-		this->id=id;
-		this->name=name;
-		this->two_way=two_way;
-	};
+		this->id = id;
+		this->name = name;
+		this->two_way = two_way;
+	}
+	;
 
 	/**
 	 * Get road's id.
@@ -37,13 +37,17 @@ public:
 
 
 	/**
+	* Get road's name.
+	* @return name.
+	*/
+	std::string getName();
+
+
+	/**
 	 * Check if road is two way or not.
 	 * @return True if road is two way, false otherwise.
 	 */
 	bool isTwoWay();
 };
-
-
-
 
 #endif /* ROAD_H_ */

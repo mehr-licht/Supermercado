@@ -6,6 +6,10 @@ long long Road::getId(){
 }
 
 
+std::string Road::getName(){
+	return this->name;
+}
+
 bool Road::isTwoWay() {
 	return this->two_way;
 }

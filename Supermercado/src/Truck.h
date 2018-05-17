@@ -100,6 +100,11 @@ public:
 	 */
 	std::string getClientsName(int idNode);
 
+	/**
+	 * adds client to stops of the truck
+	 * @param client to add
+	 */
+	void addNewStop(Client * newC);
 };
 
 #endif /* TRUCK_H_ */

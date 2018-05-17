@@ -21,11 +21,14 @@
 #include <stack>
 #include <limits>
 #include "edgetype.h"
+#include "matcher.h"
+#include "Searcher.h"
+#include <set>
+#include <sys/time.h>
 
 #define IMGPRE "map"
 #define IMGEXT ".png"
 #define SUPERNAME "super"
-;
 
 class Menu {
 private:
@@ -38,8 +41,10 @@ private:
 	vector<Client*> clients;
 	vector<Truck*> trucks;
 	static long long last_id;
-
+	long long source;
+	long long destination;
 	bool statsShown;
+	int c = 0;
 
 	struct methodData {
 		int totalNodes;
@@ -64,9 +69,65 @@ public:
 	void createClients(int clientes);
 
 	/**
-	 * Supermarket Delivery default constructor.
+	 * choose clients, supermarkets, trucks
 	 */
 	Menu();
+
+	/**
+	 * define the (string method)route source
+	 * @param node of the source
+	 */
+	void setSource(long long node);
+
+	/**
+	 * define the (string method)route destination
+	 * @param node of the destination
+	 */
+	void setDestination(long long node);
+
+	/**
+	 * return (string method)route source node
+	 */
+	long long getSource();
+
+	/**
+	 * return (string method)route destination node
+	 */
+	long long getDestination();
+
+	/**
+	 * choose between string methods
+	 */
+	void stringMenu();
+
+	/**
+	 * choose between route methods
+	 */
+	void routeMenu();
+
+	/**
+	 * search the pattern and displays the result accordinf to the handout
+	 * @param the ppattern to search
+	 */
+	void superExacta(string pattern);
+
+	/**
+	 * search the pattern and displays the result accordinf to the handout
+	 * @param the ppattern to search
+	 */
+	void superAprox(string pattern);
+
+	/**
+	 * search the pattern and displays the result accordinf to the handout
+	 * @param the ppattern to search
+	 */
+	void ruaExacta(string pattern);
+
+	/**
+	 *search the pattern and displays the result accordinf to the handout
+	 * @param the ppattern to search
+	 */
+	void ruaAprox(string pattern);
 
 	/**
 	 * Method to load graph from files.
@@ -93,6 +154,13 @@ public:
 	void DoD(double &total, bool toPrint);
 
 	/**
+	 * Dijkstra of Dijkstras method for string search
+	 * @param total to return the route total meters
+	 * @param toPrint true implies printing the routes
+	 */
+	void stringDoD(double &total, bool toPrint);
+
+	/**
 	 * Floyd-Warshall method
 	 * @param total to return the route total meters
 	 * @param toPrint true implies printing the routes
@@ -105,6 +173,13 @@ public:
 	 * @param toPrint true implies printing the routes
 	 */
 	void bi(double &total, bool toPrint);
+
+	/**
+	 * Our bidireccional method for string search
+	 * @param total to return the route total meters
+	 * @param toPrint true implies printing the routes
+	 */
+	void stringbi(double &total, bool toPrint);
 
 	/**
 	 * Compares between the 3 methods presented and says which is faster (and times of all 3), which has less nodes
@@ -212,6 +287,34 @@ public:
 	 * Get route obtained with Dijkstra of Dijkstras algorithm in graphviewer.
 	 */
 	void gvRouteDoD();
+
+	void crossExacta();
+	void crossAprox();
+
+	void fregAprox(string pattern);
+	void fregExacta(string pattern);
+
+	/**
+	 * Get roads on a given node
+	 * @param node
+	 * @return ordered set with the names of the roads on that node
+	 */
+	set<std::string> getRoadByNode(long long node);
+
+	/**
+	 * Get supermarkets on a given road
+	 * @param road id
+	 * @return ordered set with the names of the supermarkets on that street
+	 *  */
+	set<string> getSupermarketByRoadId(long long id);
+
+	int getC() ;
+
+	void incC() ;
+
+	void adicionaSuper(long long node);
+
+	void adicionaParagem(long long node);
 }
 ;
 

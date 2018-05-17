@@ -8,6 +8,10 @@ std::string Supermarket::getName() {
 	return this->name;
 }
 
+std::string Supermarket::getFreguesia() {
+	return this->freguesia;
+}
+
 long long Supermarket::getNode() {
 	return this->node;
 }

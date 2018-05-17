@@ -121,7 +121,9 @@ vector<Supermarket*> Files::loadSupermarkets() {
 			string name = s;
 			getline(linestream, s, ';');
 			long long node = atoll(s.c_str());
-			Supermarket* supermarket = new Supermarket(id, name, node);
+			getline(linestream, s, ';');
+			std::string freguesia = s;
+			Supermarket* supermarket = new Supermarket(id, name, node,freguesia);
 			supermarkets.push_back(supermarket);
 		}
 		file.close();
