@@ -398,6 +398,7 @@ void Menu::menu() {
 
 						 cout << "demorou" << elapsed << " microsegundos";
 						 */
+
 						getchar();
 					} else {//texto aprox
 cout<<"encontrar palavra num conjunto e não comparar palavras\n";
