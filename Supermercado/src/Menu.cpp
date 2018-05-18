@@ -1907,7 +1907,22 @@ void Menu::crossExacta() {
 	cout << "nome de outra rua: ";
 	getline(cin, name2);
 	cout << "\n\n\n\n\n";
+
+
+	//set<float> tmpset;
+		//for (float i = 0; i < val.size(); i++) {
+		//tmpset.insert(val.at(i));
 	cout << "IMPLEMENTAR\n";
+	//procura por 1ª rua
+	//dos resultados guarda os das ruas que possam ter supers - se nao encontrou rua guarda VAR
+	//procura por 2ª
+	//dos resultados guarda os das ruas que possam ter supers - se nao encontrou rua guarda VAR
+	//se houver true nas duas pesquisas devolve os que deram true,
+	//se só deu numa das ruas devolve (intercalado) as ruas com supers
+	//se não deu nenhum - nada
+	//se nao encontrou 1 ou 2 das ruas diz isso....
+
+
 
 	cout << "\tadicionar ID como paragem da rota:\n";
 
