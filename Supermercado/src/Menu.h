@@ -26,6 +26,7 @@
 #include <set>
 #include <sys/time.h>
 
+#define MINUMUM 0.66
 #define IMGPRE "map"
 #define IMGEXT ".png"
 #define SUPERNAME "super"
@@ -45,6 +46,7 @@ private:
 	long long destination;
 	bool statsShown;
 	int c = 0;
+	int map;
 
 	struct methodData {
 		int totalNodes;
@@ -308,13 +310,41 @@ public:
 	 *  */
 	set<string> getSupermarketByRoadId(long long id);
 
-	int getC() ;
+	/**
+	 * gets the c
+	 */
+	int getC();
 
-	void incC() ;
+	/**
+	 * increments the c by one
+	 */
+	void incC();
 
+	/**
+	 * Adds THE supermarket to new route (string project)
+	 * @param node of the supermarket
+	 **/
 	void adicionaSuper(long long node);
 
+	/**
+	 * Adds client to new route (string project)
+	 * @param node of the client
+	 **/
 	void adicionaParagem(long long node);
+
+	/**
+	 * Set number of nodes chosen for graph from map
+	 * @param nodes
+	 *
+	 *  */
+	void setMap(int map);
+
+	/**
+	 * Get number of nodes chosen for graph from map
+	 *
+	 * @return number of nodes chosen for graph from map
+	 *  */
+	int getMap();
 }
 ;
 

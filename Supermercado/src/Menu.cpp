@@ -22,7 +22,7 @@ Menu::Menu() {
 		return;
 	cout << "\n\n\nA Ler Os Ficheiros\n";
 	loadFiles(numNodes);
-
+	this->setMap(numNodes);
 	cout << "\nficheiros lidos!\nprima uma tecla para continuar\n";
 	getchar();
 	getchar();
@@ -130,7 +130,7 @@ void Menu::assignClientToTruck(int camioes) {
 			std::stringstream sstm;
 			sstm << "truck" << t << "from" << z;
 			string d = sstm.str();
-			trucks.push_back(new Truck(t, d, INT_INFINITY, z));	//add necessary trucks
+			trucks.push_back(new Truck(t, d, INT_INFINITY, z));//add necessary trucks
 
 		}
 	}
@@ -322,6 +322,10 @@ void Menu::menu() {
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 			cout << "padrao a procurar:\n";
 			getline(cin, padrao);
+			if (padrao.length() < 3) {
+				cout << "introduzir padroes com pelo menos 3 caracteres\n";
+				break;
+			}
 			while (opc2 != 1 && opc2 != 2) {
 				cout << "em ficheiro(1) ou em texto(2)?\n";
 				cin >> opc2;
@@ -350,7 +354,7 @@ void Menu::menu() {
 				case 1:
 					if (opc2 == 1) {
 						cout << "para já ir pelas strings e supermercados\n";
-						superExacta (padrao);/*
+						superExacta(padrao);/*
 						 gettimeofday(&st, NULL);
 
 						 vals = numStringMatching(filen, padrao);
@@ -370,8 +374,8 @@ void Menu::menu() {
 							cout << "encontrou na posicao "
 									<< textobase.find_first_of(padrao, i)
 									<< ", o padrao "
-									<< textobase.substr(i - 1,
-											padrao.length() ) << "\n";
+									<< textobase.substr(i - 1, padrao.length())
+									<< "\n";
 
 						cout << "tamanho do padrao=" << padrao.length() << endl;
 						cout << "tamanho do texto=" << textobase.length()
@@ -380,7 +384,9 @@ void Menu::menu() {
 						int elapsed = ((et.tv_sec - st.tv_sec) * 1000000)
 								+ (et.tv_usec - st.tv_usec);
 
-						cout << "demorou" << elapsed << " microsegundos";
+						cout << "demorou" << elapsed << " microsegundos / "
+								<< elapsed / 1000 << " milisegundos / "
+								<< elapsed / 1000000 << " segundos" << endl;
 
 					}
 					break;
@@ -388,7 +394,7 @@ void Menu::menu() {
 				case 2:
 					if (opc2 == 1) {
 						cout << "para já ir pelas strings e supermercados\n";
-						superAprox (padrao);/*
+						superAprox(padrao);/*
 						 gettimeofday(&st, NULL);
 
 						 numApproximateStringMatching(filen, padrao);
@@ -400,8 +406,9 @@ void Menu::menu() {
 						 */
 
 						getchar();
-					} else {//texto aprox
-cout<<"encontrar palavra num conjunto e não comparar palavras\n";
+					} else { //texto aprox
+						cout
+								<< "encontrar palavra num conjunto e não comparar palavras\n";
 						stringstream s1(textobase);
 						string word1;
 						int num = 0, nwords = 0;
@@ -420,10 +427,13 @@ cout<<"encontrar palavra num conjunto e não comparar palavras\n";
 								+ (et.tv_usec - st.tv_usec);
 
 						float res = (float) num / nwords;
-						cout << "parecença=" << res << " (se superior a 5,5=>ok)"
-								<< endl;
+						cout << "parecença=" << res
+								<< " (se superior a 5,5=>ok)" << endl;
+
 						getchar();
-						cout << "demorou" << elapsed << " microsegundos";
+						cout << "demorou" << elapsed << " microsegundos / "
+								<< elapsed / 1000 << " milisegundos / "
+								<< elapsed / 1000000 << " segundos" << endl;
 
 					}
 					break;
@@ -448,6 +458,7 @@ void Menu::stringMenu() {
 	string pattern;
 	while (choice != 0) {
 		do {
+			pattern = "";
 			system("clear");
 			cout << "\n\n\n\n";
 			cout << "\t1 - procura exacta de supermercados (com a sua rua)\n\n";
@@ -459,9 +470,10 @@ void Menu::stringMenu() {
 			cout << "\t5 - procura exacta de supermercados em cruzamentos\n\n";
 			cout
 					<< "\t6 - procura aproximada de supermercados em cruzamentos\n\n";
+			cout << "\t7 - procura exacta de supermercados em freguesias\n\n";
+
 			cout
-					<< "\t7 - procura aproximada de supermercados em freguesias\n\n";
-			cout << "\t8 - procura exacta de supermercados em freguesias\n\n";
+					<< "\t8 - procura aproximada de supermercados em freguesias\n\n";
 			cout << "\t0 - para trás\n";
 			cin >> choice;
 		} while (choice != 0 && choice != 1 && choice != 2 && choice != 3
@@ -469,12 +481,15 @@ void Menu::stringMenu() {
 				&& choice != 8);
 
 		if (choice && choice != 5 && choice != 6) {
+
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			while (pattern.size() < 3) {
+				cout << "\n\ntexto a pesquisar (pelo menos 3 caracteres):\n";
 
-			cout << "\n\ntexto a pesquisar:\n";
+				getline(cin, pattern);
 
-			getline(cin, pattern);
+			}
 		}
 
 		switch (choice) {
@@ -497,17 +512,20 @@ void Menu::stringMenu() {
 			crossAprox();
 			break;
 		case 7:
-			fregAprox(pattern);
-			break;
-		case 8:
 			fregExacta(pattern);
 			break;
+		case 8:
+			fregAprox(pattern);
+			break;
+
 		default:
 			return;
 			break;
 
 		}
+
 	}
+
 	return;
 }
 
@@ -629,8 +647,8 @@ void Menu::superExacta(string pattern) {
 
 	cout << endl << endl;
 	cout << "A pesquisa exacta de supermercados demorou " << elapsed
-			<< " microsegundos / " << 1000 * elapsed << " milisegundos / "
-			<< 1000000 * elapsed << " segundos" << endl;
+			<< " microsegundos / " << elapsed / 1000 << " milisegundos / "
+			<< elapsed / 1000000 << " segundos." << endl;
 
 	cout << "\nprima uma tecla para continuar" << endl;
 	getchar();
@@ -658,21 +676,23 @@ void Menu::superAprox(string pattern) {
 	gettimeofday(&et, NULL);
 	int elapsed = ((et.tv_sec - st.tv_sec) * 1000000)
 			+ (et.tv_usec - st.tv_usec);
-
+//float max;
 	for (unsigned int i = 0; i < val.size(); i++) {
-		if (val.at(i) < min) {
-			min = val.at(i);
+		if (val.at(i) > max) {
+			max = val.at(i);
 		}
 	}
-	cout << "\n\nMINIMUM:" << min;
+	cout << "\n\nMINIMUM:" << max;
 
 	/*
 	 * Val<=5.5 seems to grant a good level of detail in the similar
 	 * results. || val == min must be used because, sometimes the
 	 * most similar result is higher than 5.5, so it prlong longs the minimum.
 	 */
+	set<float> tmpset;
 	for (float i = 0; i < val.size(); i++) {
-		if (val.at(i) <= 5.5 || val.at(i) == min)
+		tmpset.insert(val.at(i));
+		if (val.at(i) > 0.66 || val.at(i) == max)
 			tmp.push_back(supermarkets.at(i));
 	}
 
@@ -730,8 +750,8 @@ void Menu::superAprox(string pattern) {
 
 	cout << endl << endl;
 	cout << "A pesquisa aproximada de supermercados demorou " << elapsed
-			<< " microsegundos / " << 1000 * elapsed << " milisegundos / "
-			<< 1000000 * elapsed << " segundos" << endl;
+			<< " microsegundos / " << elapsed / 1000 << " milisegundos / "
+			<< elapsed / 1000000 << " segundos" << endl;
 
 	cout << "\nprima uma tecla para continuar" << endl;
 	getchar();
@@ -760,9 +780,12 @@ void Menu::ruaExacta(string pattern) {
 
 	 int elapsed = (((et.tv_sec - st.tv_sec) * 1000000) + (et.tv_usec - st.tv_usec)) / num_runs;
 	 */
+	std::stringstream sstmm;
+	sstmm << "roads" << getMap() << ".txt";
+	string tmp2 = sstmm.str();
 
 	gettimeofday(&st, NULL);
-	vector<int> ids = numStringMatchingRoad("roads.txt", pattern);
+	vector<int> ids = numStringMatchingRoad(tmp2, pattern);
 	gettimeofday(&et, NULL);
 	int elapsed = ((et.tv_sec - st.tv_sec) * 1000000)
 			+ (et.tv_usec - st.tv_usec);
@@ -818,8 +841,8 @@ void Menu::ruaExacta(string pattern) {
 
 	cout << endl << endl;
 	cout << "A pesquisa exacta de ruas demorou " << elapsed
-			<< " microsegundos / " << 1000 * elapsed << " milisegundos / "
-			<< 1000000 * elapsed << " segundos" << endl;
+			<< " microsegundos / " << elapsed / 1000 << " milisegundos / "
+			<< elapsed / 1000000 << " segundos" << endl;
 	cout << "\nprima uma tecla para continuar" << endl;
 	getchar();
 	return;
@@ -849,20 +872,24 @@ void Menu::ruaAprox(string pattern) {
 
 	 int elapsed = (((et.tv_sec - st.tv_sec) * 1000000) + (et.tv_usec - st.tv_usec)) / num_runs;
 	 */
-
+	std::stringstream sstmm;
+	sstmm << "roads" << getMap() << ".txt";
+	string tmp2 = sstmm.str();
 	gettimeofday(&st, NULL);
 	//vector<int> ids =numApproximateStringMatching("roads.txt", pattern);
-	vector<float> val = numApproximateStringMatchingRoad("roads.txt", pattern);
+	vector<float> val = numApproximateStringMatchingRoad(tmp2, pattern);
 	gettimeofday(&et, NULL);
 	int elapsed = ((et.tv_sec - st.tv_sec) * 1000000)
 			+ (et.tv_usec - st.tv_usec);
 
-	for (unsigned int i = 0; i < val.size(); i++) {
-		if (val.at(i) < min) {
-			min = val.at(i);
+	set<float> tmpset;
+	for (float i = 0; i < val.size(); i++) {
+		tmpset.insert(val.at(i));
+		if (val.at(i) > max) {
+			max = val.at(i);
 		}
 	}
-	cout << "\n\nMINIMUM:" << min;
+	cout << "\n\nMINIMUM:" << max;
 
 	/*
 	 * Val<=5.5 seems to grant a good level of detail in the similar
@@ -870,10 +897,8 @@ void Menu::ruaAprox(string pattern) {
 	 * most similar result is higher than 5.5, so it prlong longs the minimum.
 	 */
 	for (float i = 0; i < val.size(); i++) {
-		if ((val.at(i) <= 5.5 || val.at(i) == min)
-				&& roads.at(i)->getName() != "") {
+		if (val.at(i) > 0.66 || val.at(i) == max)
 			tmp.push_back(roads.at(i));
-		}
 	}
 
 	cout << "\n\n\n\n\n";
@@ -924,8 +949,9 @@ void Menu::ruaAprox(string pattern) {
 
 	cout << endl << endl;
 	cout << "A pesquisa aproximada de ruas demorou " << elapsed
-			<< " microsegundos / " << 1000 * elapsed << " milisegundos / "
-			<< 1000000 * elapsed << " segundos" << endl;
+
+	<< " microsegundos / " << elapsed / 1000 << " milisegundos / "
+			<< elapsed / 1000000 << " segundos" << endl;
 	cout << "\nprima uma tecla para continuar" << endl;
 	getchar();
 	return;
@@ -1909,8 +1935,8 @@ void Menu::crossExacta() {
 	 }
 	 */
 
-	//Searcher* rs = new Searcher();
-	//rs->SearchForSupermarketInRoutes(name1, name2);
+//Searcher* rs = new Searcher();
+//rs->SearchForSupermarketInRoutes(name1, name2);
 }
 
 void Menu::crossAprox() {
@@ -1920,13 +1946,32 @@ void Menu::crossAprox() {
 	std::stringstream sstm;
 	getchar();
 
+
+
 	cout << "Pesquisa aproximada de supermercados em cruzamentos\n\n";
 	cout << "nome de uma rua: ";
 	getline(cin, name1);
 	cout << "nome de outra rua: ";
 	getline(cin, name2);
 	cout << "\n\n\n\n\n";
+
+
+	//set<float> tmpset;
+		//for (float i = 0; i < val.size(); i++) {
+		//tmpset.insert(val.at(i));
 	cout << "IMPLEMENTAR\n";
+	//procura por 1ª rua
+	//dos resultados guarda os das ruas que possam ter supers - se nao encontrou rua guarda VAR
+	//procura por 2ª
+	//dos resultados guarda os das ruas que possam ter supers - se nao encontrou rua guarda VAR
+	//se houver true nas duas pesquisas devolve os que deram true, por ordem de parecença
+	//se só deu numa das ruas devolve (intercalado) as ruas com supers por ordem de parecença
+	//se não deu nenhum - nada
+	//se nao encontrou 1 ou 2 das ruas diz isso....
+
+
+
+
 
 	cout << "\tadicionar ID como paragem da rota:\n";
 
@@ -1954,8 +1999,8 @@ void Menu::crossAprox() {
 	 }
 	 */
 
-	//Searcher* rs = new Searcher();
-	//rs->SearchForSupermarketInRoutesAprox(name1, name2);
+//Searcher* rs = new Searcher();
+//rs->SearchForSupermarketInRoutesAprox(name1, name2);
 }
 
 set<string> Menu::getRoadByNode(long long node) {
@@ -2086,8 +2131,8 @@ void Menu::fregExacta(string pattern) {
 
 	cout << endl << endl;
 	cout << "A pesquisa exacta de supermercados na freguesia demorou "
-			<< elapsed << " microsegundos / " << 1000 * elapsed
-			<< " milisegundos / " << 1000000 * elapsed << " segundos" << endl;
+			<< elapsed << " microsegundos / " << elapsed / 1000
+			<< " milisegundos / " << elapsed / 1000000 << " segundos" << endl;
 
 	cout << "\nprima uma tecla para continuar" << endl;
 	getchar();
@@ -2109,19 +2154,21 @@ void Menu::fregAprox(string pattern) {
 	float max = 0;
 
 	gettimeofday(&st, NULL);
-	//vector<int> ids = numApproximateStringMatching("supermarkets.txt", pattern);
+//vector<int> ids = numApproximateStringMatching("supermarkets.txt", pattern);
 	vector<float> val = numApproximateStringMatchingFreg("supermarkets.txt",
 			pattern);
 	gettimeofday(&et, NULL);
 	int elapsed = ((et.tv_sec - st.tv_sec) * 1000000)
 			+ (et.tv_usec - st.tv_usec);
 
-	for (unsigned int i = 0; i < val.size(); i++) {
-		if (val.at(i) < min) {
-			min = val.at(i);
+	set<float> tmpset;
+	for (float i = 0; i < val.size(); i++) {
+		tmpset.insert(val.at(i));
+		if (val.at(i) > max) {
+			max = val.at(i);
 		}
 	}
-	cout << "\n\nMINIMUM:" << min;
+	cout << "\n\nMINIMUM:" << max;
 
 	/*
 	 * Val<=5.5 seems to grant a good level of detail in the similar
@@ -2129,7 +2176,7 @@ void Menu::fregAprox(string pattern) {
 	 * most similar result is higher than 5.5, so it prlong longs the minimum.
 	 */
 	for (float i = 0; i < val.size(); i++) {
-		if (val.at(i) <= 5.5 || val.at(i) == min)
+		if (val.at(i) > 0.66 || val.at(i) == max)
 			tmp.push_back(supermarkets.at(i));
 	}
 
@@ -2186,8 +2233,8 @@ void Menu::fregAprox(string pattern) {
 
 	cout << endl << endl;
 	cout << "A pesquisa aproximada de supermercados na freguesia demorou "
-			<< elapsed << " microsegundos / " << 1000 * elapsed
-			<< " milisegundos / " << 1000000 * elapsed << " segundos" << endl;
+			<< elapsed << " microsegundos / " << elapsed / 1000
+			<< " milisegundos / " << elapsed / 1000000 << " segundos" << endl;
 
 	cout << "\nprima uma tecla para continuar" << endl;
 	getchar();
@@ -2230,10 +2277,10 @@ void Menu::stringDoD(double &total, bool toPrint) {
 	long long LastStop;
 //	for (unsigned int s = 0; s < supermarkets.size(); s++) {
 
-	//	for (unsigned int t = 0; t < trucks.size(); t++) {
+//	for (unsigned int t = 0; t < trucks.size(); t++) {
 
 	total = 0;
-	//if (trucks.at(t)->getSupermarket() == supermarkets.at(s)->getId()) {
+//if (trucks.at(t)->getSupermarket() == supermarkets.at(s)->getId()) {
 
 	completeRoute.clear();
 	route.clear();
@@ -2241,7 +2288,7 @@ void Menu::stringDoD(double &total, bool toPrint) {
 	supermarketLocation.clear();
 	stops.clear();
 	stops = trucks.at(0)->getStops();
-	//stops.push_back(this->getDestination());
+//stops.push_back(this->getDestination());
 
 	supermarketLocation.push_back(this->getSource());
 
@@ -2258,32 +2305,32 @@ void Menu::stringDoD(double &total, bool toPrint) {
 
 	write(STDOUT_FILENO, "\n\n", 2);
 
-	//	cout << "rota " << t + 1 << "/" << trucks.size()
-	//		<< " do supermercado " << s + 1 << "/"
-	//	<< supermarkets.size() << "\n";
+//	cout << "rota " << t + 1 << "/" << trucks.size()
+//		<< " do supermercado " << s + 1 << "/"
+//	<< supermarkets.size() << "\n";
 
 	if (toPrint)
 		printRoute(completeRoute, 0, 0);
 
-	//	cout << "\ntotal=" << total << endl;
-	//			totaltotal += total;
-	//		compareStruct.dOdMethod.routes.push_back(completeRoute);
-	//	compareStruct.dOdMethod.totalNodes += completeRoute.size();
-	//	}	//fim verificacao cliente truck super
-	//}	//fim for truck
+//	cout << "\ntotal=" << total << endl;
+//			totaltotal += total;
+//		compareStruct.dOdMethod.routes.push_back(completeRoute);
+//	compareStruct.dOdMethod.totalNodes += completeRoute.size();
+//	}	//fim verificacao cliente truck super
+//}	//fim for truck
 //	}	//fim for super
 
 //time--------------------------------------------
 //	long long nTimeElapsed = GetMilliSpan(nTimeStart);
-	//cout << endl << endl;
+//cout << endl << endl;
 //	cout << "> Consecutive Dijkstra's Algorithm execution time (ms): "
-	//		<< nTimeElapsed << endl;
+//		<< nTimeElapsed << endl;
 //------------------------------------------------
 //	cout << "\ntotal de nós rotas =" << compareStruct.dOdMethod.totalNodes
-	//		<< endl;
+//		<< endl;
 //	cout << "\ntotal das rotas =" << totaltotal << " m" << endl;
 //	compareStruct.dOdMethod.totalWeight = totaltotal;
-	//compareStruct.dOdMethod.totalMillis = nTimeElapsed;
+//compareStruct.dOdMethod.totalMillis = nTimeElapsed;
 	cout << "\n";
 	return;
 }
@@ -2301,25 +2348,25 @@ void Menu::stringbi(double &total, bool toPrint) {
 	vector<long long> completeRoute;
 	vector<long long> route;
 	vector<long long> routeBack;
-	//vector<long long> supermarketLocation;
+//vector<long long> supermarketLocation;
 	vector<long long> stops;
 
 //	for (unsigned int s = 0; s < supermarkets.size(); s++) {
 
-	//	for (unsigned int t = 0; t < trucks.size(); t++) {
+//	for (unsigned int t = 0; t < trucks.size(); t++) {
 	total = 0;
 
-	//if (trucks.at(t)->getSupermarket() == supermarkets.at(s)->getId()) {
+//if (trucks.at(t)->getSupermarket() == supermarkets.at(s)->getId()) {
 
 	completeRoute.clear();
 	route.clear();
 	routeBack.clear();
-	//		supermarketLocation.clear();
+//		supermarketLocation.clear();
 	stops.clear();
 
 	stops = trucks.at(0)->getStops();
-	//stops.push_back(this->getDestination());
-	//	supermarketLocation.push_back(this->getSource());
+//stops.push_back(this->getDestination());
+//	supermarketLocation.push_back(this->getSource());
 
 	route = graph.getOurRoute(this->getSource(), stops, total);
 
@@ -2329,37 +2376,37 @@ void Menu::stringbi(double &total, bool toPrint) {
 
 	write(STDOUT_FILENO, "\n\n", 2);
 
-	//	cout << "rota " << t + 1 << "/" << trucks.size()
-	//		<< " do supermercado " << s + 1 << "/"
-	//	<< supermarkets.size() << "\n";
+//	cout << "rota " << t + 1 << "/" << trucks.size()
+//		<< " do supermercado " << s + 1 << "/"
+//	<< supermarkets.size() << "\n";
 
 	if (toPrint)
 		printRoute(completeRoute, 0, 0);
-	//	cout << "\ntotal=" << total << endl;
+//	cout << "\ntotal=" << total << endl;
 
-	//		totaltotal += total;
+//		totaltotal += total;
 
-	//	compareStruct.biMethod.routes.push_back(completeRoute);
+//	compareStruct.biMethod.routes.push_back(completeRoute);
 
-	//compareStruct.biMethod.totalNodes += completeRoute.size();
+//compareStruct.biMethod.totalNodes += completeRoute.size();
 
-	//	}	//fim verificacao cliente truck super
+//	}	//fim verificacao cliente truck super
 
-	//}	//fim for truck
+//}	//fim for truck
 
-	//}	//fim for super
+//}	//fim for super
 
 //time--------------------------------------------
 //	long long nTimeElapsed = GetMilliSpan(nTimeStart);
-	//cout << endl << endl;
+//cout << endl << endl;
 //	cout << "> Our Bidireccional Algorithm execution time (ms): "
-	//		<< nTimeElapsed << endl;
+//		<< nTimeElapsed << endl;
 //------------------------------------------------
-	//cout << "\ntotal de nós rotas =" << compareStruct.biMethod.totalNodes
+//cout << "\ntotal de nós rotas =" << compareStruct.biMethod.totalNodes
 //			<< endl;
 //cout << "\ntotal das rotas =" << totaltotal << " m" << endl;
 //	compareStruct.biMethod.totalWeight = totaltotal;
-	//compareStruct.biMethod.totalMillis = nTimeElapsed;
+//compareStruct.biMethod.totalMillis = nTimeElapsed;
 	cout << "\n";
 	return;
 }
@@ -2376,12 +2423,12 @@ void Menu::adicionaSuper(long long node) {
 }
 
 void Menu::adicionaParagem(long long node) {
-	//int index;
+//int index;
 
 	std::stringstream sstm;
 
 //	std::istringstream ss(ind);
-	//ss >> index;
+//ss >> index;
 	int c = this->getC();
 	if (c < 10) {
 		sstm << "client_00" << c;
@@ -2395,7 +2442,7 @@ void Menu::adicionaParagem(long long node) {
 	}
 	string d = sstm.str();
 
-	//clients.push_back(new Client(c, d, nodes.at(n)->getId(), "rua", 0)); //add necessary clients
+//clients.push_back(new Client(c, d, nodes.at(n)->getId(), "rua", 0)); //add necessary clients
 	Client * newC = new Client(c, d, node, *(this->getRoadByNode(node).begin()),
 			0);
 
@@ -2409,4 +2456,12 @@ int Menu::getC() {
 
 void Menu::incC() {
 	this->c++;
+}
+
+void Menu::setMap(int map) {
+	this->map = map;
+}
+
+int Menu::getMap() {
+	return this->map;
 }

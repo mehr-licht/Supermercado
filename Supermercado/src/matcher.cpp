@@ -6,6 +6,7 @@
  */
 
 #include "matcher.h"
+#include <cmath>
 
 using namespace std;
 
@@ -96,25 +97,36 @@ int b1kmpMatcher(string text, string pattern) {
 }
 
 bool kmpMatcher(string text, string pattern) {
-	int m = pattern.size();
-	int n = text.size();
+	int m = pattern.length();
+	int n = text.length();
 	int f[m];
 
-	a3preKMP(pattern, f);
+	std::istringstream ss(text + ' ');
+	std::string word;
 
-	int i = 0;
-	int k = 0;
-	while (i < n) {
-		if (k == -1) {
-			i++;
-			k = 0;
-		} else if (text[i] == pattern[k]) {
-			i++;
-			k++;
-			if (k == m)
-				return true;
-		} else
-			k = f[k];
+	while (std::getline(ss, word, ' ')) {
+		if (notStreetName(word)) { //ignore rua via avenida de etc...
+			n = word.length();
+
+			a3preKMP(pattern, f);
+
+			int i = 0;
+			int k = 0;
+			while (i < n) {
+				if (k == -1) {
+					i++;
+					k = 0;
+				} else if (word[i] == pattern[k]) {
+					i++;
+					k++;
+					if (k == m) {
+
+						return true;
+					}
+				} else
+					k = f[k];
+			}
+		}
 	}
 	return false;
 }
@@ -214,13 +226,12 @@ vector<int> numStringMatchingRoad(string filename, string toSearch) {
 			ids.push_back(i);
 		}
 		getline(linestream, s, ';');
-
 		i++;
 	}
+
 	file.close();
 	return ids;
 }
-
 
 vector<int> numStringMatchingFreg(string filename, string toSearch) {
 
@@ -248,8 +259,8 @@ vector<int> numStringMatchingFreg(string filename, string toSearch) {
 		getline(linestream, s, ';');
 		getline(linestream, s, ';');
 		if (kmpMatcher(s, toSearch) == 1) {
-					ids.push_back(i);
-				}
+			ids.push_back(i);
+		}
 		getline(linestream, s, ';');
 		i++;
 	}
@@ -257,42 +268,51 @@ vector<int> numStringMatchingFreg(string filename, string toSearch) {
 	return ids;
 }
 
-
-
 int editDistance(string pattern, string text) {
 	int n = text.length();
 	int m = pattern.length();
 	int old, neww;
 	vector<int> d(n + 1);
 
-	for (int j = 0; j <= n; j++)
-		d[j] = j;
+	std::istringstream ss(text);
+	std::string word;
 
-	for (int i = 1; i <= m; i++) {
-		old = d[0];
-		d[0] = i;
-		for (int j = 1; j <= n; j++) {
-			if (pattern[i - 1] == text[j - 1])
-				neww = old;
-			else {
-				neww = min(old, d[j]);
-				neww = min(neww, d[j - 1]);
-				neww = neww + 1;
+	while (std::getline(ss, word, ' ')) {
+		if (notStreetName(word)) {
+			//ignore rua via avenida de etc
+			n = word.length();
+			for (int j = 0; j <= n; j++)
+				d[j] = j;
+
+			for (int i = 1; i <= m; i++) {
+				old = d[0];
+				d[0] = i;
+				for (int j = 1; j <= n; j++) {
+					if (pattern[i - 1] == word[j - 1])
+						neww = old;
+					else {
+						neww = min(old, d[j]);
+						neww = min(neww, d[j - 1]);
+						neww = neww + 1;
+					}
+					old = d[j];
+					d[j] = neww;
+				}
 			}
-			old = d[j];
-			d[j] = neww;
+		} else {
+			return INT_INFINITY;
 		}
 	}
 	return d[n];
 }
 /*
- float numApproximateStringMatching(string filename, string toSearch) {
+ float numApproximate	StringMatching(string filename, string toSearch) {
  // TODO
  return 0;
  }
  */
 vector<float> numApproximateStringMatching(string filename, string toSearch) {
-
+	float res;
 	ifstream fich(filename.c_str());
 	vector<float> values;
 	if (!fich) {
@@ -300,73 +320,72 @@ vector<float> numApproximateStringMatching(string filename, string toSearch) {
 
 	}
 	string line, word1;
-	int num = 0, nwords = 0;
+	//int num = 0,
+	int nwords = 0, nchars = 0;
 
 	while (getline(fich, line)) {
 
-		num = 0;
 		nwords = 0;
 		stringstream linestream(line);
 		string s;
 		getline(linestream, s, ';');
 		getline(linestream, s, ';');
-
+		float tmpres = 0;
 		stringstream s1(s);
 		while (!s1.eof()) {
-
+			float num = 0;
 			s1 >> word1;
-			num += editDistance(toSearch, word1);
+			num = editDistance(toSearch, word1);
 			nwords++;
+			float tmp = (word1.length() - num) / (int) word1.length();
+			if (tmp > tmpres)
+				tmpres = tmp;
 		}
-
-		float res = (float) num / nwords;//num=distancia de edição; res=distancia na pesquisa por numero de palavras no texto
+		res = tmpres;
 		values.push_back(res);
 	}
-
 	fich.close();
-
 	return values;
 }
 
-vector<float> numApproximateStringMatchingRoad(string filename, string toSearch) {
-
+vector<float> numApproximateStringMatchingRoad(string filename,
+		string toSearch) {
+	float res;
 	ifstream fich(filename.c_str());
 	vector<float> values;
 	if (!fich) {
 		cout << "ficheiro " << filename << " nao encontrado " << endl;
-
 	}
 	string line, word1;
 	int num = 0, nwords = 0;
-
 	while (getline(fich, line)) {
-
-		num = 0;
 		nwords = 0;
 		stringstream linestream(line);
 		string s;
 		getline(linestream, s, ';');
 		getline(linestream, s, ';');
-
+		float tmpres = 0;
 		stringstream s1(s);
-		while (!s1.eof()) {
-
-			s1 >> word1;
-			num += editDistance(toSearch, word1);
-			nwords++;
-		}
-
-		float res = (float) num / nwords;
+		if (s1.str() != "")
+			while (!s1.eof()) {
+				float num = 0;
+				s1 >> word1;
+				num = editDistance(toSearch, word1);
+				nwords++;
+				float tmp = (word1.length() - num) / (int) word1.length();
+				if (tmp > tmpres)
+					tmpres = tmp;
+			}
+		res = tmpres;
 		values.push_back(res);
+		getline(linestream, s, ';');
 	}
-
 	fich.close();
-
 	return values;
 }
 
-
-vector<float> numApproximateStringMatchingFreg(string filename, string toSearch) {
+vector<float> numApproximateStringMatchingFreg(string filename,
+		string toSearch) {
 
 	ifstream fich(filename.c_str());
 	vector<float> values;
@@ -375,27 +394,30 @@ vector<float> numApproximateStringMatchingFreg(string filename, string toSearch)
 
 	}
 	string line, word1;
-	int num = 0, nwords = 0;
+	int nwords = 0;
 
 	while (getline(fich, line)) {
-
-		num = 0;
+		float res;
+		//num = 0;
 		nwords = 0;
 		stringstream linestream(line);
 		string s;
 		getline(linestream, s, ';');
 		getline(linestream, s, ';');
 		getline(linestream, s, ';');
-				getline(linestream, s, ';');
+		getline(linestream, s, ';');
+		float tmpres = 0;
 		stringstream s1(s);
 		while (!s1.eof()) {
-
+			float num = 0;
 			s1 >> word1;
-			num += editDistance(toSearch, word1);
+			num = editDistance(toSearch, word1);
 			nwords++;
+			float tmp = (word1.length() - num) / (int) word1.length();
+			if (tmp > tmpres)
+				tmpres = tmp;
 		}
-
-		float res = (float) num / nwords;
+		res = tmpres;
 		values.push_back(res);
 	}
 
@@ -413,7 +435,7 @@ vector<string> splitter(string original) {
 	return result;
 }
 
-bool notStretName(string text) {
+bool notStreetName(string text) {
 	return text != "Rua" && text != "rua" && text != "Estrada"
 			&& text != "estrada" && text != "Avenida" && text != "avenida"
 			&& text != "Alameda" && text != "alameda" && text != "Praça"
