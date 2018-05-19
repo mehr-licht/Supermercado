@@ -88,7 +88,7 @@ int b1kmpMatcher(string text, string pattern) {
 		if (pattern[q + 1] == text[i])
 			q++;
 		if (q == m - 1) {
-			//cout <<"pattern occurs with shift" << i-m+1 << endl;
+
 			num++;
 			q = prefix[q];
 		}
@@ -104,7 +104,8 @@ bool kmpMatcher(string text, string pattern) {
 	std::istringstream ss(text + ' ');
 	std::string word;
 
-	if (onlyOneWord(ss.str())) {
+//codigo para palavra a palavra
+	if (onlyOneWord(pattern)) {
 		while (std::getline(ss, word, ' ')) {
 			if (notStreetName(word)) { //ignore rua via avenida de etc...
 				n = word.length();
@@ -130,6 +131,9 @@ bool kmpMatcher(string text, string pattern) {
 			}
 		}
 	} else {
+
+		n = ss.str().length();
+
 		a3preKMP(pattern, f);
 
 		int i = 0;
@@ -148,8 +152,8 @@ bool kmpMatcher(string text, string pattern) {
 			} else
 				k = f[k];
 		}
-
 	}
+
 	return false;
 }
 /*
@@ -298,20 +302,47 @@ int editDistance(string pattern, string text) {
 
 	std::istringstream ss(text);
 	std::string word;
+	if (onlyOneWord(pattern)) {
+		while (std::getline(ss, word, ' ')) {
+			if (notStreetName(word)) {
+				//ignore rua via avenida de etc
+				n = word.length();
+				for (int j = 0; j <= n; j++)
+					d[j] = j;
 
-	while (std::getline(ss, word, ' ')) {
+				for (int i = 1; i <= m; i++) {
+					old = d[0];
+					d[0] = i;
+					for (int j = 1; j <= n; j++) {
+						if (pattern[i - 1] == word[j - 1])
+							neww = old;
+						else {
+							neww = min(old, d[j]);
+							neww = min(neww, d[j - 1]);
+							neww = neww + 1;
+						}
+						old = d[j];
+						d[j] = neww;
+					}
+				}
+			} else {
+				return INT_INFINITY;
+			}
+		}
+	} else {
+
 		if (notStreetName(word)) {
 			//ignore rua via avenida de etc
-			n = word.length();
+			n =text.length();
 			for (int j = 0; j <= n; j++)
-				d[j] = j;
+			d[j] = j;
 
 			for (int i = 1; i <= m; i++) {
 				old = d[0];
 				d[0] = i;
 				for (int j = 1; j <= n; j++) {
-					if (pattern[i - 1] == word[j - 1])
-						neww = old;
+					if (pattern[i - 1] == text[j - 1])
+					neww = old;
 					else {
 						neww = min(old, d[j]);
 						neww = min(neww, d[j - 1]);
@@ -321,7 +352,8 @@ int editDistance(string pattern, string text) {
 					d[j] = neww;
 				}
 			}
-		} else {
+		}
+		else {
 			return INT_INFINITY;
 		}
 	}
@@ -342,29 +374,53 @@ vector<float> numApproximateStringMatching(string filename, string toSearch) {
 
 	}
 	string line, word1;
-	//int num = 0,
-	int nwords = 0, nchars = 0;
 
-	while (getline(fich, line)) {
+	int nwords = 0;
 
-		nwords = 0;
-		stringstream linestream(line);
-		string s;
-		getline(linestream, s, ';');
-		getline(linestream, s, ';');
-		float tmpres = 0;
-		stringstream s1(s);
-		while (!s1.eof()) {
-			float num = 0;
-			s1 >> word1;
-			num = editDistance(toSearch, word1);
-			nwords++;
-			float tmp = (word1.length() - num) / (int) word1.length();
-			if (tmp > tmpres)
-				tmpres = tmp;
+	//codigo para palavra a palavra
+	if (onlyOneWord(toSearch)) {
+		while (getline(fich, line)) {
+
+			nwords = 0;
+			stringstream linestream(line);
+			string s;
+			getline(linestream, s, ';');
+			getline(linestream, s, ';');
+			float tmpres = 0;
+			stringstream s1(s);
+			while (!s1.eof()) {
+				float num = 0;
+				s1 >> word1;
+				num = editDistance(toSearch, word1);
+				nwords++;
+				float tmp = (word1.length() - num) / (int) word1.length();
+				if (tmp > tmpres)
+					tmpres = tmp;
+			}
+			res = tmpres;
+			values.push_back(res);
 		}
-		res = tmpres;
-		values.push_back(res);
+	} else {
+
+		float num = 0;
+
+		while (getline(fich, line)) {
+			num = 0;
+			nwords = 0;
+			stringstream linestream(line);
+			string s;
+			getline(linestream, s, ';');
+			getline(linestream, s, ';');
+
+			stringstream s1(s);
+
+			num = editDistance(toSearch, s1.str());
+
+			float res = (s1.str().length() - num) / (int) s1.str().length();
+
+			values.push_back(res);
+		}
+
 	}
 	fich.close();
 	return values;
@@ -420,7 +476,7 @@ vector<float> numApproximateStringMatchingFreg(string filename,
 
 	while (getline(fich, line)) {
 		float res;
-		//num = 0;
+//num = 0;
 		nwords = 0;
 		stringstream linestream(line);
 		string s;
