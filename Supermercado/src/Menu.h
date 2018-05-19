@@ -22,7 +22,6 @@
 #include <limits>
 #include "edgetype.h"
 #include "matcher.h"
-#include "Searcher.h"
 #include <set>
 #include <sys/time.h>
 
@@ -345,6 +344,15 @@ public:
 	 * @return number of nodes chosen for graph from map
 	 *  */
 	int getMap();
+
+
+	/**
+	 * Check if the the ids of two roads meet in a crossroads
+	 * @param id of one road
+	 * @param id of another road
+	 * @return true if the two roads meet and false otherwise
+	 */
+	bool checkCross(long long id1, long long id2);
 }
 ;
 

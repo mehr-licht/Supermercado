@@ -670,13 +670,13 @@ void Menu::superAprox(string pattern) {
 	float max = 0;
 
 	gettimeofday(&st, NULL);
-	//vector<int> ids = numApproximateStringMatching("supermarkets.txt", pattern);
+
 	vector<float> val = numApproximateStringMatching("supermarkets.txt",
 			pattern);
 	gettimeofday(&et, NULL);
 	int elapsed = ((et.tv_sec - st.tv_sec) * 1000000)
 			+ (et.tv_usec - st.tv_usec);
-//float max;
+
 	for (unsigned int i = 0; i < val.size(); i++) {
 		if (val.at(i) > max) {
 			max = val.at(i);
@@ -684,14 +684,10 @@ void Menu::superAprox(string pattern) {
 	}
 	cout << "\n\nMINIMUM:" << max;
 
-	/*
-	 * Val<=5.5 seems to grant a good level of detail in the similar
-	 * results. || val == min must be used because, sometimes the
-	 * most similar result is higher than 5.5, so it prlong longs the minimum.
-	 */
-	set<float> tmpset;
+
+	set<Supermarket*> tmpset;
 	for (float i = 0; i < val.size(); i++) {
-		tmpset.insert(val.at(i));
+
 		if (val.at(i) > 0.66 || val.at(i) == max)
 			tmp.push_back(supermarkets.at(i));
 	}
@@ -710,7 +706,7 @@ void Menu::superAprox(string pattern) {
 				cout << "\n\truas do cruzamento:\n";
 				for (set<string>::iterator it = ruas.begin(); it != ruas.end();
 						it++) {
-					//for (unsigned int j = 0; j < ruas.size(); j++) {
+					tmpset.insert(tmp.at(i));
 
 					if (*it == "") {
 						cout << "Rua sem nome" << endl;
@@ -882,20 +878,16 @@ void Menu::ruaAprox(string pattern) {
 	int elapsed = ((et.tv_sec - st.tv_sec) * 1000000)
 			+ (et.tv_usec - st.tv_usec);
 
-	set<float> tmpset;
+	set<Road*> tmpset;
 	for (float i = 0; i < val.size(); i++) {
-		tmpset.insert(val.at(i));
+
 		if (val.at(i) > max) {
 			max = val.at(i);
 		}
 	}
 	cout << "\n\nMINIMUM:" << max;
 
-	/*
-	 * Val<=5.5 seems to grant a good level of detail in the similar
-	 * results. || val == min must be used because, sometimes the
-	 * most similar result is higher than 5.5, so it prlong longs the minimum.
-	 */
+
 	for (float i = 0; i < val.size(); i++) {
 		if (val.at(i) > 0.66 || val.at(i) == max)
 			tmp.push_back(roads.at(i));
@@ -916,6 +908,7 @@ void Menu::ruaAprox(string pattern) {
 				cout << "\n\tsupermercados nesta rua:\n";
 				for (set<string>::iterator it = supermercados.begin();
 						it != supermercados.end(); it++) {
+					tmpset.insert(tmp.at(i));
 					cout << "\t" << *it << "\n";
 				}
 			} else {
@@ -1908,10 +1901,9 @@ void Menu::crossExacta() {
 	getline(cin, name2);
 	cout << "\n\n\n\n\n";
 
-
 	//set<float> tmpset;
-		//for (float i = 0; i < val.size(); i++) {
-		//tmpset.insert(val.at(i));
+	//for (float i = 0; i < val.size(); i++) {
+	//tmpset.insert(val.at(i));
 	cout << "IMPLEMENTAR\n";
 	//procura por 1ª rua
 	//dos resultados guarda os das ruas que possam ter supers - se nao encontrou rua guarda VAR
@@ -1921,8 +1913,6 @@ void Menu::crossExacta() {
 	//se só deu numa das ruas devolve (intercalado) as ruas com supers
 	//se não deu nenhum - nada
 	//se nao encontrou 1 ou 2 das ruas diz isso....
-
-
 
 	cout << "\tadicionar ID como paragem da rota:\n";
 
@@ -1956,13 +1946,17 @@ void Menu::crossExacta() {
 
 void Menu::crossAprox() {
 	string name1, name2, ind;
-	int op = 0;
-	int id;
-	std::stringstream sstm;
-	getchar();
+	int id, op = 0;
+	std::stringstream sstm, sstmm;
+	set<string> supermercados;
+	vector<Road*> tmp1, tmp2;
+	float min = 999, max = 0;
+	struct timeval st, et;
+	set<Road*> tmpset1, tmpset2;
+	bool not1 = false, not2 = false;
 
-
-
+	cin.clear();
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	cout << "Pesquisa aproximada de supermercados em cruzamentos\n\n";
 	cout << "nome de uma rua: ";
 	getline(cin, name1);
@@ -1970,12 +1964,116 @@ void Menu::crossAprox() {
 	getline(cin, name2);
 	cout << "\n\n\n\n\n";
 
+	sstmm << "roads" << getMap() << ".txt";
+	string tempstring = sstmm.str();
+	gettimeofday(&st, NULL);
+	vector<float> val = numApproximateStringMatchingRoad(tempstring, name1);
+	gettimeofday(&et, NULL);
 
-	//set<float> tmpset;
-		//for (float i = 0; i < val.size(); i++) {
-		//tmpset.insert(val.at(i));
-	cout << "IMPLEMENTAR\n";
-	//procura por 1ª rua
+	for (float i = 0; i < val.size(); i++) {
+		if (val.at(i) > max) {
+			max = val.at(i);
+		}
+	}
+
+	for (float i = 0; i < val.size(); i++) {
+		if (val.at(i) > 0.66 || val.at(i) == max)
+			tmp1.push_back(roads.at(i));
+	}
+
+	if (tmp1.size()) {
+		for (unsigned int i = 0; i < tmp1.size(); i++) {
+			if ((supermercados = getSupermarketByRoadId(tmp1.at(i)->getId())).size()) {
+				for (set<string>::iterator it = supermercados.begin();
+						it != supermercados.end(); it++) {
+					tmpset1.insert(tmp1.at(i));
+				}
+			} else {
+				not1 = true;
+			}
+		}
+
+	}
+
+	gettimeofday(&st, NULL);
+	val = numApproximateStringMatchingRoad(tempstring, name2);
+	gettimeofday(&et, NULL);
+
+	for (float i = 0; i < val.size(); i++) {
+		if (val.at(i) > max) {
+			max = val.at(i);
+		}
+	}
+
+	for (float i = 0; i < val.size(); i++) {
+		if (val.at(i) > 0.66 || val.at(i) == max)
+			tmp2.push_back(roads.at(i));
+	}
+
+	if (tmp2.size()) {
+		for (unsigned int i = 0; i < tmp2.size(); i++) {
+			if ((supermercados = getSupermarketByRoadId(tmp2.at(i)->getId())).size()) {
+				for (set<string>::iterator it = supermercados.begin();
+						it != supermercados.end(); it++) {
+					tmpset2.insert(tmp2.at(i));
+				}
+			} else {
+				not2 = true;
+			}
+		}
+
+	}
+	cout << "00\n";
+	for (set<Road*>::iterator itr1 = tmpset1.begin(); itr1 != tmpset1.end();
+			itr1++) {
+		cout << "01_" << (**itr1).getName() << "_" << (**itr1).getId() << "\n";
+		for (set<Road*>::iterator itr2 = tmpset2.begin(); itr2 != tmpset2.end();
+				itr2++) {
+			cout << "02_" << (**itr2).getName() << "_" << (**itr2).getId()
+					<< "\n";
+			if (checkCross((**itr1).getId(), (**itr2).getId())) {
+				cout << "03\n";
+				cout << "encontrado supermercado no cruzamento com id="
+						<< (**itr2).getId() << endl;
+			}
+
+		}
+	}
+
+	if (!tmp1.size()) {
+		cout << "\n\n\nNão foram encontradas ruas com " << name1 << " !\n";
+	}
+	if (!tmp2.size()) {
+		cout << "\n\n\nNão foram encontradas ruas com " << name2 << " !\n";
+	}
+	if (not1) {
+		cout << "\n\n\nNão foram encontrados supermercados em " << name1
+				<< " !\n";
+	}
+	if (not2) {
+		cout << "\n\n\nNão foram encontrados supermercados em " << name2
+				<< " !\n";
+	}
+
+	/*cin.clear();
+	 cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	 cout << "\tadicionar ID como paragem da rota:\n";
+
+	 getline(cin, ind);
+	 sstm.str(ind);
+	 sstm >> id;
+
+	 for (unsigned int i = 0; i < tmp.size(); i++) {
+	 if (tmp.at(i)->getId() == id) {
+	 adicionaParagem(id);
+	 break;
+	 }
+	 }*/
+
+	cout << "\nprima uma tecla para continuar" << endl;
+	getchar();
+	return;
+
 	//dos resultados guarda os das ruas que possam ter supers - se nao encontrou rua guarda VAR
 	//procura por 2ª
 	//dos resultados guarda os das ruas que possam ter supers - se nao encontrou rua guarda VAR
@@ -1983,10 +2081,6 @@ void Menu::crossAprox() {
 	//se só deu numa das ruas devolve (intercalado) as ruas com supers por ordem de parecença
 	//se não deu nenhum - nada
 	//se nao encontrou 1 ou 2 das ruas diz isso....
-
-
-
-
 
 	cout << "\tadicionar ID como paragem da rota:\n";
 
@@ -2013,9 +2107,6 @@ void Menu::crossAprox() {
 	 }
 	 }
 	 */
-
-//Searcher* rs = new Searcher();
-//rs->SearchForSupermarketInRoutesAprox(name1, name2);
 }
 
 set<string> Menu::getRoadByNode(long long node) {
@@ -2038,6 +2129,31 @@ set<string> Menu::getRoadByNode(long long node) {
 		}
 	}
 	return ruas;
+}
+
+bool Menu::checkCross(long long id1, long long id2) {
+	for (unsigned int i = 0; i < connections.size(); i++) {
+		for (unsigned int j = 0; j < connections.size(); j++) {
+			cout << "check02	" << j << endl;
+			if (connections.at(i)->getRoadId() == id1
+					&& connections.at(j)->getRoadId() == id2) {
+				if (connections.at(i)->getNode1()
+						== connections.at(j)->getNode1()
+						|| connections.at(i)->getNode1()
+								== connections.at(j)->getNode2()
+						|| connections.at(i)->getNode2()
+								== connections.at(j)->getNode2()) {
+					return true;
+
+				}
+			}
+			if (connections.at(j)->getRoadId() == id2)
+				break;
+		}
+		if (connections.at(i)->getRoadId() == id1)
+			break;
+	}
+	return false;
 }
 
 set<string> Menu::getSupermarketByRoadId(long long id) {
@@ -2169,27 +2285,23 @@ void Menu::fregAprox(string pattern) {
 	float max = 0;
 
 	gettimeofday(&st, NULL);
-//vector<int> ids = numApproximateStringMatching("supermarkets.txt", pattern);
+
 	vector<float> val = numApproximateStringMatchingFreg("supermarkets.txt",
 			pattern);
 	gettimeofday(&et, NULL);
 	int elapsed = ((et.tv_sec - st.tv_sec) * 1000000)
 			+ (et.tv_usec - st.tv_usec);
 
-	set<float> tmpset;
+	set<Supermarket*> tmpset;
 	for (float i = 0; i < val.size(); i++) {
-		tmpset.insert(val.at(i));
+
 		if (val.at(i) > max) {
 			max = val.at(i);
 		}
 	}
 	cout << "\n\nMINIMUM:" << max;
 
-	/*
-	 * Val<=5.5 seems to grant a good level of detail in the similar
-	 * results. || val == min must be used because, sometimes the
-	 * most similar result is higher than 5.5, so it prlong longs the minimum.
-	 */
+
 	for (float i = 0; i < val.size(); i++) {
 		if (val.at(i) > 0.66 || val.at(i) == max)
 			tmp.push_back(supermarkets.at(i));
@@ -2210,7 +2322,7 @@ void Menu::fregAprox(string pattern) {
 				cout << "\n\truas do cruzamento:\n";
 				for (set<string>::iterator it = ruas.begin(); it != ruas.end();
 						it++) {
-					//for (unsigned int j = 0; j < ruas.size(); j++) {
+					tmpset.insert(tmp.at(i));
 
 					if (*it == "") {
 						cout << "Rua sem nome" << endl;
