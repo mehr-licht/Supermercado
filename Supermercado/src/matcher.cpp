@@ -203,7 +203,7 @@ vector<int> numStringMatching(string filename, string toSearch) {
 	vector<int> ids;
 
 	if (!file) {
-		cout < "Erro a abrir ficheiro de leitura\n";
+		cout << "Erro a abrir ficheiro de leitura\n";
 		return ids;
 	}
 	int i = 1;
