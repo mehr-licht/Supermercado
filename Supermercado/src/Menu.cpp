@@ -1663,7 +1663,6 @@ void Menu::gvRouteDoDString() {
 
 	LastStop = route.at(route.size() - 1);
 
-
 	route = dijkstraOfDijkstras(LastStop, supermarketLocation, total);
 
 	completeRoute.insert(completeRoute.end(), route.begin(), route.end() - 1);
