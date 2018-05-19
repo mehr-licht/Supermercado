@@ -237,7 +237,7 @@ vector<int> numStringMatchingRoad(string filename, string toSearch) {
 	vector<int> ids;
 
 	if (!file) {
-		cout < "Erro a abrir ficheiro de leitura\n";
+		cout << "Erro a abrir ficheiro de leitura\n";
 		return ids;
 	}
 	int i = 1;
@@ -425,7 +425,6 @@ vector<float> numApproximateStringMatching(string filename, string toSearch) {
 	fich.close();
 	return values;
 }
-
 vector<float> numApproximateStringMatchingRoad(string filename,
 		string toSearch) {
 	float res;
@@ -433,35 +432,101 @@ vector<float> numApproximateStringMatchingRoad(string filename,
 	vector<float> values;
 	if (!fich) {
 		cout << "ficheiro " << filename << " nao encontrado " << endl;
+
 	}
 	string line, word1;
-	int num = 0, nwords = 0;
-	while (getline(fich, line)) {
-		nwords = 0;
-		stringstream linestream(line);
-		string s;
-		getline(linestream, s, ';');
-		getline(linestream, s, ';');
-		float tmpres = 0;
-		stringstream s1(s);
-		if (s1.str() != "")
-			while (!s1.eof()) {
-				float num = 0;
-				s1 >> word1;
-				num = editDistance(toSearch, word1);
-				nwords++;
-				float tmp = (word1.length() - num) / (int) word1.length();
-				if (tmp > tmpres)
-					tmpres = tmp;
+
+	int nwords = 0;
+
+	//codigo para palavra a palavra
+	if (onlyOneWord(toSearch)) {
+		while (getline(fich, line)) {
+
+			nwords = 0;
+			stringstream linestream(line);
+			string s;
+			getline(linestream, s, ';');
+			getline(linestream, s, ';');
+			float tmpres = 0;
+			stringstream s1(s);
+			if (s1.str() != "") {
+				while (!s1.eof()) {
+					float num = 0;
+					s1 >> word1;
+					num = editDistance(toSearch, word1);
+					nwords++;
+					float tmp = (word1.length() - num) / (int) word1.length();
+					if (tmp > tmpres)
+						tmpres = tmp;
+				}
 			}
-		res = tmpres;
-		values.push_back(res);
-		getline(linestream, s, ';');
+			res = tmpres;
+			values.push_back(res);
+			getline(linestream, s, ';');
+		}
+	} else {
+
+		float num = 0;
+
+		while (getline(fich, line)) {
+			num = 0;
+			nwords = 0;
+			stringstream linestream(line);
+			string s;
+			getline(linestream, s, ';');
+			getline(linestream, s, ';');
+
+			stringstream s1(s);
+
+			num = editDistance(toSearch, s1.str());
+
+			float res = (s1.str().length() - num) / (int) s1.str().length();
+
+			values.push_back(res);
+			getline(linestream, s, ';');
+		}
+
 	}
 	fich.close();
 	return values;
 }
-
+/*
+ vector<float> numApproximateStringMatchingRoad(string filename,
+ string toSearch) {
+ float res;
+ ifstream fich(filename.c_str());
+ vector<float> values;
+ if (!fich) {
+ cout << "ficheiro " << filename << " nao encontrado " << endl;
+ }
+ string line, word1;
+ int num = 0, nwords = 0;
+ while (getline(fich, line)) {
+ nwords = 0;
+ stringstream linestream(line);
+ string s;
+ getline(linestream, s, ';');
+ getline(linestream, s, ';');
+ float tmpres = 0;
+ stringstream s1(s);
+ if (s1.str() != "")
+ while (!s1.eof()) {
+ float num = 0;
+ s1 >> word1;
+ num = editDistance(toSearch, word1);
+ nwords++;
+ float tmp = (word1.length() - num) / (int) word1.length();
+ if (tmp > tmpres)
+ tmpres = tmp;
+ }
+ res = tmpres;
+ values.push_back(res);
+ getline(linestream, s, ';');
+ }
+ fich.close();
+ return values;
+ }
+ */
 vector<float> numApproximateStringMatchingFreg(string filename,
 		string toSearch) {
 

@@ -41,8 +41,8 @@ private:
 	vector<Client*> clients;
 	vector<Truck*> trucks;
 	static long long last_id;
-	long long source;
-	long long destination;
+	long long source=0;
+	//long long destination;
 	bool statsShown;
 	int c = 0;
 	int map;
@@ -84,7 +84,7 @@ public:
 	 * define the (string method)route destination
 	 * @param node of the destination
 	 */
-	void setDestination(long long node);
+	//void setDestination(long long node);
 
 	/**
 	 * return (string method)route source node
@@ -94,7 +94,7 @@ public:
 	/**
 	 * return (string method)route destination node
 	 */
-	long long getDestination();
+//	long long getDestination();
 
 	/**
 	 * choose between string methods
@@ -116,7 +116,7 @@ public:
 	 * search the pattern and displays the result accordinf to the handout
 	 * @param the ppattern to search
 	 */
-	void superAprox(string pattern);
+	void superApprox(string pattern);
 
 	/**
 	 * search the pattern and displays the result accordinf to the handout
@@ -128,7 +128,7 @@ public:
 	 *search the pattern and displays the result accordinf to the handout
 	 * @param the ppattern to search
 	 */
-	void ruaAprox(string pattern);
+	void ruaApprox(string pattern);
 
 	/**
 	 * Method to load graph from files.
@@ -252,13 +252,13 @@ public:
 
 	/**
 	 *verifies if given id corresponds to a Supermarket
-	 * @parm idNo id number
+	 * @param idNo id number
 	 */
 	bool isSupermarket(int idNo);
 
 	/**
 	 *verifies if given id corresponds to a Client
-	 * @parm idNo id number
+	 * @param idNo id number
 	 */
 	bool isClient(int idNo);
 
@@ -289,11 +289,32 @@ public:
 	 */
 	void gvRouteDoD();
 
+	/**
+	 * Finds Supermarkets near a crossroads (approximated method)
+	 */
 	void crossExacta();
-	void crossAprox();
 
-	void fregAprox(string pattern);
+	/**
+	 *  Finds Supermarkets near a crossroads (exact method)
+	 */
+	void crossApprox();
+
+	/**
+	 * @brief finds supermarkets in the given "freguesia" (approximated method)
+	 *@param pattern to search for
+	 */
+	void fregApprox(string pattern);
+
+	/**
+	 *@brief finds supermarkets in the given "freguesia" (exact method)
+	 *@param pattern to search for
+	 */
 	void fregExacta(string pattern);
+
+	/**
+	 * closes current route and shows it
+	 */
+	void closeRoute();
 
 	/**
 	 * Get roads on a given node

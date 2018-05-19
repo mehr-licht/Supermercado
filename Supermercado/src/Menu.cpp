@@ -234,7 +234,7 @@ void Menu::menu() {
 			cout << "\n\nO que pretende?\n\n";
 			cout << "1 - Strings\n\n";
 			cout << "2 - Rotas\n\n";
-			cout << "3 - testes\n\n";
+			//cout << "3 - testes\n\n";
 			cout << "0 - sair\n";
 			cin >> choice;
 		} while (choice != 0 && choice != 1 && choice != 2 && choice != 3);
@@ -314,6 +314,8 @@ void Menu::menu() {
 		}
 		case 3: //APAGAR ISTO TUDO - não esquecer && != 3 no menu
 		{
+			system("clear");
+			cout << "****TESTS****\n\n";
 			vector<int> vals;
 			int opc = 0, opc2 = 0;
 			string textobase, padrao, filen;
@@ -394,7 +396,7 @@ void Menu::menu() {
 				case 2:
 					if (opc2 == 1) {
 						cout << "para já ir pelas strings e supermercados\n";
-						superAprox(padrao);/*
+						superApprox(padrao);/*
 						 gettimeofday(&st, NULL);
 
 						 numApproximateStringMatching(filen, padrao);
@@ -474,13 +476,14 @@ void Menu::stringMenu() {
 
 			cout
 					<< "\t8 - procura aproximada de supermercados em freguesias\n\n";
+			cout << "\t9 - fechar rota e mostrar\n\n";
 			cout << "\t0 - para trás\n";
 			cin >> choice;
 		} while (choice != 0 && choice != 1 && choice != 2 && choice != 3
 				&& choice != 4 && choice != 5 && choice != 6 && choice != 7
-				&& choice != 8);
+				&& choice != 8 && choice != 9);
 
-		if (choice && choice != 5 && choice != 6) {
+		if (choice && choice != 5 && choice != 6 && choice != 9) {
 
 			cin.clear();
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -497,27 +500,29 @@ void Menu::stringMenu() {
 			superExacta(pattern);
 			break;
 		case 2:
-			superAprox(pattern);
+			superApprox(pattern);
 			break;
 		case 3:
 			ruaExacta(pattern);
 			break;
 		case 4:
-			ruaAprox(pattern);
+			ruaApprox(pattern);
 			break;
 		case 5:
 			crossExacta();
 			break;
 		case 6:
-			crossAprox();
+			crossApprox();
 			break;
 		case 7:
 			fregExacta(pattern);
 			break;
 		case 8:
-			fregAprox(pattern);
+			fregApprox(pattern);
 			break;
-
+		case 9:
+			closeRoute();
+			break;
 		default:
 			return;
 			break;
@@ -655,7 +660,7 @@ void Menu::superExacta(string pattern) {
 	return;
 }
 
-void Menu::superAprox(string pattern) {
+void Menu::superApprox(string pattern) {
 	system("clear");
 	int id;
 	string ind;
@@ -763,18 +768,6 @@ void Menu::ruaExacta(string pattern) {
 	struct timeval st, et;
 
 	cout << "pesquisa exacta de ruas com o texto \"" << pattern << "\".\n";
-
-	/*  // correr 5 vezes e fazer a média (quando é muito rápido)
-	 int i, num_runs = 5;
-
-	 gettimeofday(&st,NULL);
-	 for (i=0; i<num_runs; i++) {
-	 bubble(a,n);
-	 }
-	 gettimeofday(&et,NULL);
-
-	 int elapsed = (((et.tv_sec - st.tv_sec) * 1000000) + (et.tv_usec - st.tv_usec)) / num_runs;
-	 */
 	std::stringstream sstmm;
 	sstmm << "roads" << getMap() << ".txt";
 	string tmp2 = sstmm.str();
@@ -843,7 +836,7 @@ void Menu::ruaExacta(string pattern) {
 	return;
 }
 
-void Menu::ruaAprox(string pattern) {
+void Menu::ruaApprox(string pattern) {
 	system("clear");
 	int id;
 	string ind;
@@ -856,22 +849,11 @@ void Menu::ruaAprox(string pattern) {
 
 	cout << "pesquisa aproximada de ruas com o texto \"" << pattern << "\".\n";
 
-	/*  // correr 5 vezes e fazer a média (quando é muito rápido)
-	 int i, num_runs = 5;
-
-	 gettimeofday(&st,NULL);
-	 for (i=0; i<num_runs; i++) {
-	 bubble(a,n);
-	 }
-	 gettimeofday(&et,NULL);
-
-	 int elapsed = (((et.tv_sec - st.tv_sec) * 1000000) + (et.tv_usec - st.tv_usec)) / num_runs;
-	 */
 	std::stringstream sstmm;
 	sstmm << "roads" << getMap() << ".txt";
 	string tmp2 = sstmm.str();
 	gettimeofday(&st, NULL);
-	//vector<int> ids =numApproximateStringMatching("roads.txt", pattern);
+
 	vector<float> val = numApproximateStringMatchingRoad(tmp2, pattern);
 	gettimeofday(&et, NULL);
 	int elapsed = ((et.tv_sec - st.tv_sec) * 1000000)
@@ -1887,11 +1869,18 @@ double Menu::euclideanDist(double x1, double y1, double x2, double y2) {
 
 void Menu::crossExacta() {
 	string name1, name2, ind;
-	int id;
-	std::stringstream sstm;
-	int op = 0;
-	getchar();
+	int id, op = 0;
+	std::stringstream sstm, sstmm;
+	set<string> supermercados;
+	set<long long> tmpsupers, tmpsupers1, tmpsupers2;
+	vector<Road*> tmp1, tmp2;
+	float min = 999, max = 0;
+	struct timeval st, et;
+	set<Road*> tmpset1, tmpset2;
+	bool not1 = true, not2 = true;
 
+	cin.clear();
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
 	cout << "Pesquisa exacta de supermercados em cruzamentos\n\n";
 	cout << "nome de uma rua: ";
 	getline(cin, name1);
@@ -1899,54 +1888,150 @@ void Menu::crossExacta() {
 	getline(cin, name2);
 	cout << "\n\n\n\n\n";
 
-	//set<float> tmpset;
-	//for (float i = 0; i < val.size(); i++) {
-	//tmpset.insert(val.at(i));
-	cout << "IMPLEMENTAR\n";
-	//procura por 1ª rua
-	//dos resultados guarda os das ruas que possam ter supers - se nao encontrou rua guarda VAR
-	//procura por 2ª
-	//dos resultados guarda os das ruas que possam ter supers - se nao encontrou rua guarda VAR
-	//se houver true nas duas pesquisas devolve os que deram true,
-	//se só deu numa das ruas devolve (intercalado) as ruas com supers
-	//se não deu nenhum - nada
-	//se nao encontrou 1 ou 2 das ruas diz isso....
+	sstmm << "roads" << getMap() << ".txt";
+	string tempstring = sstmm.str();
 
-	cout << "\tadicionar ID como paragem da rota:\n";
+	vector<int> ids = numStringMatchingRoad(tempstring, name1);
+
+	for (unsigned int i = 0; i < ids.size(); i++) {
+		tmp1.push_back(roads[ids.at(i) - 1]);
+	}
+
+	if (tmp1.size()) {
+		for (unsigned int i = 0; i < tmp1.size(); i++) {
+			if ((supermercados = getSupermarketByRoadId(tmp1.at(i)->getId())).size()) {
+				for (set<string>::iterator it = supermercados.begin();
+						it != supermercados.end(); it++) {
+					tmpset1.insert(tmp1.at(i));
+					tmpsupers1.insert(tmp1.at(i)->getId());
+					not1 = false;
+				}
+			}
+		}
+
+	}
+
+	ids = numStringMatchingRoad(tempstring, name2);
+
+	for (unsigned int i = 0; i < ids.size(); i++) {
+		tmp2.push_back(roads[ids.at(i) - 1]);
+	}
+
+	if (tmp2.size()) {
+
+		for (unsigned int i = 0; i < tmp2.size(); i++) {
+
+			if ((supermercados = getSupermarketByRoadId(tmp2.at(i)->getId())).size()) {
+
+				for (set<string>::iterator it = supermercados.begin();
+						it != supermercados.end(); it++) {
+
+					tmpset2.insert(tmp2.at(i));
+
+					tmpsupers2.insert(tmp2.at(i)->getId());
+
+					not2 = false;
+				}
+			}
+		}
+
+	}
+
+	for (set<Road*>::iterator itr1 = tmpset1.begin(); itr1 != tmpset1.end();
+			itr1++) {
+
+		for (set<Road*>::iterator itr2 = tmpset2.begin(); itr2 != tmpset2.end();
+				itr2++) {
+
+			if (checkCross((**itr1).getId(), (**itr2).getId())) {
+				tmpsupers.insert((**itr2).getId());
+				//	cout << "encontrado supermercado no cruzamento com id="
+				//		<< (**itr2).getId() << endl;
+			}
+
+		}
+	}
+
+	if (tmp1.size() && tmp2.size()) {
+		//continue;
+	} else if (!tmp1.size() && !tmp2.size()) {
+		cout << "\n\n\nNão foram encontradas ruas com " << name1 << "nem com "
+				<< name2 << " !\n";
+	} else {
+		if (!tmp1.size()) {
+			cout << "\n\n\nNão foram encontradas ruas com " << name1 << " !\n";
+		} else {
+			cout << "\n\n\nNão foram encontradas ruas com " << name2 << " !\n";
+		}
+	}
+
+	if (not1 && not2) {
+
+		cout << "\n\n\nNão foram encontrados supermercados em " << name1
+				<< "nem em " << name2 << " !\n";
+
+	} else if (!(not1 && not2)) {
+//		if (!tmpsupers.size()) {
+//			for (set<long long>::iterator its1 = tmpsupers1.begin();
+//					its1 != tmpsupers1.end(); its1++) {
+//				tmpsupers.insert(*its1);
+//			}
+//			for (set<long long>::iterator its2 = tmpsupers2.begin();
+//					its2 != tmpsupers2.end(); its2++) {
+//				tmpsupers.insert(*its2);
+//			}
+//		}
+
+		for (set<long long>::iterator its = tmpsupers.begin();
+				its != tmpsupers.end(); its++) {
+
+			cout << "\n\tsupermercados nas ruas do cruzamento de " << name1
+					<< " com " << name2 << ":\n\n";
+			supermercados = getSupermarketByRoadId(*its);				//
+			for (set<string>::iterator s = supermercados.begin();
+					s != supermercados.end(); s++) {
+				cout << "ID: " << *its << "\n";
+				cout << "\t" << *s << "\n";
+			}
+		}
+
+	} else {
+		if (not1) {
+			cout << "\n\n\nNão foram encontrados supermercados em " << name1
+					<< " !\n";
+		} else {
+			cout << "\n\n\nNão foram encontrados supermercados em " << name2
+					<< " !\n";
+		}
+	}
+
+	cin.clear();
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	cout << "\tadicionar ID como supermercado da rota:\n";
 
 	getline(cin, ind);
-	/*	sstm.str(ind);
-	 sstm >> id;
-	 while (op != 1 || op != 2) {
-	 cout << "supermercado(1) ou cliente(2)?\n";
-	 cin >> op;
-	 }
+	sstm.str(ind);
+	sstm >> id;
 
-	 for (unsigned int i = 0; i < tmp.size(); i++) {
-	 if (tmp.at(i)->getId() == id) {
-	 switch (op) {
-	 case 1:
-	 adicionaSuper (id);
-	 break;
-	 case 2:
-	 adicionaParagem(id);
-	 break;
-	 }
+	for (unsigned int i = 0; i < supermarkets.size(); i++) {
+		if (supermarkets.at(i)->getId() == id) {
+			adicionaSuper(id);
+			break;
+		}
+	}
 
-	 break;
-	 }
-	 }
-	 */
+	cout << "\nprima uma tecla para continuar" << endl;
+	getchar();
+	return;
 
-//Searcher* rs = new Searcher();
-//rs->SearchForSupermarketInRoutes(name1, name2);
 }
 
-void Menu::crossAprox() {
+void Menu::crossApprox() {
 	string name1, name2, ind;
 	int id, op = 0;
 	std::stringstream sstm, sstmm;
 	set<string> supermercados;
+	set<long long> tmpsupers, tmpsupers1, tmpsupers2;
 	vector<Road*> tmp1, tmp2;
 	float min = 999, max = 0;
 	struct timeval st, et;
@@ -1985,6 +2070,7 @@ void Menu::crossAprox() {
 				for (set<string>::iterator it = supermercados.begin();
 						it != supermercados.end(); it++) {
 					tmpset1.insert(tmp1.at(i));
+					tmpsupers1.insert(tmp1.at(i)->getId());
 					not1 = false;
 				}
 			}
@@ -2008,101 +2094,112 @@ void Menu::crossAprox() {
 	}
 
 	if (tmp2.size()) {
+
 		for (unsigned int i = 0; i < tmp2.size(); i++) {
+
 			if ((supermercados = getSupermarketByRoadId(tmp2.at(i)->getId())).size()) {
+
 				for (set<string>::iterator it = supermercados.begin();
 						it != supermercados.end(); it++) {
+
 					tmpset2.insert(tmp2.at(i));
+
+					tmpsupers2.insert(tmp2.at(i)->getId());
+
 					not2 = false;
 				}
 			}
 		}
 
 	}
-	//cout << "00\n";
+
 	for (set<Road*>::iterator itr1 = tmpset1.begin(); itr1 != tmpset1.end();
 			itr1++) {
-		//cout << "01_" << (**itr1).getName() << "_" << (**itr1).getId() << "\n";
+
 		for (set<Road*>::iterator itr2 = tmpset2.begin(); itr2 != tmpset2.end();
 				itr2++) {
-			//cout << "02_" << (**itr2).getName() << "_" << (**itr2).getId()
-		//	<< "\n";
+
 			if (checkCross((**itr1).getId(), (**itr2).getId())) {
-				//cout << "03\n";
-				cout << "encontrado supermercado no cruzamento com id="
-						<< (**itr2).getId() << endl;
+				tmpsupers.insert((**itr2).getId());
+				//	cout << "encontrado supermercado no cruzamento com id="
+				//		<< (**itr2).getId() << endl;
 			}
 
 		}
 	}
 
-	if (!tmp1.size()) {
-		cout << "\n\n\nNão foram encontradas ruas com " << name1 << " !\n";
+	if (tmp1.size() && tmp2.size()) {
+		//continue;
+	} else if (!tmp1.size() && !tmp2.size()) {
+		cout << "\n\n\nNão foram encontradas ruas com " << name1 << "nem com "
+				<< name2 << " !\n";
+	} else {
+		if (!tmp1.size()) {
+			cout << "\n\n\nNão foram encontradas ruas com " << name1 << " !\n";
+		} else {
+			cout << "\n\n\nNão foram encontradas ruas com " << name2 << " !\n";
+		}
 	}
-	if (!tmp2.size()) {
-		cout << "\n\n\nNão foram encontradas ruas com " << name2 << " !\n";
-	}
-	if (not1) {
+
+	if (not1 && not2) {
+
 		cout << "\n\n\nNão foram encontrados supermercados em " << name1
-				<< " !\n";
+				<< "nem em " << name2 << " !\n";
+
+	} else if (!(not1 && not2)) {
+//		if (!tmpsupers.size()) {
+//			for (set<long long>::iterator its1 = tmpsupers1.begin();
+//					its1 != tmpsupers1.end(); its1++) {
+//				tmpsupers.insert(*its1);
+//			}
+//			for (set<long long>::iterator its2 = tmpsupers2.begin();
+//					its2 != tmpsupers2.end(); its2++) {
+//				tmpsupers.insert(*its2);
+//			}
+//		}
+
+		for (set<long long>::iterator its = tmpsupers.begin();
+				its != tmpsupers.end(); its++) {
+
+			cout << "\n\tsupermercados nas ruas do cruzamento de " << name1
+					<< " com " << name2 << ":\n\n";
+			supermercados = getSupermarketByRoadId(*its);				//
+			for (set<string>::iterator s = supermercados.begin();
+					s != supermercados.end(); s++) {
+				cout << "ID: " << *its << "\n";
+				cout << "\t" << *s << "\n";
+			}
+		}
+
+	} else {
+		if (not1) {
+			cout << "\n\n\nNão foram encontrados supermercados em " << name1
+					<< " !\n";
+		} else {
+			cout << "\n\n\nNão foram encontrados supermercados em " << name2
+					<< " !\n";
+		}
 	}
-	if (not2) {
-		cout << "\n\n\nNão foram encontrados supermercados em " << name2
-				<< " !\n";
+
+	cin.clear();
+	cin.ignore(numeric_limits<streamsize>::max(), '\n');
+	cout << "\tadicionar ID como supermercado da rota:\n";
+
+	getline(cin, ind);
+	sstm.str(ind);
+	sstm >> id;
+
+	for (unsigned int i = 0; i < supermarkets.size(); i++) {
+		if (supermarkets.at(i)->getId() == id) {
+			adicionaSuper(id);
+			break;
+		}
 	}
-
-	/*cin.clear();
-	 cin.ignore(numeric_limits<streamsize>::max(), '\n');
-	 cout << "\tadicionar ID como paragem da rota:\n";
-
-	 getline(cin, ind);
-	 sstm.str(ind);
-	 sstm >> id;
-
-	 for (unsigned int i = 0; i < tmp.size(); i++) {
-	 if (tmp.at(i)->getId() == id) {
-	 adicionaParagem(id);
-	 break;
-	 }
-	 }*/
 
 	cout << "\nprima uma tecla para continuar" << endl;
 	getchar();
 	return;
 
-	//dos resultados guarda os das ruas que possam ter supers - se nao encontrou rua guarda VAR
-	//procura por 2ª
-	//dos resultados guarda os das ruas que possam ter supers - se nao encontrou rua guarda VAR
-	//se houver true nas duas pesquisas devolve os que deram true, por ordem de parecença
-	//se só deu numa das ruas devolve (intercalado) as ruas com supers por ordem de parecença
-	//se não deu nenhum - nada
-	//se nao encontrou 1 ou 2 das ruas diz isso....
-
-	cout << "\tadicionar ID como paragem da rota:\n";
-
-	getline(cin, ind);
-	/*	sstm.str(ind);
-	 sstm >> id;
-	 while (op != 1 || op != 2) {
-	 cout << "supermercado(1) ou cliente(2)?\n";
-	 cin >> op;
-	 }
-
-	 for (unsigned int i = 0; i < tmp.size(); i++) {
-	 if (tmp.at(i)->getId() == id) {
-	 switch (op) {
-	 case 1:
-	 adicionaSuper (id);
-	 break;
-	 case 2:
-	 adicionaParagem(id);
-	 break;
-	 }
-
-	 break;
-	 }
-	 }
-	 */
 }
 
 set<string> Menu::getRoadByNode(long long node) {
@@ -2149,7 +2246,10 @@ bool Menu::checkCross(long long id1, long long id2) {
 							|| connections.at(i)->getNode1()
 									== connections.at(j)->getNode2()
 							|| connections.at(i)->getNode2()
-									== connections.at(j)->getNode2()) {
+									== connections.at(j)->getNode2()
+							|| connections.at(i)->getNode2()
+									== connections.at(j)->getNode1()) {
+
 						return true;
 					}
 					if (connections.at(j)->getRoadId() == id2)
@@ -2277,7 +2377,7 @@ void Menu::fregExacta(string pattern) {
 	return;
 }
 
-void Menu::fregAprox(string pattern) {
+void Menu::fregApprox(string pattern) {
 	system("clear");
 	int id;
 	string ind;
@@ -2377,18 +2477,18 @@ void Menu::fregAprox(string pattern) {
 void Menu::setSource(long long node) {
 	this->source = node;
 }
-
+/*
 void Menu::setDestination(long long node) {
 	this->destination = node;
-}
+}*/
 
 long long Menu::getSource() {
 	return this->source;
 }
-
+/*
 long long Menu::getDestination() {
 	return this->destination;
-}
+}*/
 
 void Menu::stringDoD(double &total, bool toPrint) {
 
@@ -2556,13 +2656,11 @@ void Menu::adicionaSuper(long long node) {
 }
 
 void Menu::adicionaParagem(long long node) {
-//int index;
 
 	std::stringstream sstm;
 
-//	std::istringstream ss(ind);
-//ss >> index;
 	int c = this->getC();
+
 	if (c < 10) {
 		sstm << "client_00" << c;
 
@@ -2573,11 +2671,12 @@ void Menu::adicionaParagem(long long node) {
 		sstm << "client" << c;
 
 	}
+
 	string d = sstm.str();
 
 //clients.push_back(new Client(c, d, nodes.at(n)->getId(), "rua", 0)); //add necessary clients
 	Client * newC = new Client(c, d, node, *(this->getRoadByNode(node).begin()),
-			0);
+			0);//ERRO
 
 	this->trucks.at(0)->addNewStop(newC);
 
@@ -2597,4 +2696,32 @@ void Menu::setMap(int map) {
 
 int Menu::getMap() {
 	return this->map;
+}
+
+void Menu::closeRoute() {
+	system("clear");
+	char opt = ' ';
+	double total=0;
+	while (opt != 'y' && opt != 'n' && opt != 'Y' && opt != 'N') {
+		cout << "\n\tdo you really want to close the current route? (y/n)\n";
+		cin >> opt;
+	}
+
+	//verifica se tem source e dests...
+	if (!this->trucks.at(0)->getStops().size() || !this->getSource()){
+		cout << "\n\tNao tem supermercado e/ou paragens adicionadas\n";
+		getchar();	getchar();
+		return;
+	}
+
+
+	switch (toupper(opt)) {
+	case ('Y'):
+		stringDoD(total, true);
+		break;
+	case ('N'):
+		return;
+		break;
+	}
+	return;
 }
