@@ -684,7 +684,6 @@ void Menu::superAprox(string pattern) {
 	}
 	cout << "\n\nMINIMUM:" << max;
 
-
 	set<Supermarket*> tmpset;
 	for (float i = 0; i < val.size(); i++) {
 
@@ -886,7 +885,6 @@ void Menu::ruaAprox(string pattern) {
 		}
 	}
 	cout << "\n\nMINIMUM:" << max;
-
 
 	for (float i = 0; i < val.size(); i++) {
 		if (val.at(i) > 0.66 || val.at(i) == max)
@@ -1953,7 +1951,7 @@ void Menu::crossAprox() {
 	float min = 999, max = 0;
 	struct timeval st, et;
 	set<Road*> tmpset1, tmpset2;
-	bool not1 = false, not2 = false;
+	bool not1 = true, not2 = true;
 
 	cin.clear();
 	cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -1987,9 +1985,8 @@ void Menu::crossAprox() {
 				for (set<string>::iterator it = supermercados.begin();
 						it != supermercados.end(); it++) {
 					tmpset1.insert(tmp1.at(i));
+					not1 = false;
 				}
-			} else {
-				not1 = true;
 			}
 		}
 
@@ -2016,23 +2013,22 @@ void Menu::crossAprox() {
 				for (set<string>::iterator it = supermercados.begin();
 						it != supermercados.end(); it++) {
 					tmpset2.insert(tmp2.at(i));
+					not2 = false;
 				}
-			} else {
-				not2 = true;
 			}
 		}
 
 	}
-	cout << "00\n";
+	//cout << "00\n";
 	for (set<Road*>::iterator itr1 = tmpset1.begin(); itr1 != tmpset1.end();
 			itr1++) {
-		cout << "01_" << (**itr1).getName() << "_" << (**itr1).getId() << "\n";
+		//cout << "01_" << (**itr1).getName() << "_" << (**itr1).getId() << "\n";
 		for (set<Road*>::iterator itr2 = tmpset2.begin(); itr2 != tmpset2.end();
 				itr2++) {
-			cout << "02_" << (**itr2).getName() << "_" << (**itr2).getId()
-					<< "\n";
+			//cout << "02_" << (**itr2).getName() << "_" << (**itr2).getId()
+		//	<< "\n";
 			if (checkCross((**itr1).getId(), (**itr2).getId())) {
-				cout << "03\n";
+				//cout << "03\n";
 				cout << "encontrado supermercado no cruzamento com id="
 						<< (**itr2).getId() << endl;
 			}
@@ -2132,26 +2128,37 @@ set<string> Menu::getRoadByNode(long long node) {
 }
 
 bool Menu::checkCross(long long id1, long long id2) {
+//	cout<<"125957_id="<<connections.at(125956)->getRoadId()<<"\tnode1="<<connections.at(125956)->getNode1() <<"\tnode2="<<connections.at(125956)->getNode2()<<endl;
+//	cout << "check00\tid1=" <<id1<<"\tid2="<<id2<< endl;
+//	getchar();
 	for (unsigned int i = 0; i < connections.size(); i++) {
-		for (unsigned int j = 0; j < connections.size(); j++) {
-			cout << "check02	" << j << endl;
-			if (connections.at(i)->getRoadId() == id1
-					&& connections.at(j)->getRoadId() == id2) {
-				if (connections.at(i)->getNode1()
-						== connections.at(j)->getNode1()
-						|| connections.at(i)->getNode1()
-								== connections.at(j)->getNode2()
-						|| connections.at(i)->getNode2()
-								== connections.at(j)->getNode2()) {
-					return true;
+		//	cout << "check01	" << i << endl;
+		if (connections.at(i)->getRoadId() == id1
+				|| connections.at(i)->getRoadId() == id2) {
+			//	cout << "check02	" << i << endl;
+			//getchar();
+			for (unsigned int j = 0; j < connections.size(); j++) {
+				//	cout << "check03	" << j << endl;
+				if (i != j
+						&& (connections.at(j)->getRoadId() == id1
+								|| connections.at(j)->getRoadId() == id2)) {
+					//	cout << "check04	" << connections.at(j)->getRoadId()<< endl;
 
+					if (connections.at(i)->getNode1()
+							== connections.at(j)->getNode1()
+							|| connections.at(i)->getNode1()
+									== connections.at(j)->getNode2()
+							|| connections.at(i)->getNode2()
+									== connections.at(j)->getNode2()) {
+						return true;
+					}
+					if (connections.at(j)->getRoadId() == id2)
+						break;
 				}
+				if (connections.at(i)->getRoadId() == id1)
+					break;
 			}
-			if (connections.at(j)->getRoadId() == id2)
-				break;
 		}
-		if (connections.at(i)->getRoadId() == id1)
-			break;
 	}
 	return false;
 }
@@ -2300,7 +2307,6 @@ void Menu::fregAprox(string pattern) {
 		}
 	}
 	cout << "\n\nMINIMUM:" << max;
-
 
 	for (float i = 0; i < val.size(); i++) {
 		if (val.at(i) > 0.66 || val.at(i) == max)
