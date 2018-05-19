@@ -245,51 +245,54 @@ void Menu::menu() {
 			break;
 		}
 		case 2: {
-			cout << "\nplease wait while building graph\n";
-			for (unsigned int i = 0; i < nodes.size(); i++) {
+			if (!this->created) {
+				cout << "\nplease wait while building graph\n";
+				for (unsigned int i = 0; i < nodes.size(); i++) {
 
-				graph.addVertex(nodes.at(i)->getId());
-			}
-
-			for (unsigned int i = 0; i < connections.size(); i++) {
-
-				double x1 = 0, x2 = 0, y1 = 0, y2 = 0;
-				bool twoWay = false;
-
-				for (unsigned int j = 0; j < roads.size(); j++) {
-
-					if (roads.at(j)->getId()
-							== connections.at(i)->getRoadId()) {
-						twoWay = roads.at(j)->isTwoWay();
-						break;
-					}
+					graph.addVertex(nodes.at(i)->getId());
 				}
 
-				for (unsigned int j = 0; j < nodes.size(); j++) {
+				for (unsigned int i = 0; i < connections.size(); i++) {
 
-					if (nodes.at(j)->getId() == connections.at(i)->getNode1()) {
-						x1 = nodes.at(j)->getX();
-						y1 = nodes.at(j)->getY();
-						break;
+					double x1 = 0, x2 = 0, y1 = 0, y2 = 0;
+					bool twoWay = false;
+
+					for (unsigned int j = 0; j < roads.size(); j++) {
+
+						if (roads.at(j)->getId()
+								== connections.at(i)->getRoadId()) {
+							twoWay = roads.at(j)->isTwoWay();
+							break;
+						}
 					}
-				}
 
-				for (unsigned int j = 0; j < nodes.size(); j++) {
+					for (unsigned int j = 0; j < nodes.size(); j++) {
 
-					if (nodes.at(j)->getId() == connections.at(i)->getNode2()) {
-						x2 = nodes.at(j)->getX();
-						y2 = nodes.at(j)->getY();
-						break;
+						if (nodes.at(j)->getId()
+								== connections.at(i)->getNode1()) {
+							x1 = nodes.at(j)->getX();
+							y1 = nodes.at(j)->getY();
+							break;
+						}
 					}
+
+					for (unsigned int j = 0; j < nodes.size(); j++) {
+
+						if (nodes.at(j)->getId()
+								== connections.at(i)->getNode2()) {
+							x2 = nodes.at(j)->getX();
+							y2 = nodes.at(j)->getY();
+							break;
+						}
+					}
+
+					double distance = euclideanDist(x1, y1, x2, y2);
+					graph.addEdge(connections.at(i)->getNode1(),
+							connections.at(i)->getNode2(), distance);
+					if (twoWay)
+						graph.addEdge(connections.at(i)->getNode2(),
+								connections.at(i)->getNode1(), distance);
 				}
-
-				double distance = euclideanDist(x1, y1, x2, y2);
-				graph.addEdge(connections.at(i)->getNode1(),
-						connections.at(i)->getNode2(), distance);
-				if (twoWay)
-					graph.addEdge(connections.at(i)->getNode2(),
-							connections.at(i)->getNode1(), distance);
-
 			}
 
 			cout << "Quantos clientes ? (0 para usar ficheiros)\n";
@@ -1621,6 +1624,64 @@ void Menu::gvRouteDoD() {
 	return;
 }
 
+void Menu::gvRouteDoDString() {
+	long long id;
+	double total = 0;
+	bool found = false;
+	vector<long long> completeRoute;
+	vector<long long> route;
+	vector<long long> routeBack;
+	vector<long long> supermarketLocation;
+	vector<long long> stops;
+
+	long long LastStop;
+
+//	do {
+	//	cout << "qual a rota?\n";
+		//cin >> id;
+		//for (unsigned int i = 0; i < trucks.size(); i++) {
+			//if (trucks.at(0)->getId() == id) {
+				//found = true;
+			//	break;
+		//	}
+	//	}
+	//	if (found == false) {
+		//	cout << "nao existe essa rota.\n qual a rota?\n";
+	//	}
+	//} while (found == false);
+	system("clear");
+	write(STDOUT_FILENO, "\n\nem processamento\n", 19);
+	long long supermarket = this->getSource(); //supermercado onde esta o camiao
+
+	stops = trucks.at(0)->getStops();
+
+	supermarketLocation.push_back(supermarket);
+
+	route = dijkstraOfDijkstras(supermarket,
+			trucks.at(0)->getStops(), total);
+	completeRoute.insert(completeRoute.end(), route.begin(), route.end());
+
+	LastStop = route.at(route.size() - 1);
+
+	route = dijkstraOfDijkstras(LastStop, supermarketLocation, total);
+
+	completeRoute.insert(completeRoute.end(), route.begin(), route.end() - 1);
+
+//}	//fim verificacao cliente truck super
+
+	if (completeRoute.size() == 0) {
+		cout << "rota vazia\n";
+		return;
+	}
+
+	cout << "mais um pouco\n";
+
+	viewGraph(true, id, completeRoute);
+
+	return;
+}
+
+
 void Menu::loadFiles(int numNodes) {
 	Files fl;
 
@@ -1804,7 +1865,6 @@ vector<long long> Menu::getFW(long long firstNode, vector<long long> stops,
 
 vector<long long> Menu::dijkstraOfDijkstras(long long firstNode,
 		vector<long long> stops, double &total) {
-
 	stack<long long> dijkstraLeg;
 	vector<long long> leg;
 	double parcial, tmp = 0;
@@ -1814,42 +1874,33 @@ vector<long long> Menu::dijkstraOfDijkstras(long long firstNode,
 	double min;
 	int k;
 	pathOrder.push_back((graph.getVertex(next))->getInfo());
-
 	while (stops.size() > 0) {
-
 		k = 0;
-
 		min = INT_INFINITY;
 		parcial = 0;
 //vai determinar a etapa
-
 		graph.dijkstraShortestPath(source, parcial);//a partir do inicio desta etapa distancias para tudo
-//cout<<"size="<<stops.size()<<"\tsource="<<source<<endl;
 
 		for (unsigned int i = 0; i < stops.size(); i++) {//ver qual a stop mais perto do inicio da etapa actual
 
 			if ((tmp = graph.getVertex(stops.at(i))->getDist()) < min) {
-				//	cout << "i=" << i << endl;
-
 				min = tmp;
 				next = stops.at(i);
 				k = i;
 			}
+
 		}
 
 //sai com next stop actualizada
-//	cout << "k=" << k << endl;
-//	cout << "size=" << stops.size() << "\tnext=" << next << endl;
 		total += parcial;
 		leg = graph.getPath(source, next);//vai buscar o caminho da etapa agora calculada e a seguir insere no caminho total
 		pathOrder.insert(pathOrder.end(), leg.begin(), leg.end());
-
 		if (stops.size() > 1) {
 			source = (graph.getVertex(next))->getInfo(); //actualiza o inicio da proxima etapa
-			//	cout<<"stops.at(k)"<<stops.at(k)<<endl;
-			stops.erase(stops.begin() + k);	//erro NAO APAGA O QUE DEVE //apaga a stop do cliente calculado nesta etapa
-			//	cout << "passou";
+
+			stops.erase(stops.begin() + k);
 		} else {
+
 			graph.dijkstraShortestPath(stops.at(0), parcial);
 			leg = graph.getPath(stops.at(0), firstNode); //vai buscar o caminho da etapa agora calculada e a seguir insere no caminho total
 			pathOrder.insert(pathOrder.end(), leg.begin(), leg.end());
@@ -1858,6 +1909,7 @@ vector<long long> Menu::dijkstraOfDijkstras(long long firstNode,
 
 			//break;
 		}
+
 	}
 
 	return pathOrder;
@@ -2478,29 +2530,77 @@ void Menu::setSource(long long node) {
 	this->source = node;
 }
 /*
-void Menu::setDestination(long long node) {
-	this->destination = node;
-}*/
+ void Menu::setDestination(long long node) {
+ this->destination = node;
+ }*/
 
 long long Menu::getSource() {
 	return this->source;
 }
 /*
-long long Menu::getDestination() {
-	return this->destination;
-}*/
+ long long Menu::getDestination() {
+ return this->destination;
+ }*/
 
 void Menu::stringDoD(double &total, bool toPrint) {
+	if (!this->created) {
+		cout << "\nplease wait while building graph\n";
 
+		for (unsigned int i = 0; i < nodes.size(); i++) {
+
+			graph.addVertex(nodes.at(i)->getId());
+		}
+
+		for (unsigned int i = 0; i < connections.size(); i++) {
+
+			double x1 = 0, x2 = 0, y1 = 0, y2 = 0;
+			bool twoWay = false;
+
+			for (unsigned int j = 0; j < roads.size(); j++) {
+
+				if (roads.at(j)->getId() == connections.at(i)->getRoadId()) {
+					twoWay = roads.at(j)->isTwoWay();
+					break;
+				}
+			}
+
+			for (unsigned int j = 0; j < nodes.size(); j++) {
+
+				if (nodes.at(j)->getId() == connections.at(i)->getNode1()) {
+					x1 = nodes.at(j)->getX();
+					y1 = nodes.at(j)->getY();
+					break;
+				}
+			}
+
+			for (unsigned int j = 0; j < nodes.size(); j++) {
+
+				if (nodes.at(j)->getId() == connections.at(i)->getNode2()) {
+					x2 = nodes.at(j)->getX();
+					y2 = nodes.at(j)->getY();
+					break;
+				}
+			}
+
+			double distance = euclideanDist(x1, y1, x2, y2);
+			graph.addEdge(connections.at(i)->getNode1(),
+					connections.at(i)->getNode2(), distance);
+			if (twoWay)
+				graph.addEdge(connections.at(i)->getNode2(),
+						connections.at(i)->getNode1(), distance);
+		}
+	}
+
+	system("clear");
 	int totaltotal = 0;
 	cout << "\nalgoritmo de Dijkstra sobre algoritmos de Dijkstra:\n";
 
 	write(STDOUT_FILENO, "\n\nem processamento\n", 19);
-	compareStruct.dOdMethod.totalNodes = 0;
 
 //------------------------------------------------
 //	long long nTimeStart = GetMilliCount();
 //------------------------------------------------
+
 	vector<long long> completeRoute;
 	vector<long long> route;
 	vector<long long> routeBack;
@@ -2508,12 +2608,7 @@ void Menu::stringDoD(double &total, bool toPrint) {
 	vector<long long> stops;
 
 	long long LastStop;
-//	for (unsigned int s = 0; s < supermarkets.size(); s++) {
-
-//	for (unsigned int t = 0; t < trucks.size(); t++) {
-
 	total = 0;
-//if (trucks.at(t)->getSupermarket() == supermarkets.at(s)->getId()) {
 
 	completeRoute.clear();
 	route.clear();
@@ -2521,37 +2616,22 @@ void Menu::stringDoD(double &total, bool toPrint) {
 	supermarketLocation.clear();
 	stops.clear();
 	stops = trucks.at(0)->getStops();
-//stops.push_back(this->getDestination());
 
 	supermarketLocation.push_back(this->getSource());
-
 	route = dijkstraOfDijkstras(this->getSource(), stops, total);
 	completeRoute.insert(completeRoute.end(), route.begin(), route.end());
-
 	LastStop = route.at(route.size() - 1);
-
 	route = dijkstraOfDijkstras(LastStop, supermarketLocation, total);
-
 	completeRoute.insert(completeRoute.end(), route.begin(), route.end() - 1);
-
 	cout << "\nnumber of nodes in path:" << completeRoute.size() << endl;
 
 	write(STDOUT_FILENO, "\n\n", 2);
 
-//	cout << "rota " << t + 1 << "/" << trucks.size()
-//		<< " do supermercado " << s + 1 << "/"
-//	<< supermarkets.size() << "\n";
-
 	if (toPrint)
 		printRoute(completeRoute, 0, 0);
 
-//	cout << "\ntotal=" << total << endl;
-//			totaltotal += total;
-//		compareStruct.dOdMethod.routes.push_back(completeRoute);
-//	compareStruct.dOdMethod.totalNodes += completeRoute.size();
-//	}	//fim verificacao cliente truck super
-//}	//fim for truck
-//	}	//fim for super
+	cout << "\ntotal=" << total << endl;
+	totaltotal += total;
 
 //time--------------------------------------------
 //	long long nTimeElapsed = GetMilliSpan(nTimeStart);
@@ -2562,9 +2642,18 @@ void Menu::stringDoD(double &total, bool toPrint) {
 //	cout << "\ntotal de nós rotas =" << compareStruct.dOdMethod.totalNodes
 //		<< endl;
 //	cout << "\ntotal das rotas =" << totaltotal << " m" << endl;
-//	compareStruct.dOdMethod.totalWeight = totaltotal;
-//compareStruct.dOdMethod.totalMillis = nTimeElapsed;
 	cout << "\n";
+	getchar;
+
+	char opt;
+	while (opt != 'y' && opt != 'n' && opt != 'Y' && opt != 'N') {
+		cout << "quer ver em modo gráfico?\n";
+		cin >> opt;
+	}
+	if (toupper(opt) == 'Y') {
+		gvRouteDoDString();
+	}
+
 	return;
 }
 
@@ -2644,21 +2733,22 @@ void Menu::stringbi(double &total, bool toPrint) {
 	return;
 }
 
-void Menu::adicionaSuper(long long node) {
-	/*int index;
-	 std::stringstream sstm;
+void Menu::adicionaSuper(long long id) {
+	long long node;
+	for (unsigned int i = 0; i < supermarkets.size(); i++) {
+		if (supermarkets.at(i)->getId() == id) {
+			node = supermarkets.at(i)->getNode();
+		}
+	}
 
-	 std::istringstream ss(ind);
-	 ss >> index;
-	 */
 	this->setSource(node);
 
 }
 
-void Menu::adicionaParagem(long long node) {
-
+void Menu::adicionaParagem(long long id) {
+	long long node;
 	std::stringstream sstm;
-
+	string nome;
 	int c = this->getC();
 
 	if (c < 10) {
@@ -2674,12 +2764,15 @@ void Menu::adicionaParagem(long long node) {
 
 	string d = sstm.str();
 
-//clients.push_back(new Client(c, d, nodes.at(n)->getId(), "rua", 0)); //add necessary clients
-	Client * newC = new Client(c, d, node, *(this->getRoadByNode(node).begin()),
-			0);//ERRO
-
+	for (unsigned int i = 0; i < roads.size(); i++) {
+		if (roads.at(i)->getId() == id) {
+			nome = roads.at(i)->getName();
+			node = edgeId2Node(roads.at(i)->getId());
+		}
+	}
+	Client * newC = new Client(c, d, node, nome, 0);
 	this->trucks.at(0)->addNewStop(newC);
-
+	clients.push_back(newC);
 }
 
 int Menu::getC() {
@@ -2701,19 +2794,19 @@ int Menu::getMap() {
 void Menu::closeRoute() {
 	system("clear");
 	char opt = ' ';
-	double total=0;
+	double total = 0;
 	while (opt != 'y' && opt != 'n' && opt != 'Y' && opt != 'N') {
 		cout << "\n\tdo you really want to close the current route? (y/n)\n";
 		cin >> opt;
 	}
 
 	//verifica se tem source e dests...
-	if (!this->trucks.at(0)->getStops().size() || !this->getSource()){
+	if (!this->trucks.at(0)->getStops().size() || !this->getSource()) {
 		cout << "\n\tNao tem supermercado e/ou paragens adicionadas\n";
-		getchar();	getchar();
+		getchar();
+		getchar();
 		return;
 	}
-
 
 	switch (toupper(opt)) {
 	case ('Y'):
@@ -2724,4 +2817,15 @@ void Menu::closeRoute() {
 		break;
 	}
 	return;
+}
+
+long long Menu::edgeId2Node(long long id) {
+	long long node = NULL;
+	for (unsigned int i = 0; i < connections.size(); i++) {
+		if (connections.at(i)->getRoadId() == id) {
+
+			node = connections.at(i)->getNode1();
+		}
+	}
+	return node;
 }

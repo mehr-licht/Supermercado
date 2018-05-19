@@ -59,6 +59,9 @@ bool Truck::nodeExistsAsClients(int idNode) {
 	return false;
 }
 
+
+
+
 string Truck::getClientsName(int idNode) {
 	string outstring = "";
 	for (unsigned int i = 0; i < this->getClients().size(); i++) {

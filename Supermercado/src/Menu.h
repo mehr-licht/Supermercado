@@ -46,6 +46,7 @@ private:
 	bool statsShown;
 	int c = 0;
 	int map;
+	bool created=false;
 
 	struct methodData {
 		int totalNodes;
@@ -288,6 +289,7 @@ public:
 	 * Get route obtained with Dijkstra of Dijkstras algorithm in graphviewer.
 	 */
 	void gvRouteDoD();
+	void gvRouteDoDString();
 
 	/**
 	 * Finds Supermarkets near a crossroads (approximated method)
@@ -366,6 +368,12 @@ public:
 	 *  */
 	int getMap();
 
+	/**
+	 * @brief converts edge id (part of road) to node
+	 * @param edge id
+	 * @return node
+	 */
+	long long edgeId2Node(long long id);
 
 	/**
 	 * Check if the the ids of two roads meet in a crossroads
