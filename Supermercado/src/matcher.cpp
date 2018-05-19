@@ -104,29 +104,51 @@ bool kmpMatcher(string text, string pattern) {
 	std::istringstream ss(text + ' ');
 	std::string word;
 
-	while (std::getline(ss, word, ' ')) {
-		if (notStreetName(word)) { //ignore rua via avenida de etc...
-			n = word.length();
+	if (onlyOneWord(ss.str())) {
+		while (std::getline(ss, word, ' ')) {
+			if (notStreetName(word)) { //ignore rua via avenida de etc...
+				n = word.length();
 
-			a3preKMP(pattern, f);
+				a3preKMP(pattern, f);
 
-			int i = 0;
-			int k = 0;
-			while (i < n) {
-				if (k == -1) {
-					i++;
-					k = 0;
-				} else if (word[i] == pattern[k]) {
-					i++;
-					k++;
-					if (k == m) {
+				int i = 0;
+				int k = 0;
+				while (i < n) {
+					if (k == -1) {
+						i++;
+						k = 0;
+					} else if (word[i] == pattern[k]) {
+						i++;
+						k++;
+						if (k == m) {
 
-						return true;
-					}
-				} else
-					k = f[k];
+							return true;
+						}
+					} else
+						k = f[k];
+				}
 			}
 		}
+	} else {
+		a3preKMP(pattern, f);
+
+		int i = 0;
+		int k = 0;
+		while (i < n) {
+			if (k == -1) {
+				i++;
+				k = 0;
+			} else if (ss.str()[i] == pattern[k]) {
+				i++;
+				k++;
+				if (k == m) {
+
+					return true;
+				}
+			} else
+				k = f[k];
+		}
+
 	}
 	return false;
 }
@@ -447,4 +469,13 @@ bool notStreetName(string text) {
 			&& text != "Do" && text != "dos" && text != "Dos" && text != "das"
 			&& text != "Das" && text != "Via" && text != "via"
 			&& text != "Viaduto" && text != "viaduto";
+}
+
+bool onlyOneWord(string text) {
+	for (unsigned int i = 1; i < text.length(); i++) {
+		if (text.substr(i, 1) == " ")
+			return false;
+	}
+	return true;
+
 }
