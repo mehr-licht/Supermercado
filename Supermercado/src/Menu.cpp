@@ -249,13 +249,13 @@ void Menu::menu() {
 
 			while (opt != 'y' && opt != 'n' && opt != 'Y' && opt != 'N') {
 				cout
-						<< "\n\do you really want to reset the current route? (y/n)\n";
+						<< "\n\tdo you really want to reset the current route? (y/n)\n";
 				cin >> opt;
 			}
 
 			switch (toupper(opt)) {
 			case 'Y':
-				this->setSource(NULL);
+				this->setSource((long long)NULL);
 				this->trucks.at(0)->getStops().clear();
 				cout << "the route was reset\n";
 				getchar();
@@ -658,7 +658,8 @@ void Menu::superExacta(string pattern) {
 				cout << "\t\truas do cruzamento nao encontradas\n";
 			}
 
-			cout << "\n********************************************\n\n";
+			cout << "\n********************************************\n";
+						if((i+1)%6==0)getchar();
 		}
 		//cin.clear();
 		//cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -762,7 +763,8 @@ void Menu::superApprox(string pattern) {
 				cout << "\t\truas do cruzamento nao encontradas\n";
 			}
 
-			cout << "\n********************************************\n\n";
+			cout << "\n********************************************\n";
+						if((i+1)%6==0)getchar();
 		}
 		cin.clear();
 		cout << "\t\tadicionar como supermercado da rota:\n";
@@ -844,7 +846,8 @@ void Menu::ruaExacta(string pattern) {
 						<< "\n\tNão foi encontrado nenhum supermercado nesta rua\n";
 			}
 
-			cout << "\n********************************************\n\n";
+			cout << "\n********************************************\n";
+						if((i+1)%6==0)getchar();
 		}
 
 		while (!(id > 0 && id <= (int) tmp.size())) {
@@ -947,7 +950,8 @@ void Menu::ruaApprox(string pattern) {
 						<< "\n\tNão foi encontrado nenhum supermercado nesta rua\n";
 			}
 
-			cout << "\n********************************************\n\n";
+			cout << "\n********************************************\n";
+			if((i+1)%6==0)getchar();
 		}
 		cin.clear();
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -1884,7 +1888,7 @@ void Menu::viewGraph(bool toSupermarket, long long idtruck,
 		for (j = 0; j < nodes.size(); j++) {
 
 			if (nodes.at(j)->getId() == route.at(i))
-				;
+
 			break;
 
 		}
@@ -1988,8 +1992,8 @@ vector<long long> Menu::dijkstraOfDijkstras(long long firstNode,
 	long long next = source;
 	double min;
 	int k;
-	cout << "DOD_000\n";
-	cout << "next=" << next << endl;
+
+
 
 	if (!isNodeinMap(next)) {
 		cout << "supermercado não consta deste mapa\n";
@@ -1997,50 +2001,50 @@ vector<long long> Menu::dijkstraOfDijkstras(long long firstNode,
 	}
 	cout << (graph.getVertex(next))->getDist() << endl;
 	pathOrder.push_back((graph.getVertex(next))->getInfo());
-	cout << "DOD_010\n";
+
 	while (stops.size() > 0) {
-		cout << "DOD_020\n";
+
 		k = 0;
 		min = INT_INFINITY;
 		parcial = 0;
 //vai determinar a etapa
-		cout << "DOD_021\n";
+
 		graph.dijkstraShortestPath(source, parcial);//a partir do inicio desta etapa distancias para tudo
-		cout << "DOD_022\n";
+
 		for (unsigned int i = 0; i < stops.size(); i++) {//ver qual a stop mais perto do inicio da etapa actual
-			cout << "DOD_023\n";
+
 			if ((tmp = graph.getVertex(stops.at(i))->getDist()) < min) {
-				cout << "DOD_024\n";
+
 				min = tmp;
 				next = stops.at(i);
 				k = i;
 			}
-			cout << "DOD_025\n";
+
 		}
-		cout << "DOD_026\n";
+
 //sai com next stop actualizada
 		total += parcial;
 		leg = graph.getPath(source, next);//vai buscar o caminho da etapa agora calculada e a seguir insere no caminho total
 		pathOrder.insert(pathOrder.end(), leg.begin(), leg.end());
-		cout << "DOD_027\n";
+
 		if (stops.size() > 1) {
-			cout << "DOD_028\n";
+
 			source = (graph.getVertex(next))->getInfo(); //actualiza o inicio da proxima etapa
-			cout << "DOD_029\n";
+
 			stops.erase(stops.begin() + k);
 		} else {
-			cout << "DOD_030\n";
+
 			graph.dijkstraShortestPath(stops.at(0), parcial);
 			leg = graph.getPath(stops.at(0), firstNode); //vai buscar o caminho da etapa agora calculada e a seguir insere no caminho total
 			pathOrder.insert(pathOrder.end(), leg.begin(), leg.end());
 			stops.erase(stops.begin());
 			total += parcial;
-			cout << "DOD_031\n";
+
 			//break;
 		}
-		cout << "DOD_032\n";
+
 	}
-	cout << "DOD_040\n";
+
 	return pathOrder;
 }
 
@@ -2049,6 +2053,7 @@ double Menu::euclideanDist(double x1, double y1, double x2, double y2) {
 }
 
 void Menu::crossExacta() {
+	system("clear");
 	string name1, name2, ind;
 	int id, op = 0;
 	int ii = 0;
@@ -2214,6 +2219,7 @@ void Menu::crossExacta() {
 }
 
 void Menu::crossApprox() {
+	system("clear");
 	string name1, name2, ind;
 	int id, op = 0;
 	int ii = 0;
@@ -2357,7 +2363,7 @@ void Menu::crossApprox() {
 					s != supermercados.end(); s++) {
 				ii++;
 				cout << "\t" << ii + 1 << ")\n";
-				cout << "\tID: " << *its << "\n";
+				cout << "\t\tID: " << *its << "\n";
 				cout << "\t\t" << *s << "\n";
 			}
 		}
@@ -2535,7 +2541,8 @@ void Menu::fregExacta(string pattern) {
 				cout << "\truas do cruzamento nao encontradas\n";
 			}
 
-			cout << "\n********************************************\n\n";
+			cout << "\n********************************************\n";
+						if((i+1)%6==0)getchar();
 		}
 		cin.clear();
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -2638,7 +2645,8 @@ void Menu::fregApprox(string pattern) {
 				cout << "\t\truas do cruzamento nao encontradas\n";
 			}
 
-			cout << "\n********************************************\n\n";
+			cout << "\n********************************************\n";
+						if((i+1)%6==0)getchar();
 		}
 		cin.clear();
 		cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -2773,20 +2781,18 @@ void Menu::stringDoD(double &total, bool toPrint) {
 	route = dijkstraOfDijkstras(this->getSource(), stops, total);
 
 	completeRoute.insert(completeRoute.end(), route.begin(), route.end());
-	cout << "01_3\n";
+
 	LastStop = route.at(route.size() - 1);
-	cout << "01_4\n";
+
 	route = dijkstraOfDijkstras(LastStop, supermarketLocation, total);
-	cout << "01_5\n";
+
 	completeRoute.insert(completeRoute.end(), route.begin(), route.end() - 1);
-	cout << "01_6\n";
+
 	cout << "\nnumber of nodes in path:" << completeRoute.size() << endl;
-	cout << "02\n";
 	write(STDOUT_FILENO, "\n\n", 2);
 
 	if (toPrint)
 		printRouteString(completeRoute, 0, 0);
-	cout << "03\n";
 	cout << "\ntotal=" << total << endl;
 	totaltotal += total;
 
@@ -2800,7 +2806,7 @@ void Menu::stringDoD(double &total, bool toPrint) {
 //		<< endl;
 //	cout << "\ntotal das rotas =" << totaltotal << " m" << endl;
 	cout << "\n";
-	getchar;
+	getchar();
 
 	char opt;
 	while (opt != 'y' && opt != 'n' && opt != 'Y' && opt != 'N') {
@@ -2981,7 +2987,7 @@ void Menu::closeRoute() {
 }
 
 long long Menu::edgeId2Node(long long id) {
-	long long node = NULL;
+	long long node = (long long)NULL;
 	for (unsigned int i = 0; i < connections.size(); i++) {
 		if (connections.at(i)->getRoadId() == id) {
 
@@ -3005,6 +3011,6 @@ bool Menu::isStop(long long node) {
 		if (this->trucks.at(0)->getClients().at(i)->getNode() == node) {
 			return true;
 		}
-		return false;
 	}
+	return false;
 }

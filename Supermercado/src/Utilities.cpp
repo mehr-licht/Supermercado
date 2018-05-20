@@ -31,10 +31,10 @@ int greatness(int number) {
 
 bool sortPair (const std::pair<float,Road*> &a,const std::pair<float,Road*> &b)
 {
-       return a.first<b.first;
+       return a.first>b.first;
 }
 
 bool sortPairS (const std::pair<float, Supermarket *> &a,const std::pair<float, Supermarket *> &b)
 {
-       return a.first<b.first;
+       return a.first>b.first;
 }
