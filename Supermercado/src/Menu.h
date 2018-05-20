@@ -389,6 +389,12 @@ public:
 	 * @param node
 	 */
 	bool isStop(long long node);
+
+	/**
+	 * checks if node is in current loaded map
+	 * @param node to be checked
+	 */
+	bool isNodeinMap(long long node);
 }
 ;
 

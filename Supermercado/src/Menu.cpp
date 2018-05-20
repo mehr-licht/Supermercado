@@ -665,6 +665,7 @@ void Menu::superExacta(string pattern) {
 		cout << "\tadicionar como supermercado da rota:\n";
 		cin >> id;
 		//	getline(cin, ind);
+		//sstm.clear();
 		//sstm.str(ind);
 		//sstm >> id;
 		adicionaSuper(tmp.at(id - 1)->getId());
@@ -727,8 +728,9 @@ void Menu::superApprox(string pattern) {
 	for (float i = 0; i < val.size(); i++) {
 
 		if (val.at(i) > 0.66 || val.at(i) == max)
-			tmp.push_back(pair<float, Supermarket *>(val.at(i), supermarkets.at(i)));
-			//tmp.push_back(supermarkets.at(i));
+			tmp.push_back(
+					pair<float, Supermarket *>(val.at(i), supermarkets.at(i)));
+		//tmp.push_back(supermarkets.at(i));
 	}
 	std::sort(tmp.begin(), tmp.end(), sortPairS);
 	cout << "\n\n\n\n\n";
@@ -763,13 +765,15 @@ void Menu::superApprox(string pattern) {
 			cout << "\n********************************************\n\n";
 		}
 		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		cout << "\t\tadicionar como supermercado da rota:\n";
 		//	cin >> id;
 		getline(cin, ind);
+		sstm.clear();
 		sstm.str(ind);
 		sstm >> id;
+		cout << "antes\n";
 		adicionaSuper((tmp.at(id - 1).second)->getId());
+		cout << "após\n";
 //		for (unsigned int i = 0; i < tmp.size(); i++) {
 //			if (tmp.at(i)->getId() == id) {
 //				adicionaSuper(id);
@@ -842,17 +846,23 @@ void Menu::ruaExacta(string pattern) {
 
 			cout << "\n********************************************\n\n";
 		}
-		cin.clear();
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
-		cout << "\t\tadicionar como paragem da rota:\n";
-		//	cin >> id;
-		getline(cin, ind);
-		sstm.str(ind);
-		sstm >> id;
+
+		while (!(id > 0 && id <= (int) tmp.size())) {
+			cin.clear();
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+			cout << "\t\tadicionar como paragem da rota:\n";
+			//	cin >> id;
+			getline(cin, ind);
+			sstm.clear();
+			sstm.str(ind);
+			sstm >> id;
+
+		}
 		adicionaParagem(tmp.at(id - 1)->getId());
+
 //		for (unsigned int i = 0; i < tmp.size(); i++) {
 //			if (tmp.at(i)->getId() == id) {
-//				adicionaSuper(id);
+//				adicionaParagem(id);
 //				break;
 //			}
 //		}
@@ -944,6 +954,7 @@ void Menu::ruaApprox(string pattern) {
 		cout << "\t\tadicionar como paragem da rota:\n";
 
 		getline(cin, ind);
+		sstm.clear();
 		sstm.str(ind);
 		sstm >> id;
 		if ((int) id)
@@ -1429,7 +1440,9 @@ void Menu::printRouteString(vector<long long> & completeRoute, int s, int t) {
 	bool stay = true;
 
 	for (unsigned int i = 0; i < completeRoute.size(); i++, count++) {
+
 		while (completeRoute.at(i) == anterior && stay) {//para saltar repetidos seguidos
+
 			anterior = completeRoute.at(i);
 			if (i < completeRoute.size() - 1) {
 				i++;
@@ -1438,6 +1451,7 @@ void Menu::printRouteString(vector<long long> & completeRoute, int s, int t) {
 				break;
 			}
 		}
+
 		anterior = completeRoute.at(i);
 
 		if (completeRoute.at(i) == this->getSource()) {
@@ -1748,7 +1762,7 @@ void Menu::gvRouteDoDString() {
 	write(STDOUT_FILENO, "\n\nem processamento\n", 19);
 
 	long long supermarket = this->getSource();//supermercado onde esta o camiao
-	cout << "00\n";
+
 	stops = trucks.at(0)->getStops();
 
 	supermarketLocation.push_back(supermarket);
@@ -1974,45 +1988,59 @@ vector<long long> Menu::dijkstraOfDijkstras(long long firstNode,
 	long long next = source;
 	double min;
 	int k;
+	cout << "DOD_000\n";
+	cout << "next=" << next << endl;
+
+	if (!isNodeinMap(next)) {
+		cout << "supermercado não consta deste mapa\n";
+		return pathOrder;
+	}
+	cout << (graph.getVertex(next))->getDist() << endl;
 	pathOrder.push_back((graph.getVertex(next))->getInfo());
+	cout << "DOD_010\n";
 	while (stops.size() > 0) {
+		cout << "DOD_020\n";
 		k = 0;
 		min = INT_INFINITY;
 		parcial = 0;
 //vai determinar a etapa
+		cout << "DOD_021\n";
 		graph.dijkstraShortestPath(source, parcial);//a partir do inicio desta etapa distancias para tudo
-
+		cout << "DOD_022\n";
 		for (unsigned int i = 0; i < stops.size(); i++) {//ver qual a stop mais perto do inicio da etapa actual
-
+			cout << "DOD_023\n";
 			if ((tmp = graph.getVertex(stops.at(i))->getDist()) < min) {
+				cout << "DOD_024\n";
 				min = tmp;
 				next = stops.at(i);
 				k = i;
 			}
-
+			cout << "DOD_025\n";
 		}
-
+		cout << "DOD_026\n";
 //sai com next stop actualizada
 		total += parcial;
 		leg = graph.getPath(source, next);//vai buscar o caminho da etapa agora calculada e a seguir insere no caminho total
 		pathOrder.insert(pathOrder.end(), leg.begin(), leg.end());
+		cout << "DOD_027\n";
 		if (stops.size() > 1) {
+			cout << "DOD_028\n";
 			source = (graph.getVertex(next))->getInfo(); //actualiza o inicio da proxima etapa
-
+			cout << "DOD_029\n";
 			stops.erase(stops.begin() + k);
 		} else {
-
+			cout << "DOD_030\n";
 			graph.dijkstraShortestPath(stops.at(0), parcial);
 			leg = graph.getPath(stops.at(0), firstNode); //vai buscar o caminho da etapa agora calculada e a seguir insere no caminho total
 			pathOrder.insert(pathOrder.end(), leg.begin(), leg.end());
 			stops.erase(stops.begin());
 			total += parcial;
-
+			cout << "DOD_031\n";
 			//break;
 		}
-
+		cout << "DOD_032\n";
 	}
-
+	cout << "DOD_040\n";
 	return pathOrder;
 }
 
@@ -2143,7 +2171,7 @@ void Menu::crossExacta() {
 
 			cout << "\n\t\tsupermercados nas ruas do cruzamento de " << name1
 					<< " com " << name2 << ":\n\n";
-			supermercados = getSupermarketByRoadId(*its);				//
+			supermercados = getSupermarketByRoadId(*its);			//
 			for (set<string>::iterator s = supermercados.begin();
 					s != supermercados.end(); s++) {
 				ii++;
@@ -2168,6 +2196,7 @@ void Menu::crossExacta() {
 	cout << "\t\tadicionar ID como supermercado da rota:\n";
 
 	getline(cin, ind);
+	sstm.clear();
 	sstm.str(ind);
 	sstm >> id;
 
@@ -2323,7 +2352,7 @@ void Menu::crossApprox() {
 
 			cout << "\n\t\tsupermercados nas ruas do cruzamento de " << name1
 					<< " com " << name2 << ":\n\n";
-			supermercados = getSupermarketByRoadId(*its);				//
+			supermercados = getSupermarketByRoadId(*its);			//
 			for (set<string>::iterator s = supermercados.begin();
 					s != supermercados.end(); s++) {
 				ii++;
@@ -2348,6 +2377,7 @@ void Menu::crossApprox() {
 	cout << "\t\tadicionar ID como supermercado da rota:\n";
 
 	getline(cin, ind);
+	sstm.clear();
 	sstm.str(ind);
 	sstm >> id;
 
@@ -2512,6 +2542,7 @@ void Menu::fregExacta(string pattern) {
 		cout << "\tadicionar como supermercado da rota:\n";
 		//cin >> id;
 		getline(cin, ind);
+		sstm.clear();
 		sstm.str(ind);
 		sstm >> id;
 		adicionaSuper(tmp.at(id - 1)->getId());
@@ -2572,8 +2603,9 @@ void Menu::fregApprox(string pattern) {
 
 	for (float i = 0; i < val.size(); i++) {
 		if (val.at(i) > 0.66 || val.at(i) == max)
-			tmp.push_back(pair<float, Supermarket *>(val.at(i), supermarkets.at(i)));
-			//tmp.push_back(supermarkets.at(i));
+			tmp.push_back(
+					pair<float, Supermarket *>(val.at(i), supermarkets.at(i)));
+		//tmp.push_back(supermarkets.at(i));
 	}
 	std::sort(tmp.begin(), tmp.end(), sortPairS);
 	cout << "\n\n\n\n\n";
@@ -2583,11 +2615,12 @@ void Menu::fregApprox(string pattern) {
 				<< ":\n\n";
 		cout << "\n********************************************\n\n";
 		for (unsigned int i = 0; i < tmp.size(); i++) {
-			cout << "\t" << i + 1 << ")\tparecença="  << tmp.at(i).first << "\n";
+			cout << "\t" << i + 1 << ")\tparecença=" << tmp.at(i).first << "\n";
 			cout << "\tID: " << (tmp.at(i).second)->getId() << "\n";
 			cout << "\tName: " << (tmp.at(i).second)->getName() << "\n";
 			cout << "\tNode ID: " << (tmp.at(i).second)->getNode() << "\n\n";
-			cout << "\tfreguesia: " << (tmp.at(i).second)->getFreguesia() << "\n\n";
+			cout << "\tfreguesia: " << (tmp.at(i).second)->getFreguesia()
+					<< "\n\n";
 			if ((ruas = getRoadByNode((tmp.at(i).second)->getNode())).size()) {
 				cout << "\n\t\truas do cruzamento:\n";
 				for (set<string>::iterator it = ruas.begin(); it != ruas.end();
@@ -2612,6 +2645,7 @@ void Menu::fregApprox(string pattern) {
 		cout << "\t\tadicionar como supermercado da rota:\n";
 		//cin >> id;
 		getline(cin, ind);
+		sstm.clear();
 		sstm.str(ind);
 		sstm >> id;
 		adicionaSuper((tmp.at(id - 1).second)->getId());
@@ -2728,20 +2762,31 @@ void Menu::stringDoD(double &total, bool toPrint) {
 	supermarketLocation.clear();
 	stops.clear();
 	stops = trucks.at(0)->getStops();
-
+	if (!isNodeinMap(this->getSource())) {
+		cout << "supermercado não consta deste mapa\n";
+		getchar();
+		return;
+	}
 	supermarketLocation.push_back(this->getSource());
-	route = dijkstraOfDijkstras(this->getSource(), stops, total);
-	completeRoute.insert(completeRoute.end(), route.begin(), route.end());
-	LastStop = route.at(route.size() - 1);
-	route = dijkstraOfDijkstras(LastStop, supermarketLocation, total);
-	completeRoute.insert(completeRoute.end(), route.begin(), route.end() - 1);
-	cout << "\nnumber of nodes in path:" << completeRoute.size() << endl;
 
+	cout << "source=" << this->getSource() << endl;
+	route = dijkstraOfDijkstras(this->getSource(), stops, total);
+
+	completeRoute.insert(completeRoute.end(), route.begin(), route.end());
+	cout << "01_3\n";
+	LastStop = route.at(route.size() - 1);
+	cout << "01_4\n";
+	route = dijkstraOfDijkstras(LastStop, supermarketLocation, total);
+	cout << "01_5\n";
+	completeRoute.insert(completeRoute.end(), route.begin(), route.end() - 1);
+	cout << "01_6\n";
+	cout << "\nnumber of nodes in path:" << completeRoute.size() << endl;
+	cout << "02\n";
 	write(STDOUT_FILENO, "\n\n", 2);
 
 	if (toPrint)
 		printRouteString(completeRoute, 0, 0);
-
+	cout << "03\n";
 	cout << "\ntotal=" << total << endl;
 	totaltotal += total;
 
@@ -2946,11 +2991,20 @@ long long Menu::edgeId2Node(long long id) {
 	return node;
 }
 
+bool Menu::isNodeinMap(long long node) {
+	for (unsigned int in = 0; in < nodes.size(); in++) {
+		if (nodes.at(in)->getId() == node) {
+			return true;
+		}
+	}
+	return false;
+}
+
 bool Menu::isStop(long long node) {
 	for (unsigned int i = 0; i < this->trucks.at(0)->getClients().size(); i++) {
 		if (this->trucks.at(0)->getClients().at(i)->getNode() == node) {
 			return true;
 		}
+		return false;
 	}
-	return false;
 }
