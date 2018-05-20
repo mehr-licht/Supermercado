@@ -235,11 +235,45 @@ void Menu::menu() {
 			cout << "1 - Strings\n\n";
 			cout << "2 - Rotas\n\n";
 			//cout << "3 - testes\n\n";
+			//cout << "4 - reset à rota\n\n";
 			cout << "0 - sair\n";
 			cin >> choice;
-		} while (choice != 0 && choice != 1 && choice != 2 && choice != 3);
+		} while (choice != 0 && choice != 1 && choice != 2 && choice != 3 && choice != 4);
 
 		switch (choice) {
+		case 4: {
+			//reset à rota
+			system("clear");
+			char opt;
+
+			while (opt != 'y' && opt != 'n' && opt != 'Y' && opt != 'N') {
+				cout
+						<< "\n\do you really want to reset the current route? (y/n)\n";
+				cin >> opt;
+			}
+
+			if (!this->trucks.at(0)->getStops().size() && !this->getSource()) {
+				cout << "\n\tNao tem supermercado nem paragens adicionadas\n";
+				getchar();
+				getchar();
+				return;
+			}
+
+			switch (toupper(opt)) {
+			case 'Y':
+				this->setSource(NULL);
+				this->trucks.at(0)->getStops().clear();
+				cout << "the route was reset\n";
+				getchar();
+				return;
+				break;
+			case 'N':
+				return;
+				break;
+			}
+
+			break;
+		}
 		case 1: {
 			stringMenu();
 			break;
@@ -1638,15 +1672,15 @@ void Menu::gvRouteDoDString() {
 
 //	do {
 	//	cout << "qual a rota?\n";
-		//cin >> id;
-		//for (unsigned int i = 0; i < trucks.size(); i++) {
-			//if (trucks.at(0)->getId() == id) {
-				//found = true;
-			//	break;
-		//	}
+	//cin >> id;
+	//for (unsigned int i = 0; i < trucks.size(); i++) {
+	//if (trucks.at(0)->getId() == id) {
+	//found = true;
+	//	break;
+	//	}
 	//	}
 	//	if (found == false) {
-		//	cout << "nao existe essa rota.\n qual a rota?\n";
+	//	cout << "nao existe essa rota.\n qual a rota?\n";
 	//	}
 	//} while (found == false);
 	system("clear");
@@ -1657,8 +1691,7 @@ void Menu::gvRouteDoDString() {
 
 	supermarketLocation.push_back(supermarket);
 
-	route = dijkstraOfDijkstras(supermarket,
-			trucks.at(0)->getStops(), total);
+	route = dijkstraOfDijkstras(supermarket, trucks.at(0)->getStops(), total);
 	completeRoute.insert(completeRoute.end(), route.begin(), route.end());
 
 	LastStop = route.at(route.size() - 1);
@@ -1680,7 +1713,6 @@ void Menu::gvRouteDoDString() {
 
 	return;
 }
-
 
 void Menu::loadFiles(int numNodes) {
 	Files fl;
