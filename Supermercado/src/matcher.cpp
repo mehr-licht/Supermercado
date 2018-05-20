@@ -7,58 +7,43 @@
 
 #include "matcher.h"
 #include <cmath>
+#include <sys/time.h>
 
 using namespace std;
+//
+//void computePrefixFunction(string toSearch, int pi[]) {
+//	int m = toSearch.length();
+//	pi[0] = 0;
+//	int k = 0;
+//
+//	for (int q = 1; q < m; q++) {
+//		while (k > 0 && toSearch[k] != toSearch[q])
+//			k = pi[k];
+//		if (toSearch[k] == toSearch[q])
+//			k++;
+//		pi[q] = k;
+//
+//	}
+//
+//	return;
+//}
+//
+//void a2pre_kmp(string pattern, vector<int> & prefix) {
+//	int m = pattern.length();
+//	prefix[0] = -1;
+//	int k = -1;
+//	for (int q = 1; q < m; q++) {
+//		while (k > -1 && pattern[k + 1] != pattern[q])
+//			k = prefix[k];
+//		if (pattern[k + 1] == pattern[q])
+//			k = k + 1;
+//		prefix[q] = k;
+//	}
+//}
 
-#define MIN(x,y) ((x) < (y) ? (x) : (y))
-
-bool findStringNaive(string pattern, string text) {
-	unsigned int j = 0;
-
-	for (unsigned int i = 0; i < text.size(); i++) {
-		if (pattern[j] != text[i])
-			j = 0;
-		else {
-			if (j == pattern.size() - 1)
-				return true;
-			j++;
-		}
-	}
-
-	return false;
-}
-
-void computePrefixFunction(string toSearch, int pi[]) {
-	int m = toSearch.length();
-	pi[0] = 0;
-	int k = 0;
-
-	for (int q = 1; q < m; q++) {
-		while (k > 0 && toSearch[k] != toSearch[q])
-			k = pi[k];
-		if (toSearch[k] == toSearch[q])
-			k++;
-		pi[q] = k;
-
-	}
-
-	return;
-}
-
-void a2pre_kmp(string pattern, vector<int> & prefix) {
-	int m = pattern.length();
-	prefix[0] = -1;
-	int k = -1;
-	for (int q = 1; q < m; q++) {
-		while (k > -1 && pattern[k + 1] != pattern[q])
-			k = prefix[k];
-		if (pattern[k + 1] == pattern[q])
-			k = k + 1;
-		prefix[q] = k;
-	}
-}
-
-void a3preKMP(string pattern, int f[]) {
+void computePrefixFunction(string pattern, int f[]) {
+	//struct timeval st, et;
+//	gettimeofday(&st, NULL);
 	int m = pattern.size(), k;
 	f[0] = -1;
 	for (int i = 1; i < m; i++) {
@@ -71,32 +56,42 @@ void a3preKMP(string pattern, int f[]) {
 		}
 		f[i] = k + 1;
 	}
+	/*gettimeofday(&et, NULL);
+	 int elapsed = ((et.tv_sec - st.tv_sec) * 1000000)
+	 + (et.tv_usec - st.tv_usec);
+	 cout << endl << endl;
+	 cout << "\to pre-process demorou " << elapsed
+
+	 << " microsegundos / " << elapsed / 1000 << " milisegundos / "
+	 << elapsed / 1000000 << " segundos" << endl;*/
 }
-
-int b1kmpMatcher(string text, string pattern) {
-	int num = 0;
-	int m = pattern.length();
-	vector<int> prefix(m);
-	a2pre_kmp(pattern, prefix);
-
-	int n = text.length();
-
-	int q = -1;
-	for (int i = 0; i < n; i++) {
-		while (q > -1 && pattern[q + 1] != text[i])
-			q = prefix[q];
-		if (pattern[q + 1] == text[i])
-			q++;
-		if (q == m - 1) {
-
-			num++;
-			q = prefix[q];
-		}
-	}
-	return num;
-}
+//
+//int b1kmpMatcher(string text, string pattern) {
+//	int num = 0;
+//	int m = pattern.length();
+//	vector<int> prefix(m);
+//	a2pre_kmp(pattern, prefix);
+//
+//	int n = text.length();
+//
+//	int q = -1;
+//	for (int i = 0; i < n; i++) {
+//		while (q > -1 && pattern[q + 1] != text[i])
+//			q = prefix[q];
+//		if (pattern[q + 1] == text[i])
+//			q++;
+//		if (q == m - 1) {
+//
+//			num++;
+//			q = prefix[q];
+//		}
+//	}
+//	return num;
+//}
 
 bool kmpMatcher(string text, string pattern) {
+	//struct timeval st, et;
+
 	int m = pattern.length();
 	int n = text.length();
 	int f[m];
@@ -110,8 +105,8 @@ bool kmpMatcher(string text, string pattern) {
 			if (notStreetName(word)) { //ignore rua via avenida de etc...
 				n = word.length();
 
-				a3preKMP(pattern, f);
-
+				computePrefixFunction(pattern, f);
+			//	gettimeofday(&st, NULL);
 				int i = 0;
 				int k = 0;
 				while (i < n) {
@@ -128,13 +123,22 @@ bool kmpMatcher(string text, string pattern) {
 					} else
 						k = f[k];
 				}
+			/*	gettimeofday(&et, NULL);
+				int elapsed = ((et.tv_sec - st.tv_sec) * 1000000)
+						+ (et.tv_usec - st.tv_usec);
+				cout << endl << endl;
+				cout << "\to kmpMatcher demorou " << elapsed
+
+				<< " microsegundos / " << elapsed / 1000 << " milisegundos / "
+						<< elapsed / 1000000 << " segundos" << endl;*/
 			}
 		}
+
 	} else {
 
 		n = ss.str().length();
 
-		a3preKMP(pattern, f);
+		computePrefixFunction(pattern, f);
 
 		int i = 0;
 		int k = 0;
@@ -299,11 +303,13 @@ int editDistance(string pattern, string text) {
 	int m = pattern.length();
 	int old, neww;
 	vector<int> d(n + 1);
-
+//	struct timeval st, et;
 	std::istringstream ss(text);
 	std::string word;
 	if (onlyOneWord(pattern)) {
 		while (std::getline(ss, word, ' ')) {
+
+			//		gettimeofday(&st, NULL);
 			if (notStreetName(word)) {
 				//ignore rua via avenida de etc
 				n = word.length();
@@ -328,6 +334,14 @@ int editDistance(string pattern, string text) {
 			} else {
 				return INT_INFINITY;
 			}
+			/*		gettimeofday(&et, NULL);
+			 int elapsed = ((et.tv_sec - st.tv_sec) * 1000000)
+			 + (et.tv_usec - st.tv_usec);
+			 cout << endl << endl;
+			 cout << "\to pre-process demorou " << elapsed
+
+			 << " microsegundos / " << elapsed / 1000 << " milisegundos / "
+			 << elapsed / 1000000 << " segundos" << endl;*/
 		}
 	} else {
 
@@ -569,14 +583,14 @@ vector<float> numApproximateStringMatchingFreg(string filename,
 	return values;
 }
 
-vector<string> splitter(string original) {
-	vector<string> result;
-	stringstream temp(original);
-	string token;
-	while (temp >> token)
-		result.push_back(token);
-	return result;
-}
+//vector<string> splitter(string original) {
+//	vector<string> result;
+//	stringstream temp(original);
+//	string token;
+//	while (temp >> token)
+//		result.push_back(token);
+//	return result;
+//}
 
 bool notStreetName(string text) {
 	return text != "Rua" && text != "rua" && text != "Estrada"

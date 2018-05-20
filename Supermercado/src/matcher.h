@@ -19,10 +19,7 @@
 
 #define INT_INFINITY std::numeric_limits<int>::max()
 
-/**
- *
- */
-void pre_kmp(std::string pattern, std::vector<int> & prefix);
+
 
 /**
  *

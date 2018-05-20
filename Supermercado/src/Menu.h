@@ -24,6 +24,7 @@
 #include "matcher.h"
 #include <set>
 #include <sys/time.h>
+#include <utility>
 
 #define MINUMUM 0.66
 #define IMGPRE "map"
@@ -47,7 +48,7 @@ private:
 	int c = 0;
 	int map;
 	bool created=false;
-
+bool newtruck=false;
 	struct methodData {
 		int totalNodes;
 		double totalWeight;
@@ -197,7 +198,7 @@ public:
 	 * @param t the truck
 	 */
 	void printRoute(vector<long long> & completeRoute, int s, int t);
-
+	void printRouteString(vector<long long> & completeRoute, int s, int t);
 	/**
 	 * Method to return all nodes within certain stops, calculating the best path according to applying dijkstra after dijkstra.
 	 * @return Best route.
@@ -382,6 +383,12 @@ public:
 	 * @return true if the two roads meet and false otherwise
 	 */
 	bool checkCross(long long id1, long long id2);
+
+	/**
+	 * checks if node is client
+	 * @param node
+	 */
+	bool isStop(long long node);
 }
 ;
 
